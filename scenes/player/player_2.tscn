@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://peith7845lm0"]
+
+[ext_resource type="Script" path="res://scenes/player/player_2.gd" id="1_8soar"]
+[ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_qifrf"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_trinq"]
+radius = 11.0
+height = 60.0
+
+[node name="Player2" type="CharacterBody2D"]
+collision_mask = 10
+script = ExtResource("1_8soar")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_qifrf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_trinq")
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(0, -37)

@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgy3rqxws2l4w"]
+
+[ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_gvkbj"]
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_pf1yp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2v2iu"]
+radius = 14.0
+height = 58.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_pf1yp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_2v2iu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("1_gvkbj")
+
+[node name="LaserTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="LaserMarkers" type="Node2D" parent="."]
+
+[node name="LaserMarker" type="Marker2D" parent="LaserMarkers"]
+position = Vector2(0, -35)
+
+[connection signal="timeout" from="LaserTimer" to="." method="_on_timer_timeout"]

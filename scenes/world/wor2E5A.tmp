@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwlv7ix15whqd"]
+
+[ext_resource type="Script" path="res://scenes/world/world.gd" id="1_8rw03"]
+[ext_resource type="PackedScene" uid="uid://dgy3rqxws2l4w" path="res://scenes/player/player.tscn" id="1_e5wuh"]
+
+[node name="world" type="Node2D"]
+script = ExtResource("1_8rw03")
+
+[node name="Player" parent="." instance=ExtResource("1_e5wuh")]
+
+[node name="Projectiles" type="Node2D" parent="."]
+
+[connection signal="laser" from="Player" to="." method="_on_player_laser"]
