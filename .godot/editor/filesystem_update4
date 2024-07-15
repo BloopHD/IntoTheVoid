@@ -1,7 +1,8 @@
-res://scenes/player/player.tscn
+res://scenes/player/player.gd
 res://scenes/world/world_2.tscn
 res://scenes/world/world.tscn
 res://scenes/background/simple_parallax_bg.tscn
 res://scenes/laser/laser.tscn
 res://scenes/player/player_2.tscn
-res://scenes/player/player.gd
+res://scenes/player/player.tscn
+res://scenes/player/player_2.gd

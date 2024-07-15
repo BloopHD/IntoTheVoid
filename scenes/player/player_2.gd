@@ -3,6 +3,10 @@ class_name Player extends CharacterBody2D
 signal laser_shot(laser)
 signal died
 
+
+const NINETY_DEGREES: int = 90
+const NINETY_DEGREES_RAD: float = 1.5708
+
 @export var acceleration: float = 15.0
 @export var slow_down: float = 5.0
 @export var max_speed: float = 1000.0
@@ -31,7 +35,7 @@ func _process(_delta):
 			shoot_cd = false
 			
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if !alive:
 		return
 		
@@ -40,10 +44,20 @@ func _physics_process(delta):
 	velocity += input_vector.rotated(rotation) * acceleration
 	velocity = velocity.limit_length(max_speed)
 	
-	if Input.is_action_pressed("right"):
-		rotate(deg_to_rad(rotation_speed * delta))
-	elif Input.is_action_pressed("left"):
-		rotate(deg_to_rad(-rotation_speed * delta))
+	var look_dir: Vector2 = (get_global_mouse_position() - position).normalized()
+	var curr_look_dir: Vector2 = global_transform.y.normalized()
+
+	var angle = look_dir.angle() + NINETY_DEGREES_RAD
+	var gr = global_rotation
+
+	rotation_degrees = rad_to_deg(lerp_angle(gr, angle, .1))
+	print("rd, ", rotation_degrees)
+	print("gr, ", gr)
+	print(" ")
+	# if Input.is_action_pressed("right"):
+	# 	rotate(deg_to_rad(rotation_speed * delta))
+	# elif Input.is_action_pressed("left"):
+	# 	rotate(deg_to_rad(-rotation_speed * delta))
 		
 	
 	if input_vector.y <= 0.001:

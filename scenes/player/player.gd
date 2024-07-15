@@ -8,6 +8,7 @@ signal laser(pos, dir, curr_speed)
 @export var rotation_speed: int = 250
 
 const NINETY_DEGREES: int = 90
+const NINETY_DEGREES_RAD: float = 1.5708
 
 var can_shoot: bool = true
 
@@ -54,10 +55,9 @@ func player_movement(delta) -> void:
 	move_and_slide()
 
 func player_rotation() -> Vector2:
-	
-	var look_dir = (get_global_mouse_position() - position).normalized()
-	print("look dir, ", look_dir)
-	#rotation_degrees = rad_to_deg(look_dir.angle()) + NINETY_DEGREES
+	var look_dir: Vector2 = (get_global_mouse_position() - position).normalized()
+	var angle = look_dir.angle() + NINETY_DEGREES_RAD
+	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, .1))
 	return look_dir
 
 func _on_timer_timeout():
