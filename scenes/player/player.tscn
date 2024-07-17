@@ -9,6 +9,10 @@ height = 58.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_pf1yp")
+max_speed = null
+accel = null
+friction = null
+rotation_speed = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_2v2iu")
@@ -19,7 +23,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
 
 [node name="LaserTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.25
 one_shot = true
 
 [node name="LaserMarkers" type="Node2D" parent="."]

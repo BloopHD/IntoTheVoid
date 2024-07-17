@@ -1,14 +1,22 @@
 extends Area2D
 
-@export var speed: int = 1000
+@export var speed: float = 1000.0
 
-var direction: Vector2 = Vector2.UP
+var movement_vector: Vector2 = Vector2.UP
 
 var curr_speed: float:
 	set(value):
 		curr_speed = value
-	
+
 
 func _physics_process(delta):
-	position += direction * (speed + curr_speed) * delta
- 
+	global_position += movement_vector.rotated(rotation) * (speed + curr_speed) * delta
+
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	queue_free()
+
+func _on_area_entered(area):
+	if area is Asteroid:
+		var asteroid = area
+		asteroid.explode()
+		queue_free()

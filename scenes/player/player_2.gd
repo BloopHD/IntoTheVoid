@@ -45,15 +45,13 @@ func _physics_process(_delta):
 	velocity = velocity.limit_length(max_speed)
 	
 	var look_dir: Vector2 = (get_global_mouse_position() - position).normalized()
-	var curr_look_dir: Vector2 = global_transform.y.normalized()
+	# var curr_look_dir: Vector2 = global_transform.y.normalized()
 
 	var angle = look_dir.angle() + NINETY_DEGREES_RAD
 	var gr = global_rotation
 
 	rotation_degrees = rad_to_deg(lerp_angle(gr, angle, .1))
-	print("rd, ", rotation_degrees)
-	print("gr, ", gr)
-	print(" ")
+
 	# if Input.is_action_pressed("right"):
 	# 	rotate(deg_to_rad(rotation_speed * delta))
 	# elif Input.is_action_pressed("left"):

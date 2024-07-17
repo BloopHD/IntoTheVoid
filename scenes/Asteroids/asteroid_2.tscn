@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cv7d2er4umyyt"]
+
+[node name="Asteroid" type="Node2D"]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-498, -283, -104, -353, 446, -308, 795, 42, 646, 618, -123, 480, -601, 535, -794, 161, -707, -129)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["asteroids"]]
+collision_layer = 2
+collision_mask = 5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-498, -283, -104, -353, 446, -308, 795, 42, 646, 618, -123, 480, -601, 535, -794, 161, -707, -129)

@@ -1,11 +1,15 @@
 extends CharacterBody2D
 
-signal laser(pos, dir, curr_speed)
+signal laser_shot(laser)
 
 @export var max_speed: int = 500
 @export var accel: int = 500
 @export var friction: int = 100
 @export var rotation_speed: int = 250
+
+@onready var muzzle: Marker2D = $LaserMarkers/LaserMarker
+
+var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
 
 const NINETY_DEGREES: int = 90
 const NINETY_DEGREES_RAD: float = 1.5708
@@ -23,13 +27,10 @@ func _physics_process(delta):
 	player_movement(delta)
 
 func check_input():
-	if Input.is_action_pressed("primary action") and can_shoot:
-		var laser_marker = $LaserMarkers/LaserMarker
-		var pos: Vector2 = laser_marker.global_position
-		var dir: Vector2 = (get_global_mouse_position() - position).normalized()
+	if (Input.is_action_pressed("primary action") or Input.is_action_pressed("fire_laser")) and can_shoot:
+		shoot_laser()
 		can_shoot = false
 		$LaserTimer.start()
-		laser.emit(pos, dir, curr_speed)
 	elif Input.is_action_pressed("secondary action"):
 		print("boom")
 
@@ -40,9 +41,10 @@ func get_thrust() -> float:
 func player_movement(delta) -> void:
 	var look_dir: Vector2 = player_rotation()
 	var thrust: float = get_thrust()
+	curr_speed = velocity.length()
 	
 	if thrust <= 0.001:
-		if velocity.length() > (friction * delta):
+		if curr_speed > (friction * delta):
 			velocity -= velocity.normalized() * (friction * delta)
 		else:
 			velocity = Vector2.ZERO
@@ -62,3 +64,10 @@ func player_rotation() -> Vector2:
 
 func _on_timer_timeout():
 	can_shoot = true
+
+func shoot_laser():
+	var laser: Area2D = laser_scene.instantiate()
+	laser.global_position = muzzle.global_position
+	laser.rotation = rotation
+	laser.curr_speed = curr_speed
+	emit_signal("laser_shot", laser)
