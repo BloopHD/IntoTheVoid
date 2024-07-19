@@ -1,13 +1,12 @@
-[gd_scene format=3 uid="uid://cv7d2er4umyyt"]
+[gd_scene load_steps=2 format=3 uid="uid://cv7d2er4umyyt"]
 
-[node name="Asteroid" type="Node2D"]
+[ext_resource type="Script" path="res://scenes/Asteroids/asteroid_2.gd" id="1_s7t55"]
+
+[node name="Asteroid" type="Area2D" groups=["asteroids"]]
+script = ExtResource("1_s7t55")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-498, -283, -104, -353, 446, -308, 795, 42, 646, 618, -123, 480, -601, 535, -794, 161, -707, -129)
+polygon = PackedVector2Array(-213, -205, 36, -238, 220, -181, 295, -73, 195, 147, -23, 185, -182, 145, -247, 68, -264, -54)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["asteroids"]]
-collision_layer = 2
-collision_mask = 5
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(-498, -283, -104, -353, 446, -308, 795, 42, 646, 618, -123, 480, -601, 535, -794, 161, -707, -129)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-213, -205, 36, -238, 220, -181, 295, -73, 195, 147, -23, 185, -182, 145, -247, 68, -264, -54)

@@ -23,7 +23,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
 
 [node name="LaserTimer" type="Timer" parent="."]
-wait_time = 0.25
+wait_time = 0.15
 one_shot = true
 
 [node name="LaserMarkers" type="Node2D" parent="."]
