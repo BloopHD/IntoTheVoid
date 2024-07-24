@@ -1,3 +1,4 @@
+res://scenes/Asteroids/asteroid_2.gd
 res://scenes/world/world.tscn
 res://scenes/world/world_2.tscn
 res://scenes/background/simple_parallax_bg.tscn
@@ -7,9 +8,4 @@ res://scenes/player/player.tscn
 res://scenes/Asteroids/asteroid_2.tscn
 res://scenes/asteroid/asteroid.tscn
 res://scenes/laser/laser_2.tscn
-res://scenes/asteroid/asteroid.gd
-res://scenes/laser/laser_2.gd
 res://scenes/laser/laser.gd
-res://scenes/world/world_2.gd
-res://scenes/Asteroids/asteroid_2.gd
-res://scenes/world/world.gd
