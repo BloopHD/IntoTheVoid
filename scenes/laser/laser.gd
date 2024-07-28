@@ -20,6 +20,5 @@ func _on_area_entered(area):
 
 	if area.is_in_group("asteroids"):
 		destruction_area.rotation = rotation
-		print("Laser ", destruction_area.rotation)
 		area.clip(destruction_area)
 		queue_free()

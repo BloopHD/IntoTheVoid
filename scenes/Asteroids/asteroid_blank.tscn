@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh4ab5yn13ix5"]
+
+[ext_resource type="Script" path="res://scenes/Asteroids/asteroid_blank.gd" id="1_te2ng"]
+
+[node name="Asteroid_Blank" type="Area2D" groups=["asteroids"]]
+script = ExtResource("1_te2ng")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

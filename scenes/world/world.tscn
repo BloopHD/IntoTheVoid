@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_c3qrl"]
 [ext_resource type="PackedScene" uid="uid://cv7d2er4umyyt" path="res://scenes/Asteroids/asteroid_2.tscn" id="4_cqg6a"]
 
-[node name="world" type="Node2D"]
+[node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
 
 [node name="SimpleParallaxBG" parent="." instance=ExtResource("2_c3qrl")]
@@ -17,7 +17,11 @@ position = Vector2(640, 380)
 
 [node name="Projectiles" type="Node2D" parent="."]
 
-[node name="Asteroid" parent="." instance=ExtResource("4_cqg6a")]
-position = Vector2(11, 17)
+[node name="Asteroids" type="Node2D" parent="."]
+
+[node name="Asteroid" parent="Asteroids" instance=ExtResource("4_cqg6a")]
+
+[node name="Asteroid2" parent="Asteroids" instance=ExtResource("4_cqg6a")]
+position = Vector2(645, -10)
 
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
