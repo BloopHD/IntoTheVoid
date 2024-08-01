@@ -46,11 +46,14 @@ func clip(destruction_area):
 	for i in new_asteroids.size():
 
 		if i > 0:
+
+			# print("asteroid added - asteroid")
 			var asteroid_new: Area2D = blank_asteroid_scene.instantiate()
 			asteroid_new.find_child("Polygon2D").polygon = new_asteroids[i]
 			asteroid_new.find_child("CollisionPolygon2D").polygon = new_asteroids[i]
 			emit_signal("asteroid_added", asteroid_new)
 		else:
+
 			$Polygon2D.polygon = new_asteroids[i]
 			$CollisionPolygon2D.set_deferred("polygon", new_asteroids[0])
 
@@ -75,7 +78,7 @@ func localize_and_rotate(destruction_area) -> Polygon2D:
 		rotated_position.x = (point.x * cos(destruction_area.rotation)) - (point.y * sin(destruction_area.rotation))
 		rotated_position.y = (point.y * cos(destruction_area.rotation)) + (point.x * sin(destruction_area.rotation))
 
-		# Combine the localized point with the rotation to get the correct location
+		# Combine the localized point with the rotation
 		# and add them into the new_poly_points array.
 		new_poly_points.append(localized_position + rotated_position)
 	

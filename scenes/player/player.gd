@@ -57,9 +57,25 @@ func player_movement(delta) -> void:
 	move_and_slide()
 
 func player_rotation() -> Vector2:
-	var look_dir: Vector2 = (get_global_mouse_position() - position).normalized()
+	var left: float = Input.get_action_strength("left") 
+	var right: float = Input.get_action_strength("right")
+	var look_dir: Vector2
+
+	# Keyboard turning controls take priority, so always turn
+	# on keyboard input.
+	if (left != 0 || right != 0):
+		# TODO: set look_dir to the correct direction.
+		pass 
+	
+	# Then, if the mouse has not moved stay the direction
+	# player is currently facing. Or if the mouse has moved,
+	# go ahead and move toward mouse.
+	elif !Input.get_last_mouse_velocity():
+		look_dir = (get_global_mouse_position() - position).normalized()
+		
 	var angle = look_dir.angle() + NINETY_DEGREES_RAD
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, .1))
+		
 	return look_dir
 
 func _on_timer_timeout():

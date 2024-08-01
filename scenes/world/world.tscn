@@ -12,6 +12,10 @@ script = ExtResource("1_8rw03")
 
 [node name="Player" parent="." instance=ExtResource("1_e5wuh")]
 position = Vector2(640, 380)
+max_speed = 500
+accel = 500
+friction = 100
+rotation_speed = 250
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
@@ -20,8 +24,7 @@ position = Vector2(640, 380)
 [node name="Asteroids" type="Node2D" parent="."]
 
 [node name="Asteroid" parent="Asteroids" instance=ExtResource("4_cqg6a")]
-
-[node name="Asteroid2" parent="Asteroids" instance=ExtResource("4_cqg6a")]
-position = Vector2(645, -10)
+position = Vector2(677, 14)
 
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
+[connection signal="asteroid_added" from="Asteroids/Asteroid" to="." method="_on_asteroid_asteroid_added"]

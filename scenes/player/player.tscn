@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgy3rqxws2l4w"]
+[gd_scene load_steps=5 format=3 uid="uid://dgy3rqxws2l4w"]
 
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_gvkbj"]
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_pf1yp"]
+[ext_resource type="PackedScene" uid="uid://dmtjjxxfv4b6f" path="res://scenes/crosshairs/crosshair.tscn" id="3_7ao8m"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2v2iu"]
 radius = 14.0
@@ -9,10 +10,6 @@ height = 58.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_pf1yp")
-max_speed = null
-accel = null
-friction = null
-rotation_speed = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_2v2iu")
@@ -25,6 +22,8 @@ texture = ExtResource("1_gvkbj")
 [node name="LaserTimer" type="Timer" parent="."]
 wait_time = 0.15
 one_shot = true
+
+[node name="Crosshair" parent="." instance=ExtResource("3_7ao8m")]
 
 [node name="LaserMarkers" type="Node2D" parent="."]
 

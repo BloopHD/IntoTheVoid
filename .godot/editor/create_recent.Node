@@ -1,11 +1,11 @@
+Sprite2D
+Node2D
+StaticBody2D
 Polygon2D
 CollisionPolygon2D
 Area2D
-Node2D
 CollisionShape2D
-StaticBody2D
 Camera2D
-Sprite2D
 ParallaxLayer
 ParallaxBackground
 GPUParticles2D
