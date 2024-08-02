@@ -10,3 +10,4 @@ res://scenes/crosshairs/crosshair.tscn
 res://scenes/Asteroids/asteroid_blank.gd
 res://scenes/world/world_2.gd
 res://scenes/world/world.gd
+res://scenes/player/player.gd
