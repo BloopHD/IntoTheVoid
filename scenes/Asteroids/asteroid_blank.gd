@@ -52,7 +52,7 @@ func clip(destruction_area):
 			asteroid_new.find_child("Polygon2D").polygon = new_asteroids[i]
 			asteroid_new.find_child("CollisionPolygon2D").polygon = new_asteroids[i]
 			# emit_signal("asteroid_added", asteroid_new)
-			call_deferred("add_child", asteroid_new)
+			get_parent().call_deferred("add_child", asteroid_new)
 		else:
 
 			$Polygon2D.polygon = new_asteroids[i]
