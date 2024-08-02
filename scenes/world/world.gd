@@ -3,7 +3,6 @@ extends Node2D
 func _on_player_laser_shot(laser:Variant):
 	$Projectiles.add_child(laser)
 
-
-func _on_asteroid_asteroid_added(new_asteroid:Variant):
-	# print("asteroid added - world")
+func _on_asteroid_blank_asteroid_added(new_asteroid:Variant):
+	print("asteroid added - world")
 	$Asteroids.call_deferred("add_child", new_asteroid)

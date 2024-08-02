@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://cv7d2er4umyyt"]
 
-[ext_resource type="Script" path="res://scenes/Asteroids/asteroid_2.gd" id="1_s7t55"]
+[ext_resource type="Script" path="res://scenes/Asteroids/asteroid_blank.gd" id="1_4j0d3"]
 
 [node name="Asteroid" type="Area2D" groups=["asteroids"]]
-script = ExtResource("1_s7t55")
+script = ExtResource("1_4j0d3")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(-213, -205, 36, -238, 220, -181, 295, -73, 195, 147, -23, 185, -182, 145, -247, 68, -264, -54)

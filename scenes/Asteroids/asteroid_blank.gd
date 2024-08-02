@@ -2,7 +2,7 @@ extends Area2D
 
 signal asteroid_added(new_asteroid)
 
-var blank_asteroid_scene: PackedScene = preload("res://scenes/Asteroids/asteroid_blank.tscn")
+var blank_asteroid_scene: PackedScene = load("res://scenes/Asteroids/asteroid_blank.tscn")
 
 func _ready():
 	calculate_polygon_properties()
@@ -47,11 +47,12 @@ func clip(destruction_area):
 
 		if i > 0:
 
-			print("asteroid added - asteroid")
 			var asteroid_new: Area2D = blank_asteroid_scene.instantiate()
+			print(asteroid_new)
 			asteroid_new.find_child("Polygon2D").polygon = new_asteroids[i]
 			asteroid_new.find_child("CollisionPolygon2D").polygon = new_asteroids[i]
-			emit_signal("asteroid_added", asteroid_new)
+			# emit_signal("asteroid_added", asteroid_new)
+			call_deferred("add_child", asteroid_new)
 		else:
 
 			$Polygon2D.polygon = new_asteroids[i]
