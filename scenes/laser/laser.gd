@@ -1,4 +1,4 @@
-extends Area2D
+extends RigidBody2D
 
 @onready var destruction_area: CollisionPolygon2D = $Area2D/ExplosionArea
 
@@ -16,9 +16,8 @@ func _physics_process(delta):
 	global_position += movement_vector.rotated(rotation) * (speed + curr_speed) * delta
 
 
-func _on_area_entered(area):
+func _on_body_entered(body:Node2D):
 
-	if area.is_in_group("asteroids"):
-		destruction_area.rotation = rotation
-		area.clip(destruction_area)
+	if body.is_in_group("asteroids"):
+		body.clip(destruction_area)
 		queue_free()

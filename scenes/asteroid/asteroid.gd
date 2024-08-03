@@ -1,69 +1,83 @@
-class_name Asteroid extends Area2D
+extends RigidBody2D
 
-signal exploded(pos, size, points)
+var new_asteroid_scene: PackedScene = load("res://scenes/asteroid/asteroid.tscn")
 
-var movement_vector = Vector2(0, -1)
-
-enum AsteroidSize{LARGE, MEDIUM, SMALL}
-@export var size = AsteroidSize.LARGE
-
-var speed = 5
-
-@onready var sprite = $Sprite2D
-@onready var cshape = $CollisionShape2D
-
-var points: int:
-	get:
-		match size:
-			AsteroidSize.LARGE:
-				return 100
-			AsteroidSize.MEDIUM:
-				return 50
-			AsteroidSize.SMALL:
-				return 25
-			_:
-				return 0
 
 func _ready():
-	rotation = randf_range(0, 2 * PI)
-	
-	match size:
-		AsteroidSize.LARGE:
-			speed = randf_range(50, 100)
-			sprite.texture = preload("res://sprites/SimpleAsteroidLarge.png")
-			cshape.set_deferred("shape", preload("res://scenes/asteroid/asteroid_cshape_large.tres"))
-		AsteroidSize.MEDIUM:
-			speed = randf_range(100, 150)
-			sprite.texture = preload("res://sprites/SimpleAsteroidMed.png")
-			cshape.set_deferred("shape", preload("res://scenes/asteroid/asteroid_cshape_med.tres"))
-		AsteroidSize.SMALL:
-			speed = randf_range(100, 200)
-			sprite.texture = preload("res://sprites/SimpleAsteroidSmall.png")
-			cshape.set_deferred("shape", preload("res://scenes/asteroid/asteroid_cshape_small.tres"))
-
-func _physics_process(delta):
-	global_position += movement_vector.rotated(rotation) * speed * delta
-	
-	var screen_size = get_viewport_rect().size
-	var shape_radius = cshape.shape.radius
-	
-	if global_position.y + shape_radius < 0:
-		global_position.y = screen_size.y + shape_radius
-	elif global_position.y - shape_radius > screen_size.y:
-		global_position.y = -shape_radius
-	
-	if global_position.x + shape_radius < 0:
-		global_position.x = screen_size.x + shape_radius
-	elif global_position.x - shape_radius > screen_size.x:
-		global_position.x = -shape_radius
-	
-
-func explode():
-	emit_signal("exploded", global_position, size, points)
-	queue_free()
+	calculate_polygon_properties()
 
 
-func _on_body_entered(body):
-	if body is Player:
-		var player = body
-		player.die()
+func calculate_polygon_properties():
+	var center = Vector2.ZERO
+	var area = 0
+	var asteroid_points: PackedVector2Array = $Polygon2D.polygon
+
+	for i in asteroid_points.size():
+		
+		var i_plus_one = i + 1
+		if i_plus_one >= asteroid_points.size():
+			i_plus_one = 0
+		
+		var curr = asteroid_points[i]
+		var next = asteroid_points[i_plus_one]
+
+		area += (curr.x * next.y) - (next.x * curr.y)
+
+		center.x += (curr.x + next.x) * ((curr.x * next.y) - (next.x * curr.y))
+		center.y -= (curr.y + next.y) * ((curr.y * next.x) - (next.y * curr.x))
+
+
+	area = area / 2
+	center = (center / 6) / area
+
+
+func clip(destruction_area):
+
+	var localized_rotated_destruct_area: Polygon2D = localize_and_rotate(destruction_area)
+	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, localized_rotated_destruct_area.polygon)
+	
+	# destruction_area.position = transform.basis_xform_inv(destruction_area.position - global_position)
+	# var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, destruction_area.polygon)
+
+	
+
+	for i in new_asteroids.size():
+
+		if i > 0:
+
+			var asteroid_new: RigidBody2D = new_asteroid_scene.instantiate()
+			print(asteroid_new)
+			asteroid_new.find_child("Polygon2D").polygon = new_asteroids[i]
+			asteroid_new.find_child("CollisionPolygon2D").polygon = new_asteroids[i]
+			asteroid_new.global_position = global_position
+			get_parent().call_deferred("add_child", asteroid_new)
+		else:
+
+			$Polygon2D.polygon = new_asteroids[i]
+			$CollisionPolygon2D.set_deferred("polygon", new_asteroids[i])
+
+
+func localize_and_rotate(destruction_area) -> Polygon2D:
+	
+	var offset_poly = Polygon2D.new()
+	offset_poly.global_position = Vector2.ZERO
+
+	var new_poly_points: Array[Vector2] = []
+
+	for point in destruction_area.polygon:
+	
+		# Localize the polygons point.
+		var localized_position: Vector2 = destruction_area.global_position - global_position
+
+		# Rotate the polygon point.
+		var rotated_position: Vector2 = Vector2()
+		rotated_position.x = (point.x * cos(destruction_area.global_rotation)) - (point.y * sin(destruction_area.global_rotation))
+		rotated_position.y = (point.y * cos(destruction_area.global_rotation)) + (point.x * sin(destruction_area.global_rotation))
+
+		# Combine the localized point with the rotation
+		# and add them into the new_poly_points array.
+		new_poly_points.append(localized_position + rotated_position)
+	
+	offset_poly.polygon = PackedVector2Array(new_poly_points)
+
+	return offset_poly

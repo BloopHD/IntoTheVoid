@@ -1,19 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cncsy8hnxq6x8"]
+[gd_scene load_steps=2 format=3 uid="uid://cncsy8hnxq6x8"]
 
 [ext_resource type="Script" path="res://scenes/asteroid/asteroid.gd" id="1_gjyw2"]
-[ext_resource type="Texture2D" uid="uid://55qq5q0bdp4l" path="res://sprites/SimpleAsteroidLarge.png" id="2_rm6vl"]
-[ext_resource type="Shape2D" uid="uid://c0sk702kx2pmk" path="res://scenes/asteroid/asteroid_cshape_large.tres" id="3_0d6fs"]
 
-[node name="Asteroid" type="Area2D"]
+[node name="Asteroid" type="RigidBody2D" groups=["asteroids"]]
 collision_layer = 2
 collision_mask = 5
+gravity_scale = 0.0
 script = ExtResource("1_gjyw2")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
-texture = ExtResource("2_rm6vl")
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-213, -205, 36, -238, 220, -181, 295, -73, 195, 147, -23, 185, -182, 145, -247, 68, -264, -54)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = ExtResource("3_0d6fs")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-213, -205, 36, -238, 220, -181, 295, -73, 195, 147, -23, 185, -182, 145, -247, 68, -264, -54)

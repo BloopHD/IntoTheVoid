@@ -87,7 +87,7 @@ func _on_timer_timeout():
 	can_shoot = true
 
 func shoot_laser():
-	var laser: Area2D = laser_scene.instantiate()
+	var laser: RigidBody2D = laser_scene.instantiate()
 	laser.global_position = muzzle.global_position
 	laser.rotation = rotation
 	laser.curr_speed = curr_speed
