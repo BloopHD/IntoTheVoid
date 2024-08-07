@@ -1,7 +1,7 @@
+Area2D
 CollisionShape2D
 CollisionPolygon2D
 RigidBody2D
-Area2D
 Polygon2D
 Line2D
 Sprite2D

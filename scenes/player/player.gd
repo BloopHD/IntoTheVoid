@@ -20,41 +20,62 @@ var curr_speed: float:
 	get:
 		return velocity.length()
 
-func _process(_delta):
+
+func _process(_delta) -> void:
+
 	check_input()
 
-func _physics_process(delta):
+
+func _physics_process(delta) -> void:
+
 	player_movement(delta)
 
-func check_input():
+
+func check_input() -> void:
+
 	if (Input.is_action_pressed("primary action") or Input.is_action_pressed("fire_laser")) and can_shoot:
+
 		shoot_laser()
 		can_shoot = false
 		$LaserTimer.start()
+
 	elif Input.is_action_pressed("secondary action"):
+
 		print("boom")
 
+
 func get_thrust() -> float:
+
 	var thrust: float = Input.get_action_strength("up")
+
 	return thrust
 
+
 func player_movement(delta) -> void:
+
 	var look_dir: Vector2 = player_rotation()
 	var thrust: float = get_thrust()
 	curr_speed = velocity.length()
 	
 	if thrust <= 0.001:
+
 		if curr_speed > (friction * delta):
+
 			velocity -= velocity.normalized() * (friction * delta)
+
 		else:
+
 			velocity = Vector2.ZERO
+
 	else:
+
 		var thrust_power: float = (thrust * accel * delta)
 		var thrust_velocity: Vector2 = look_dir * thrust_power
 		velocity += thrust_velocity
 		velocity = velocity.limit_length(max_speed)
 	
 	move_and_slide()
+
 
 func player_rotation() -> Vector2:
 
@@ -83,11 +104,15 @@ func player_rotation() -> Vector2:
 		
 	return look_dir
 
-func _on_timer_timeout():
+
+func _on_timer_timeout() -> void:
+
 	can_shoot = true
 
-func shoot_laser():
-	var laser: RigidBody2D = laser_scene.instantiate()
+
+func shoot_laser() -> void:
+
+	var laser: Area2D = laser_scene.instantiate()
 	laser.global_position = muzzle.global_position
 	laser.rotation = rotation
 	laser.curr_speed = curr_speed

@@ -4,7 +4,7 @@
 
 [node name="Asteroid" type="RigidBody2D" groups=["asteroids"]]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 7
 gravity_scale = 0.0
 script = ExtResource("1_gjyw2")
 
