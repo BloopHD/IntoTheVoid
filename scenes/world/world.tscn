@@ -20,6 +20,9 @@ position = Vector2(640, 380)
 [node name="Asteroids" type="Node2D" parent="."]
 
 [node name="Asteroid2" parent="Asteroids" instance=ExtResource("4_5qfqe")]
-position = Vector2(746, 4)
+position = Vector2(1188, 337)
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(-267, -7)
 
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]

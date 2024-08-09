@@ -1,9 +1,10 @@
-res://scenes/laser/laser.gd
 res://scenes/player/player.gd
-res://scenes/laser/laser.tscn
-res://scenes/Asteroids/asteroid_2.gd
+res://scenes/world/world.gd
+res://scenes/world/world_2.gd
+res://scenes/laser/laser.gd
+res://scenes/asteroid/asteroid.gd
 res://scenes/world/world.tscn
 res://scenes/player/player.tscn
+res://scenes/laser/laser.tscn
 res://scenes/asteroid/asteroid.tscn
 res://scenes/Asteroids/asteroid_2.tscn
-res://scenes/asteroid/asteroid.gd
