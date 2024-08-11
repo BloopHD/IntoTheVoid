@@ -85,15 +85,12 @@ func clip(destruction_area) -> void:
 	# print("---------------")
 	
 	
-	var test: Polygon2D = localize(destruction_area, transformed_projectile_position)
-	
-	print(destruction_area.polygon)
-	print(test.polygon)
+	# var test: Polygon2D = localize(destruction_area, transformed_projectile_position)
 
-	
-	
+	var explosion: PackedVector2Array = create_explosion_area(transformed_projectile_position, 6, 25, destruction_area.global_rotation)
+
 	# destruction_area.position = transform.basis_xform_inv(destruction_area.global_position - global_position)
-	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, test.polygon)	
+	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, explosion)	
 
 	# print($Polygon2D.polygon)
 	# print(new_asteroids[0])
@@ -125,6 +122,26 @@ func clip(destruction_area) -> void:
 			$CollisionPolygon2D.set_deferred("polygon", new_asteroids[i])
 
 
+func create_explosion_area(destination, sides, radious = 1, _rotation = 0) -> PackedVector2Array:
+	
+	var explosion_points: Array[Vector2] = []
+	
+	var segment = PI * 2 / sides
+
+	for i in sides:
+		var point: Vector2 = Vector2(
+			sin(segment * i + _rotation) * radious,
+			cos(segment * i + _rotation) * radious
+		)
+
+		explosion_points.append(point + destination)
+	
+	return explosion_points
+	
+
+
+
+
 func localize(destruction_area, new_transform: Vector2 ) -> Polygon2D:
 
 	var offset_poly = Polygon2D.new()
@@ -132,21 +149,25 @@ func localize(destruction_area, new_transform: Vector2 ) -> Polygon2D:
 
 	var new_poly_points: Array[Vector2] = []
 
-	var dest_area_rotation: float = destruction_area.global_rotation
-	print((dest_area_rotation))
+	var dest_area_rotation: float = destruction_area.rotation
+
+	var localized_position: Vector2 = (destruction_area.position + new_transform)
 
 	for point in destruction_area.polygon:
 	
 		# Localize the polygons point.
-		var localized_position: Vector2 = (point + new_transform)
+		# var localized_position: Vector2 = (destruction_area.global_position + new_transform)
 
 		# var rotated_position: Vector2 = Vector2()
 		# rotated_position.x = (point.x * cos(dest_area_rotation)) - (point.y * sin(dest_area_rotation))
 		# rotated_position.y = (point.y * cos(dest_area_rotation)) + (point.x * sin(dest_area_rotation))
 
-		new_poly_points.append(localized_position)
+		new_poly_points.append(localized_position + point)
 	
 	offset_poly.polygon = PackedVector2Array(new_poly_points)
+
+	offset_poly.rotation = dest_area_rotation
+
 
 	return offset_poly
 
