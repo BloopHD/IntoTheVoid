@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _physics_process(delta):
 
-	#rotate(0.2 * delta)
+	#rotate(0.04 * delta)
 	
 
 	# print("GP: ", global_position)
@@ -87,13 +87,16 @@ func clip(destruction_area) -> void:
 	
 	# var test: Polygon2D = localize(destruction_area, transformed_projectile_position)
 
-	var explosion: PackedVector2Array = create_explosion_area(transformed_projectile_position, 6, 25, destruction_area.global_rotation)
+	var explosion: PackedVector2Array = create_explosion_area(transformed_projectile_position, 10, 35, destruction_area.global_rotation)
 
 	# destruction_area.position = transform.basis_xform_inv(destruction_area.global_position - global_position)
-	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, explosion)	
+	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, explosion)
+
+	
 
 	# print($Polygon2D.polygon)
-	# print(new_asteroids[0])
+	# print(new_asteroids)
+	# print(new_asteroids.size())
 	# print("---")	
 	# print(destruction_area.polygon)
 	# print(new_asteroids[1])
@@ -119,6 +122,8 @@ func clip(destruction_area) -> void:
 			calculate_polygon_properties()
 			check_size_requirment()
 
+			splinter($Polygon2D.polygon, transformed_projectile_position)
+
 			$CollisionPolygon2D.set_deferred("polygon", new_asteroids[i])
 
 
@@ -129,16 +134,39 @@ func create_explosion_area(destination, sides, radious = 1, _rotation = 0) -> Pa
 	var segment = PI * 2 / sides
 
 	for i in sides:
-		var point: Vector2 = Vector2(
-			sin(segment * i + _rotation) * radious,
-			cos(segment * i + _rotation) * radious
+
+		var noise = randf_range(-0.10, 0.10) * segment
+
+		var new_point: Vector2 = Vector2(
+			sin((segment + noise) * i + _rotation) * radious,
+			cos((segment + noise) * i + _rotation) * radious,
 		)
 
-		explosion_points.append(point + destination)
+		# var not_too_close: bool = true
+
+		# if explosion_points.size() > 0:
+		# 	for point in explosion_points:
+		# 		if point - new_point < Vector2(0.05, 0.05) * segment:
+		# 			not_too_close = false
+		# 	if not_too_close:	
+		# 		explosion_points.append(new_point + destination)
+		# else:
+		# 	explosion_points.append(new_point + destination)
+		
+		explosion_points.append(new_point + destination)
+		
 	
 	return explosion_points
 	
 
+func splinter(poly, hit_location):
+	
+	var splinter_start
+
+	for i in poly:
+		pass
+
+	pass
 
 
 

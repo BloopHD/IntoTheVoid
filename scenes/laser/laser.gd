@@ -26,6 +26,6 @@ func _on_body_entered(body:Node2D) -> void:
 		#destruction_area.rotation = global_rotation
 		body.clip(destruction_area)
 		# print(global_position)
-		# body.apply_impulse(force_direction * force)
+		#body.apply_impulse(force_direction * force)
 
 		queue_free()
