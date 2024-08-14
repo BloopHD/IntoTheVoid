@@ -92,14 +92,24 @@ func clip(destruction_area) -> void:
 	# destruction_area.position = transform.basis_xform_inv(destruction_area.global_position - global_position)
 	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, explosion)
 
+	var splinter_array
 	
 	for i in new_asteroids.size():
 		for j in new_asteroids[i]:
 			for k in explosion:
 				if j == k:
 					print("match: ", j, " ", k)
-					if (randf() > 0.5):
-						splinter(j, new_asteroids[i][randi_range(0, new_asteroids[i].size() - 1)])
+
+					
+
+					if (randf() > 0):
+						splinter_array = splinter(j, new_asteroids[i][randi_range(0, new_asteroids[i].size() - 1)])
+						var new_new_asteroids = Geometry2D.clip_polygons(new_asteroids[i], splinter_array)
+						
+						new_asteroids.remove_at(i)
+						new_asteroids.append(new_new_asteroids)
+	
+
 					
 
 
@@ -166,9 +176,20 @@ func create_explosion_area(destination, sides, radious = 1, _rotation = 0) -> Pa
 	return explosion_points
 	
 
-func splinter(splinter_start, splinter_finish):
+func splinter(splinter_start: Vector2, splinter_finish: Vector2):
 
-	pass
+	var splinter_poly: Polygon2D = Polygon2D.new()
+	
+	var length = splinter_start - splinter_finish
+
+	var point_1 = length * 0.33
+	var point_2 = length * 0.66
+
+	var splinter_array: PackedVector2Array = [splinter_start, point_1, splinter_finish, point_2]
+	
+	return splinter_array
+
+
 
 
 
