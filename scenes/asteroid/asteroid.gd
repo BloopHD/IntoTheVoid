@@ -93,6 +93,15 @@ func clip(destruction_area) -> void:
 	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, explosion)
 
 	
+	for i in new_asteroids.size():
+		for j in new_asteroids[i]:
+			for k in explosion:
+				if j == k:
+					print("match: ", j, " ", k)
+					if (randf() > 0.5):
+						splinter(j, new_asteroids[i][randi_range(0, new_asteroids[i].size() - 1)])
+					
+
 
 	# print($Polygon2D.polygon)
 	# print(new_asteroids)
@@ -121,8 +130,6 @@ func clip(destruction_area) -> void:
 
 			calculate_polygon_properties()
 			check_size_requirment()
-
-			splinter($Polygon2D.polygon, transformed_projectile_position)
 
 			$CollisionPolygon2D.set_deferred("polygon", new_asteroids[i])
 
@@ -159,12 +166,7 @@ func create_explosion_area(destination, sides, radious = 1, _rotation = 0) -> Pa
 	return explosion_points
 	
 
-func splinter(poly, hit_location):
-	
-	var splinter_start
-
-	for i in poly:
-		pass
+func splinter(splinter_start, splinter_finish):
 
 	pass
 

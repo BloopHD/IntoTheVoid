@@ -4,4 +4,3 @@ res://scenes/player/player.tscn
 res://scenes/laser/laser.tscn
 res://scenes/asteroid/asteroid.tscn
 res://scenes/Asteroids/asteroid_2.tscn
-res://scenes/laser/laser.gd
