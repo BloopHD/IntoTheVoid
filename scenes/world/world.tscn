@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_8rw03"]
 [ext_resource type="PackedScene" uid="uid://dgy3rqxws2l4w" path="res://scenes/player/player.tscn" id="1_e5wuh"]
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_c3qrl"]
-[ext_resource type="PackedScene" uid="uid://cncsy8hnxq6x8" path="res://scenes/asteroid/asteroid.tscn" id="4_5qfqe"]
+[ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemies/simple_enemy.tscn" id="5_i4gcu"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
@@ -19,10 +19,7 @@ position = Vector2(640, 380)
 
 [node name="Asteroids" type="Node2D" parent="."]
 
-[node name="Asteroid2" parent="Asteroids" instance=ExtResource("4_5qfqe")]
-position = Vector2(1188, 337)
-
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(-267, -7)
+[node name="SimpleEnemy" parent="." instance=ExtResource("5_i4gcu")]
+position = Vector2(1166, 146)
 
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]

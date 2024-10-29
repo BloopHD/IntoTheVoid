@@ -14,20 +14,7 @@ func _ready() -> void:
 
 func _physics_process(delta):
 
-	#rotate(0.04 * delta)
-	
-
-	# print("GP: ", global_position)
-	# print("P:  ", position)
-	# print("PGP: ", $Polygon2D.global_position)
-	# print("PP:   ", $Polygon2D.position)
-	# print("--------------------------")
-	# print("GR:  ", global_rotation)
-	# print("R:   ", rotation)
-	# print("PGR: ", $Polygon2D.global_rotation)
-	# print("PR:   ", $Polygon2D.rotation)
-	# print("--------------------------")
-
+	#rotate(0.02 * delta)
 
 	pass
 
@@ -64,62 +51,54 @@ func check_size_requirment():
 		queue_free()
 
 
-func clip(destruction_area) -> void:
-
-	# var localized_rotated_destruct_area: Polygon2D = localize_and_rotate(destruction_area)
-	# # var poly = $Polygon2D
-	# # poly.rotate(rotation)
-	# # print("r ", poly.rotation)
-	# var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, localized_rotated_destruct_area.polygon)
+func clip(hit_location, force_direction) -> void:
 	
-	var transformed_projectile_position = transform.basis_xform_inv(destruction_area.global_position - global_position)
-
-	# print("Asteroid: ", global_position)
-	# print("Asteroid: ", position)
-	# print("Laser:    ", destruction_area.global_position)
-	# print("Transform ", transformed_projectile_position)
-	# print("---------------")
-
-	# destruction_area.global_position = transformed_projectile_position
-	# print("Laser:    ", destruction_area.global_position)
-	# print("---------------")
+	var transformed_projectile_position = transform.basis_xform_inv(hit_location.global_position - global_position)
 	
-	
-	# var test: Polygon2D = localize(destruction_area, transformed_projectile_position)
+	# var test: Polygon2D = localize(hit_location, transformed_projectile_position)
 
-	var explosion: PackedVector2Array = create_explosion_area(transformed_projectile_position, 10, 35, destruction_area.global_rotation)
+	var explosion: PackedVector2Array = create_explosion_area(transformed_projectile_position, 8, 35, hit_location.global_rotation)
 
-	# destruction_area.position = transform.basis_xform_inv(destruction_area.global_position - global_position)
+	# hit_location.position = transform.basis_xform_inv(hit_location.global_position - global_position)
 	var new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons($Polygon2D.polygon, explosion)
 
 	var splinter_array
 	
-	for i in new_asteroids.size():
-		for j in new_asteroids[i]:
-			for k in explosion:
-				if j == k:
-					print("match: ", j, " ", k)
+	var splinter_line: Line2D = Line2D.new()
+	# splinter_line.position = transformed_projectile_position
+
+	if (randf() > 0.0):
+		splinter_line.add_point(transformed_projectile_position)
+
+		var rand = randf()
+
+		var direction = randf_range(0.85, 1.15) * hit_location.global_rotation
+
+		splinter_line.add_point((transformed_projectile_position - global_position) * hit_location.global_rotation * 100)
+
+	get_parent().add_child(splinter_line)
+
+
+		
+		
+
+	# for i in new_asteroids.size():
+	# 	for j in new_asteroids[i]:
+	# 		for k in explosion:
+	# 			if j == k:
+	# 				print("match: ", j, " ", k)
 
 					
 
-					if (randf() > 0):
-						splinter_array = splinter(j, new_asteroids[i][randi_range(0, new_asteroids[i].size() - 1)])
-						var new_new_asteroids = Geometry2D.clip_polygons(new_asteroids[i], splinter_array)
+	# 				if (randf() > 0):
+	# 					splinter_array = splinter(j, new_asteroids[i][randi_range(0, new_asteroids[i].size() - 1)])
+	# 					var new_new_asteroids: Array[PackedVector2Array] = Geometry2D.clip_polygons(new_asteroids[i], splinter_array)
 						
-						new_asteroids.remove_at(i)
-						new_asteroids.append(new_new_asteroids)
+	# 					new_asteroids.remove_at(i)
+
+						
+	# 					new_asteroids.append(new_new_asteroids)
 	
-
-					
-
-
-	# print($Polygon2D.polygon)
-	# print(new_asteroids)
-	# print(new_asteroids.size())
-	# print("---")	
-	# print(destruction_area.polygon)
-	# print(new_asteroids[1])
-	# print("---------------")	
 
 	for i in new_asteroids.size():
 
@@ -152,7 +131,7 @@ func create_explosion_area(destination, sides, radious = 1, _rotation = 0) -> Pa
 
 	for i in sides:
 
-		var noise = randf_range(-0.10, 0.10) * segment
+		var noise = randf_range(-0.15, 0.15) * segment
 
 		var new_point: Vector2 = Vector2(
 			sin((segment + noise) * i + _rotation) * radious,
@@ -193,21 +172,21 @@ func splinter(splinter_start: Vector2, splinter_finish: Vector2):
 
 
 
-func localize(destruction_area, new_transform: Vector2 ) -> Polygon2D:
+func localize(hit_location, new_transform: Vector2 ) -> Polygon2D:
 
 	var offset_poly = Polygon2D.new()
 	offset_poly.global_position = Vector2.ZERO
 
 	var new_poly_points: Array[Vector2] = []
 
-	var dest_area_rotation: float = destruction_area.rotation
+	var dest_area_rotation: float = hit_location.rotation
 
-	var localized_position: Vector2 = (destruction_area.position + new_transform)
+	var localized_position: Vector2 = (hit_location.position + new_transform)
 
-	for point in destruction_area.polygon:
+	for point in hit_location.polygon:
 	
 		# Localize the polygons point.
-		# var localized_position: Vector2 = (destruction_area.global_position + new_transform)
+		# var localized_position: Vector2 = (hit_location.global_position + new_transform)
 
 		# var rotated_position: Vector2 = Vector2()
 		# rotated_position.x = (point.x * cos(dest_area_rotation)) - (point.y * sin(dest_area_rotation))
@@ -223,23 +202,23 @@ func localize(destruction_area, new_transform: Vector2 ) -> Polygon2D:
 	return offset_poly
 
 
-func localize_and_rotate(destruction_area, new_transform: Vector2) -> Polygon2D:
+func localize_and_rotate(hit_location, new_transform: Vector2) -> Polygon2D:
 	
 	var offset_poly = Polygon2D.new()
 	offset_poly.global_position = Vector2.ZERO
 
-	var dest_area_rotation: float = destruction_area.global_rotation
+	var dest_area_rotation: float = hit_location.global_rotation
 	var new_poly_points: Array[Vector2] = []
 
-	# print("DA.GP: ", destruction_area.global_position)
+	# print("DA.GP: ", hit_location.global_position)
 	# print("GP   :  ", global_position)
-	# print("GP   :  ", destruction_area.global_position - global_position)
+	# print("GP   :  ", hit_location.global_position - global_position)
 	# print("--------------------------")
 
-	for point in destruction_area.polygon:
+	for point in hit_location.polygon:
 	
 		# Localize the polygons point.
-		var localized_position: Vector2 = (destruction_area.global_position - global_position)
+		var localized_position: Vector2 = (hit_location.global_position - global_position)
 
 		# Rotate the polygon point.
 		var rotated_position: Vector2 = Vector2()

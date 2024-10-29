@@ -1,8 +1,12 @@
-res://scenes/asteroid/asteroid.gd
+res://scenes/enemies/simple_enemy.gd
+res://scenes/state_machine/finite_state_machine.gd
+res://scenes/enemies/enemy_wander_state.gd
+res://scenes/enemies/enemy_chase_state.gd
 res://scenes/world/world.tscn
 res://scenes/player/player.tscn
 res://scenes/laser/laser.tscn
 res://scenes/asteroid/asteroid.tscn
 res://scenes/Asteroids/asteroid_2.tscn
-res://Test.gd
 res://scenes/tests/test.tscn
+res://scenes/enemies/simple_enemy.tscn
+res://scenes/player/player.gd

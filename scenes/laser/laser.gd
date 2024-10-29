@@ -24,7 +24,7 @@ func _on_body_entered(body:Node2D) -> void:
 
 	if body.is_in_group("asteroids"):
 		#destruction_area.rotation = global_rotation
-		body.clip(destruction_area)
+		body.clip($CollisionShape2D, force_direction)
 		# print(global_position)
 		#body.apply_impulse(force_direction * force)
 
