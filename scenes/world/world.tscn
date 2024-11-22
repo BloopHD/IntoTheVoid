@@ -14,12 +14,15 @@ script = ExtResource("1_8rw03")
 position = Vector2(640, 380)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(0.5, 0.5)
 
 [node name="Projectiles" type="Node2D" parent="."]
 
 [node name="Asteroids" type="Node2D" parent="."]
 
-[node name="SimpleEnemy" parent="." instance=ExtResource("5_i4gcu")]
-position = Vector2(1166, 146)
+[node name="SimpleEnemy" parent="." node_paths=PackedStringArray("player_test") instance=ExtResource("5_i4gcu")]
+position = Vector2(2307, 1213)
+friction = 100
+player_test = NodePath("../Player")
 
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]

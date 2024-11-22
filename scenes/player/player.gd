@@ -55,7 +55,7 @@ func player_movement(delta) -> void:
 
 	var look_dir: Vector2 = player_rotation()
 	var thrust: float = get_thrust()
-	curr_speed = velocity.length()
+	#curr_speed = velocity.length()
 	
 	if thrust <= 0.001:
 

@@ -22,14 +22,15 @@ func _process(_delta):
 		wander_location_reached = actor.global_position.distance_to(wander_location) < 5
 		
 
-func _physics_process(_delta):
-	actor.move_and_slide()
+func _physics_process(delta):
+	actor.move(delta)
+	#actor.move_and_slide()
 
 func _enter_state() -> void:
 	set_physics_process(true)
 
-	wander_origin = actor.global_position
-	wander_timer.start()
+	#wander_origin = actor.global_position
+	#wander_timer.start()
 
 	# if actor.velocity == Vector2.ZERO:
 	#     actor.velocity = Vector2.RIGHT.rotated(randf_range(0, TAU)) * actor.max_speed

@@ -1,0 +1,85 @@
+[gd_scene load_steps=10 format=3 uid="uid://bdd130r3cnp88"]
+
+[ext_resource type="Script" path="res://scenes/enemies/simple_enemy.gd" id="1_h22hu"]
+[ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
+[ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="3_wtaja"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy_wander_state.gd" id="4_db3q0"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy_chase_state.gd" id="5_ahrbe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xrcxf"]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
+radius = 500.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
+radius = 150.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
+radius = 500.0
+
+[node name="Simple_Enemy" type="CharacterBody2D"]
+collision_layer = 32
+collision_mask = 7
+script = ExtResource("1_h22hu")
+max_speed = null
+acceleration = null
+friction = 1000
+rotation_speed = null
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_6f36q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xrcxf")
+
+[node name="Chase_Detection_Area" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 33
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Chase_Detection_Area"]
+shape = SubResource("CircleShape2D_21b31")
+
+[node name="Retreat_Detection_Area" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Retreat_Detection_Area"]
+shape = SubResource("CircleShape2D_celd3")
+debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
+
+[node name="Attack_Detection_Area" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_Detection_Area"]
+shape = SubResource("CircleShape2D_vu1h3")
+debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, 500)
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("3_wtaja")
+state = NodePath("EnemyWanderState")
+
+[node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "vision_cast", "wander_timer")]
+script = ExtResource("4_db3q0")
+actor = NodePath("../..")
+vision_cast = NodePath("../../RayCast2D")
+wander_timer = NodePath("WanderTimer")
+wander_range = 250.0
+
+[node name="WanderTimer" type="Timer" parent="FiniteStateMachine/EnemyWanderState"]
+wait_time = 3.0
+one_shot = true
+
+[node name="EnemyChaseState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("5_ahrbe")
+actor = NodePath("../..")
+
+[connection signal="body_entered" from="Chase_Detection_Area" to="." method="_on_chase_detection_area_body_entered"]
+[connection signal="body_exited" from="Chase_Detection_Area" to="." method="_on_chase_detection_area_body_exited"]
+[connection signal="body_entered" from="Retreat_Detection_Area" to="." method="_on_retreat_detection_area_body_entered"]
+[connection signal="body_exited" from="Retreat_Detection_Area" to="." method="_on_retreat_detection_area_body_exited"]
+[connection signal="body_entered" from="Attack_Detection_Area" to="." method="_on_attack_detection_area_body_entered"]
+[connection signal="body_exited" from="Attack_Detection_Area" to="." method="_on_attack_detection_area_body_exited"]
+[connection signal="timeout" from="FiniteStateMachine/EnemyWanderState/WanderTimer" to="FiniteStateMachine/EnemyWanderState" method="_on_wander_timer_timeout"]
