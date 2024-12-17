@@ -37,7 +37,7 @@ func check_input() -> void:
 
 		shoot_laser()
 		can_shoot = false
-		$LaserTimer.start()
+		34.start()
 
 	elif Input.is_action_pressed("secondary action"):
 
@@ -99,7 +99,7 @@ func player_rotation() -> Vector2:
 	# 	print(look_dir)
 	
 	look_dir = (get_global_mouse_position() - position).normalized()
-	var angle = look_dir.angle() + NINETY_DEGREES_RAD
+	var angle: float = look_dir.angle() + NINETY_DEGREES_RAD
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, .1))
 		
 	return look_dir

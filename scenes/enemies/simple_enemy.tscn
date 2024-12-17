@@ -8,32 +8,39 @@
 [ext_resource type="Script" path="res://scenes/enemies/enemy_aware_state.gd" id="6_w7qao"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_attack_state.gd" id="7_e3itp"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xrcxf"]
-radius = 12.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
-radius = 1500.0
+radius = 2500.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
-radius = 1250.0
+radius = 2000.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
 radius = 150.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
-radius = 500.0
+radius = 1000.0
 
-[node name="Simple_Enemy" type="CharacterBody2D"]
+[node name="Simple_Enemy" type="CharacterBody2D" node_paths=PackedStringArray("muzzle") groups=["enemy"]]
 collision_layer = 32
 collision_mask = 7
 script = ExtResource("1_h22hu")
 friction = 500
+muzzle = NodePath("Marker2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_6f36q")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_xrcxf")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemy"]]
+shape = SubResource("CapsuleShape2D_10cgx")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, -20)
+
+[node name="ShootingTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
 
 [node name="Aware_Detection_Area" type="Area2D" parent="."]
 
@@ -60,17 +67,13 @@ debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 shape = SubResource("CircleShape2D_vu1h3")
 debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(0, 500)
-
 [node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("state")]
 script = ExtResource("3_wtaja")
 state = NodePath("EnemyWanderState")
 
-[node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "vision_cast", "wander_timer")]
+[node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("4_db3q0")
 actor = NodePath("../..")
-vision_cast = NodePath("../../RayCast2D")
 wander_timer = NodePath("WanderTimer")
 wander_range = 250.0
 
@@ -86,9 +89,11 @@ actor = NodePath("../..")
 script = ExtResource("5_ahrbe")
 actor = NodePath("../..")
 
-[node name="EnemyAttackState" type="Node" parent="FiniteStateMachine"]
+[node name="EnemyAttackState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("7_e3itp")
+actor = NodePath("../..")
 
+[connection signal="timeout" from="ShootingTimer" to="." method="_on_shooting_timer_timeout"]
 [connection signal="body_entered" from="Aware_Detection_Area" to="." method="_on_aware_detection_area_body_entered"]
 [connection signal="body_exited" from="Aware_Detection_Area" to="." method="_on_aware_detection_area_body_exited"]
 [connection signal="body_entered" from="Chase_Detection_Area" to="." method="_on_chase_detection_area_body_entered"]

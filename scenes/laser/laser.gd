@@ -21,7 +21,7 @@ func _physics_process(delta) -> void:
 
 
 func _on_body_entered(body:Node2D) -> void:
-
+	
 	if body.is_in_group("asteroids"):
 		#destruction_area.rotation = global_rotation
 		body.clip($CollisionShape2D, force_direction)
@@ -29,3 +29,6 @@ func _on_body_entered(body:Node2D) -> void:
 		#body.apply_impulse(force_direction * force)
 
 		queue_free()
+		
+	if body.is_in_group("enemy"):
+		print("Enemy Hit")

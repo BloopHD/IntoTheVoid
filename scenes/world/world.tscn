@@ -21,8 +21,10 @@ zoom = Vector2(0.5, 0.5)
 [node name="Asteroids" type="Node2D" parent="."]
 
 [node name="SimpleEnemy" parent="." node_paths=PackedStringArray("player_test") instance=ExtResource("5_i4gcu")]
-position = Vector2(2307, 1213)
+position = Vector2(2505, 1379)
 friction = 100
 player_test = NodePath("../Player")
 
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
+[connection signal="laser_shot" from="Player" to="." method="laser_shot"]
+[connection signal="laser_shot" from="SimpleEnemy" to="." method="laser_shot"]
