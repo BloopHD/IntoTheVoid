@@ -37,7 +37,7 @@ func check_input() -> void:
 
 		shoot_laser()
 		can_shoot = false
-		34.start()
+		$LaserTimer.start()
 
 	elif Input.is_action_pressed("secondary action"):
 
@@ -55,6 +55,7 @@ func player_movement(delta) -> void:
 
 	var look_dir: Vector2 = player_rotation()
 	var thrust: float = get_thrust()
+	var side_thrust: float = Input.get_action_strength("left") - Input.get_action_strength("right")
 	#curr_speed = velocity.length()
 	
 	if thrust <= 0.001:
