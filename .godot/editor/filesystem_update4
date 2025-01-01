@@ -9,8 +9,8 @@ res://scenes/enemies/simple_enemy.gd
 res://scenes/enemies/enemy_aware_state.gd
 res://scenes/state_machine/finite_state_machine.gd
 res://scenes/state_machine/state.gd
-res://scenes/world/world.tscn
 res://scenes/player/player.tscn
+res://scenes/world/world.tscn
 res://scenes/asteroid/asteroid.tscn
 res://scenes/Asteroids/asteroid_2.tscn
 res://scenes/tests/test.tscn

@@ -3,9 +3,11 @@ extends CharacterBody2D
 signal laser_shot(laser)
 
 @export var max_speed: int = 500
+@export var rotation_speed: int = 250
+@export var reverse_speed_multiplier: float = 0.75
 @export var accel: int = 500
 @export var friction: int = 100
-@export var rotation_speed: int = 250
+
 
 @onready var muzzle: Marker2D = $LaserMarkers/LaserMarker
 
@@ -13,6 +15,7 @@ var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
 
 const NINETY_DEGREES: int = 90
 const NINETY_DEGREES_RAD: float = 1.5708
+const FULL_SPEED_MULTI: float = 1.0
 
 var can_shoot: bool = true
 
@@ -28,7 +31,8 @@ func _process(_delta) -> void:
 
 func _physics_process(delta) -> void:
 
-	player_movement(delta)
+	#player_movement(delta)
+	player_move(delta)
 
 
 func check_input() -> void:
@@ -46,37 +50,96 @@ func check_input() -> void:
 
 func get_thrust() -> float:
 
-	var thrust: float = Input.get_action_strength("up")
+	var thrust: float = Input.get_action_strength("forward")
+	
+	var thrust_all: Vector2 = Input.get_vector("left", "right", "backward", "forward")
+	
+	print(thrust_all)
+	
 
 	return thrust
+	
+func get_movement() -> Vector2:
+
+	return Input.get_vector("left", "right", "backward", "forward")
 
 
 func player_movement(delta) -> void:
 
 	var look_dir: Vector2 = player_rotation()
 	var thrust: float = get_thrust()
-	var side_thrust: float = Input.get_action_strength("left") - Input.get_action_strength("right")
 	#curr_speed = velocity.length()
 	
+	print(thrust)	
+
 	if thrust <= 0.001:
-
 		if curr_speed > (friction * delta):
-
 			velocity -= velocity.normalized() * (friction * delta)
 
 		else:
-
 			velocity = Vector2.ZERO
 
 	else:
-
 		var thrust_power: float = (thrust * accel * delta)
 		var thrust_velocity: Vector2 = look_dir * thrust_power
 		velocity += thrust_velocity
 		velocity = velocity.limit_length(max_speed)
+
+	move_and_slide()
+	
+	
+func player_move(delta) -> void:
+
+	# New movement function.
+	var movement_vector: Vector2 = get_movement()
+	var thrust: float = movement_vector.y
+	var strafe: float = movement_vector.x
+
+	var look_dir: Vector2 = player_rotation()
+
+	# Thrusting
+	if thrust >= 0.001:
+		var new_velocity: Vector2 = velocity
+		velocity = activate_thrusters(delta, movement_vector, look_dir, new_velocity, FULL_SPEED_MULTI)
+
+	elif thrust <= -0.001:
+		var new_velocity: Vector2 = velocity
+		new_velocity = activate_thrusters(delta, movement_vector, look_dir, new_velocity, reverse_speed_multiplier)
+		
+		if new_velocity.length() > velocity.length():
+			velocity = new_velocity
+		
+		else:
+			deactivate_thrusters(delta)
+			
+	else:
+		deactivate_thrusters(delta)
+	
+	# Strafing
 	
 	move_and_slide()
 
+func activate_thrusters(delta, movement_vector: Vector2, look_dir: Vector2, new_velocity: Vector2, multiplier: float) ->  Vector2:
+
+	var thrust: float = movement_vector.y
+	var thrust_power: float = (thrust * accel * delta)
+	var thrust_velocity: Vector2 = look_dir * thrust_power
+	
+	new_velocity += thrust_velocity
+	new_velocity = new_velocity.limit_length(max_speed * multiplier)
+	
+	return new_velocity
+	
+	
+func deactivate_thrusters(delta) -> void:
+
+	if curr_speed > (friction * delta):
+		velocity -= velocity.normalized() * (friction * delta)
+
+	else:
+		velocity = Vector2.ZERO
+		
+		
 
 func player_rotation() -> Vector2:
 
