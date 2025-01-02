@@ -5,6 +5,7 @@ signal laser_shot(laser)
 @export var max_speed: int = 500
 @export var rotation_speed: int = 250
 @export var reverse_speed_multiplier: float = 0.75
+@export var strafe_speed_multiplier: float = 0.5
 @export var accel: int = 500
 @export var friction: int = 100
 
@@ -100,11 +101,11 @@ func player_move(delta) -> void:
 	# Thrusting
 	if thrust >= 0.001:
 		var new_velocity: Vector2 = velocity
-		velocity = activate_thrusters(delta, movement_vector, look_dir, new_velocity, FULL_SPEED_MULTI)
+		velocity = activate_thrusters(delta, thrust, look_dir, new_velocity, FULL_SPEED_MULTI)
 
 	elif thrust <= -0.001:
 		var new_velocity: Vector2 = velocity
-		new_velocity = activate_thrusters(delta, movement_vector, look_dir, new_velocity, reverse_speed_multiplier)
+		new_velocity = activate_thrusters(delta, thrust, look_dir, new_velocity, reverse_speed_multiplier)
 		
 		if new_velocity.length() > velocity.length():
 			velocity = new_velocity
@@ -116,12 +117,19 @@ func player_move(delta) -> void:
 		deactivate_thrusters(delta)
 	
 	# Strafing
+	if strafe >= 0.001 || strafe <= -0.001:
+		var strafe_power: float = (strafe * accel * delta)
+		var right_left: Vector2 = Vector2(-look_dir.y, look_dir.x)
+		var strafe_velocity: Vector2 = right_left * strafe_power
+		velocity += strafe_velocity.limit_length(max_speed * strafe_speed_multiplier)
+		
+	else:
+		deactivate_thrusters(delta)
 	
 	move_and_slide()
 
-func activate_thrusters(delta, movement_vector: Vector2, look_dir: Vector2, new_velocity: Vector2, multiplier: float) ->  Vector2:
-
-	var thrust: float = movement_vector.y
+func activate_thrusters(delta, thrust: float, look_dir: Vector2, new_velocity: Vector2, multiplier: float) ->  Vector2:
+	
 	var thrust_power: float = (thrust * accel * delta)
 	var thrust_velocity: Vector2 = look_dir * thrust_power
 	
