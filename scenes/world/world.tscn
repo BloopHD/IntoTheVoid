@@ -12,10 +12,10 @@ script = ExtResource("1_8rw03")
 
 [node name="Player" parent="." instance=ExtResource("1_e5wuh")]
 position = Vector2(640, 380)
-rotation_speed = null
-reverse_speed_multiplier = null
-strafe_speed_multiplier = null
-accel = null
+rotation_speed = 250
+reverse_speed_multiplier = 0.75
+strafe_speed_multiplier = 0.5
+accel = 500
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(0.5, 0.5)

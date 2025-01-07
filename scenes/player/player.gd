@@ -32,8 +32,8 @@ func _process(_delta) -> void:
 
 func _physics_process(delta) -> void:
 
-	#player_movement(delta)
-	player_move(delta)
+	player_movement(delta)
+	#player_move(delta)
 
 
 func check_input() -> void:
@@ -65,38 +65,32 @@ func get_movement() -> Vector2:
 	return Input.get_vector("left", "right", "backward", "forward")
 
 
+# View based movment function
 func player_movement(delta) -> void:
 
+	var movement_vector: Vector2 = get_movement()
 	var look_dir: Vector2 = player_rotation()
-	var thrust: float = get_thrust()
-	#curr_speed = velocity.length()
-	
-	print(thrust)	
 
-	if thrust <= 0.001:
-		if curr_speed > (friction * delta):
-			velocity -= velocity.normalized() * (friction * delta)
+	movement_vector.y = -movement_vector.y
 
-		else:
-			velocity = Vector2.ZERO
 
+
+	if movement_vector > Vector2.ZERO || movement_vector < Vector2.ZERO:
+		var movement_power: Vector2 = (movement_vector * accel * delta)
+		velocity += movement_power.limit_length(max_speed)
 	else:
-		var thrust_power: float = (thrust * accel * delta)
-		var thrust_velocity: Vector2 = look_dir * thrust_power
-		velocity += thrust_velocity
-		velocity = velocity.limit_length(max_speed)
+		deactivate_thrusters(delta)
 
 	move_and_slide()
 	
-	
+# Ship based movement function.
 func player_move(delta) -> void:
 
-	# New movement function.
 	var movement_vector: Vector2 = get_movement()
+	var look_dir: Vector2 = player_rotation()
+
 	var thrust: float = movement_vector.y
 	var strafe: float = movement_vector.x
-
-	var look_dir: Vector2 = player_rotation()
 
 	# Thrusting
 	if thrust >= 0.001:
