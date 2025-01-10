@@ -78,55 +78,44 @@ func get_movement() -> Vector2:
 func player_movement(delta) -> void:
 
 	var input_vector: Vector2 = get_movement()
-	var look_vector: Vector2 = player_rotation()
-	var new_velocity: Vector2 = velocity
-	var max_speed_multiplier: float = 1
+	var look_dir: Vector2 = player_rotation()
 
-	if input_vector > Vector2.ZERO || input_vector < Vector2.ZERO:
-		var movement_power: Vector2 = (input_vector * accel * delta)
-		var move_to_look_angle: float = rad_to_deg(input_vector.angle_to(look_vector))
-		var forward_thrust_angle: float = 30
-	
-		if move_to_look_angle >= forward_thrust_angle || move_to_look_angle <= -forward_thrust_angle:
-			# Strafing or moving backward.
-			max_speed_multiplier = strafe_speed_multiplier
-			
-			var slow_power: Vector2 = (velocity.normalized() * friction * delta)
-			new_velocity -= slow_power
-			new_velocity += input_vector * friction / 2 * delta
-			
-			if new_velocity.length() < (max_speed * max_speed_multiplier):
-				new_velocity = new_velocity.normalized() * max_speed * max_speed_multiplier
+	input_vector.y = -input_vector.y
+
+	var thrust: float = input_vector.y
+	var strafe: float = input_vector.x
+
+	# Thrusting
+	if thrust >= 0.001:
+		var new_velocity: Vector2 = velocity
+		velocity = activate_thrusters(delta, thrust, Vector2(0,-1), new_velocity, FULL_SPEED_MULTI)
+
+	elif thrust <= -0.001:
+		var new_velocity: Vector2 = velocity
+		new_velocity = activate_thrusters(delta, thrust, Vector2(0,-1), new_velocity, reverse_speed_multiplier)
+
+		if new_velocity.length() > velocity.length():
+			velocity = new_velocity
+
 		else:
-			new_velocity += movement_power
-			new_velocity = new_velocity.limit_length(max_speed * max_speed_multiplier)
-		
-		velocity = new_velocity
-		
-#		if new_velocity.length() >= velocity.length():
-#			velocity = new_velocity
-#		else:
-#			print("Slowing down")
-#			var slowed_velocity: Vector2 = velocity
-#			# deactivate_thrusters(delta) function.
-#			if curr_speed > (friction * delta):
-#				var slow_power: Vector2 = (input_vector * friction * delta)
-#				slowed_velocity -= slow_power
-#			else:
-#				slowed_velocity = Vector2.ZERO
-#			velocity = slowed_velocity
-		print("New Speed: ", new_velocity.length(), " Old Speed: ", velocity.length())
-		
+			print("here")
+			deactivate_thrusters(delta)
+
 	else:
-		if curr_speed > (friction * delta):
-			var slow_power: Vector2 = (velocity.normalized() * friction * delta)
-			new_velocity -= slow_power
-		else:
-			new_velocity = Vector2.ZERO
-		
-		velocity = new_velocity
+		deactivate_thrusters(delta)
+
+	# Strafing
+	if strafe >= 0.001 || strafe <= -0.001:
+		var strafe_power: float = (strafe * accel * delta)
+		var right_left: Vector2 = Vector2(-look_dir.y, look_dir.x)
+		var strafe_velocity: Vector2 = right_left * strafe_power
+		velocity += strafe_velocity.limit_length(max_speed * strafe_speed_multiplier)
+
+	else:
+		deactivate_thrusters(delta)
 
 	move_and_slide()
+	
 	
 # Ship based movement function.
 func player_move(delta) -> void:
