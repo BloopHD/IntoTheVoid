@@ -25,6 +25,6 @@ position = Vector2(2505, 1379)
 friction = 100
 player_test = NodePath("../Player")
 
-[connection signal="laser_shot" from="Player" to="." method="laser_shot"]
 [connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
+[connection signal="laser_shot" from="Player" to="." method="laser_shot"]
 [connection signal="laser_shot" from="SimpleEnemy" to="." method="laser_shot"]

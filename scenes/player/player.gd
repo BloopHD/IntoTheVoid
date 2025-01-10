@@ -5,7 +5,7 @@ signal laser_shot(laser)
 @export var max_speed: int = 500
 @export var rotation_speed: int = 250
 @export var reverse_speed_multiplier: float = 0.75
-@export var strafe_speed_multiplier: float = 0.65
+@export var strafe_speed_multiplier: float = 0.75
 @export var accel: int = 500
 @export var friction: int = 100
 
@@ -18,12 +18,15 @@ const NINETY_DEGREES: int = 90
 const NINETY_DEGREES_RAD: float = 1.5708
 const FULL_SPEED_MULTI: float = 1.0
 
+var using_m_and_k: bool = false
 var can_shoot: bool = true
 
 var curr_speed: float:
 	get:
 		return velocity.length()
 
+func _input(event: InputEvent) -> void:
+	check_input_type(event)
 
 func _process(_delta) -> void:
 
@@ -35,10 +38,17 @@ func _physics_process(delta) -> void:
 	player_movement(delta)
 	#player_move(delta)
 
+func check_input_type(event: InputEvent) -> void:
+
+	if event is InputEventMouseMotion or event is InputEventMouseButton:
+		using_m_and_k = true
+
+	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
+		using_m_and_k = false
 
 func check_input() -> void:
 
-	if (Input.is_action_pressed("primary action") or Input.is_action_pressed("fire_laser")) and can_shoot:
+	if Input.is_action_pressed("primary action") and can_shoot:
 
 		shoot_laser()
 		can_shoot = false
@@ -57,7 +67,6 @@ func get_thrust() -> float:
 	
 	print(thrust_all)
 	
-
 	return thrust
 	
 func get_movement() -> Vector2:
@@ -68,46 +77,67 @@ func get_movement() -> Vector2:
 # View based movment function
 func player_movement(delta) -> void:
 
-	var movement_vector: Vector2 = get_movement()
+	var input_vector: Vector2 = get_movement()
 	var look_vector: Vector2 = player_rotation()
-
+	var new_velocity: Vector2 = velocity
 	var max_speed_multiplier: float = 1
 
-	if movement_vector > Vector2.ZERO || movement_vector < Vector2.ZERO:
-		var movement_power: Vector2 = (movement_vector * accel * delta)
-		velocity += movement_power
-
-		var move_to_look_angle = rad_to_deg(movement_vector.angle_to(look_vector))
-		var forward_thrust_angle: float  = 30
-
-		if Input.is_action_pressed("secondary action"):
-			if move_to_look_angle >= forward_thrust_angle || move_to_look_angle <= -forward_thrust_angle:
-				print("nah")
-				max_speed_multiplier = strafe_speed_multiplier
-			else:
-				# Moving forward.
-				print("yas")
-				max_speed_multiplier = 1
-
-		velocity = velocity.limit_length(max_speed * max_speed_multiplier)
-
+	if input_vector > Vector2.ZERO || input_vector < Vector2.ZERO:
+		var movement_power: Vector2 = (input_vector * accel * delta)
+		var move_to_look_angle: float = rad_to_deg(input_vector.angle_to(look_vector))
+		var forward_thrust_angle: float = 30
+	
+		if move_to_look_angle >= forward_thrust_angle || move_to_look_angle <= -forward_thrust_angle:
+			# Strafing or moving backward.
+			max_speed_multiplier = strafe_speed_multiplier
+			
+			var slow_power: Vector2 = (velocity.normalized() * friction * delta)
+			new_velocity -= slow_power
+			new_velocity += input_vector * friction / 2 * delta
+			
+			if new_velocity.length() < (max_speed * max_speed_multiplier):
+				new_velocity = new_velocity.normalized() * max_speed * max_speed_multiplier
+		else:
+			new_velocity += movement_power
+			new_velocity = new_velocity.limit_length(max_speed * max_speed_multiplier)
+		
+		velocity = new_velocity
+		
+#		if new_velocity.length() >= velocity.length():
+#			velocity = new_velocity
+#		else:
+#			print("Slowing down")
+#			var slowed_velocity: Vector2 = velocity
+#			# deactivate_thrusters(delta) function.
+#			if curr_speed > (friction * delta):
+#				var slow_power: Vector2 = (input_vector * friction * delta)
+#				slowed_velocity -= slow_power
+#			else:
+#				slowed_velocity = Vector2.ZERO
+#			velocity = slowed_velocity
+		print("New Speed: ", new_velocity.length(), " Old Speed: ", velocity.length())
+		
 	else:
-		deactivate_thrusters(delta)
-
-	#print(velocity)
+		if curr_speed > (friction * delta):
+			var slow_power: Vector2 = (velocity.normalized() * friction * delta)
+			new_velocity -= slow_power
+		else:
+			new_velocity = Vector2.ZERO
+		
+		velocity = new_velocity
 
 	move_and_slide()
 	
 # Ship based movement function.
 func player_move(delta) -> void:
 
-	var movement_vector: Vector2 = get_movement()
+	var input_vector: Vector2 = get_movement()
 	var look_dir: Vector2 = player_rotation()
 
-	movement_vector.y = -movement_vector.y
+	input_vector.y = -input_vector.y
 
-	var thrust: float = movement_vector.y
-	var strafe: float = movement_vector.x
+	var thrust: float = input_vector.y
+	var strafe: float = input_vector.x
 
 	# Thrusting
 	if thrust >= 0.001:

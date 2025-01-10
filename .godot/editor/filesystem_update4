@@ -1,6 +1,5 @@
 res://scenes/world/world.tscn
 res://scenes/enemies/simple_enemy.gd
-res://scenes/player/player.gd
 res://scenes/player/player.tscn
 res://scenes/asteroid/asteroid.tscn
 res://scenes/Asteroids/asteroid_2.tscn
@@ -8,3 +7,13 @@ res://scenes/tests/test.tscn
 res://scenes/enemies/simple_enemy.tscn
 res://scenes/laser/laser.tscn
 res://scenes/laser/enemy_laser.tscn
+res://scenes/world/world.gd
+res://scenes/enemies/enemy_wander_state.gd
+res://scenes/enemies/enemy_chase_state.gd
+res://scenes/laser/enemy_laser.gd
+res://scenes/enemies/enemy_attack_state.gd
+res://scenes/player/player.gd
+res://scenes/laser/laser.gd
+res://scenes/enemies/enemy_aware_state.gd
+res://scenes/state_machine/finite_state_machine.gd
+res://scenes/state_machine/state.gd

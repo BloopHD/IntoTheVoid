@@ -13,10 +13,7 @@ collision_mask = 42
 motion_mode = 1
 script = ExtResource("1_pf1yp")
 max_speed = 1000
-rotation_speed = null
-reverse_speed_multiplier = null
-strafe_speed_multiplier = null
-accel = null
+strafe_speed_multiplier = 0.75
 friction = 250
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
