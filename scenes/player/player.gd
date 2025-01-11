@@ -4,7 +4,6 @@ signal laser_shot(laser)
 
 @export var forward_speed: int = 1000
 @export var reverse_and_strafe_speed: int = 750
-@export var rotational_speed: float = 150
 @export var rotational_accel: float = 15
 @export var forward_accel: float = 75
 @export var reverse_and_strafe_accel: float = 65
@@ -74,8 +73,7 @@ func player_movement(delta: float) -> void:
 
 # This function rotates the player.
 func player_rotation(angle: float) -> void:
-
-	print(rotational_speed/ONE_HUNDRED)
+	
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
 
 
