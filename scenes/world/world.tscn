@@ -12,9 +12,10 @@ script = ExtResource("1_8rw03")
 
 [node name="Player" parent="." instance=ExtResource("1_e5wuh")]
 position = Vector2(640, 380)
+rotational_speed = 1.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(0.5, 0.5)
+zoom = Vector2(0.75, 0.75)
 
 [node name="Projectiles" type="Node2D" parent="."]
 
@@ -25,6 +26,6 @@ position = Vector2(2505, 1379)
 friction = 100
 player_test = NodePath("../Player")
 
-[connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
 [connection signal="laser_shot" from="Player" to="." method="laser_shot"]
+[connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
 [connection signal="laser_shot" from="SimpleEnemy" to="." method="laser_shot"]

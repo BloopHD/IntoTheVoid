@@ -2,43 +2,103 @@ extends CharacterBody2D
 
 signal laser_shot(laser)
 
-@export var max_speed: int = 500
-@export var rotation_speed: int = 250
-@export var reverse_speed_multiplier: float = 0.75
-@export var strafe_speed_multiplier: float = 0.75
-@export var accel: int = 500
-@export var friction: int = 100
+@export var forward_speed: int = 1000
+@export var reverse_and_strafe_speed: int = 750
+@export var rotational_speed: float = 150
+@export var rotational_accel: float = 15
+@export var forward_accel: float = 75
+@export var reverse_and_strafe_accel: float = 65
+@export var friction: float = 50
 
-
-@onready var muzzle: Marker2D = $LaserMarkers/LaserMarker
+@onready var Muzzle: Marker2D = $LaserMarkers/LaserMarker
+@onready var Crosshair: Node = $Crosshair
 
 var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
 
 const NINETY_DEGREES: int = 90
 const NINETY_DEGREES_RAD: float = 1.5708
 const FULL_SPEED_MULTI: float = 1.0
+const ONE_HUNDRED: int = 100
+
+var move_vector: Vector2 = Vector2.ZERO
+var aim_vector: Vector2 = Vector2.ZERO
 
 var using_m_and_k: bool = false
 var can_shoot: bool = true
+
+var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var curr_speed: float:
 	get:
 		return velocity.length()
 
-func _input(event: InputEvent) -> void:
-	check_input_type(event)
 
+func _input(event: InputEvent) -> void:
+
+	set_input_type(event)
+
+	
 func _process(_delta) -> void:
 
-	check_input()
+	check_for_input()
+		
 
-
-func _physics_process(delta) -> void:
+func _physics_process(delta: float) -> void:
 
 	player_movement(delta)
-	#player_move(delta)
+	player_rotation(get_player_rotation_angle())
+#	handle_crosshair(delta)
+	print(curr_speed)
 
-func check_input_type(event: InputEvent) -> void:
+	
+# Movment function.
+func player_movement(delta: float) -> void:
+	
+	var current_forward_angle: float = rad_to_deg(move_vector.angle_to(aim_vector))
+	var forward_angle_max: float = 30
+	
+	# If the player is moving.
+	if move_vector > Vector2.ZERO || move_vector < Vector2.ZERO:
+		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
+			# Moving the direction player is facing.
+			velocity = lerp(velocity, move_vector * forward_speed, delta * forward_accel / ONE_HUNDRED)
+		else:
+			# Moving sideways or backwards.
+			velocity = lerp(velocity, move_vector * reverse_and_strafe_speed, delta * reverse_and_strafe_accel / ONE_HUNDRED)
+	else:
+		# Slowing player down.
+		velocity = lerp(velocity, Vector2.ZERO, delta * friction / ONE_HUNDRED)
+	
+	move_and_slide()
+
+
+# This function rotates the player.
+func player_rotation(angle: float) -> void:
+
+	print(rotational_speed/ONE_HUNDRED)
+	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
+
+
+# This function gets the angle the player is facing.
+func get_player_rotation_angle() -> float:
+
+	var angle: float = 0.0
+
+	# If the player is aiming, use the aim vector to determine the direction the player faces.
+	if aim_vector != Vector2.ZERO:
+		angle = aim_vector.angle() + NINETY_DEGREES_RAD
+		# If the player is not aiming but moving, use the move vector to determine the direction the player faces.
+	elif move_vector != Vector2.ZERO:
+		angle = move_vector.angle() + NINETY_DEGREES_RAD
+	# If the player is not moving or aiming, use the previous aim vector to determine the direction the player faces.
+	else:
+		angle = previous_aim_vector.angle() + NINETY_DEGREES_RAD
+
+	return angle
+
+
+# This function checks the type of input the player is using.
+func set_input_type(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		using_m_and_k = true
@@ -46,176 +106,78 @@ func check_input_type(event: InputEvent) -> void:
 	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
 		using_m_and_k = false
 
-func check_input() -> void:
+
+# This function checks for player game input.
+func check_for_input() -> void:
+
+	check_for_weapons_fired()
+	move_vector = get_move_input()
+	aim_vector = get_aim_input()
+	save_aim_vector()
+
+
+# This function saves the current aim vevtor or move vector to allow us to keep the player 
+# facing the same direction when they stop moving.
+func save_aim_vector() -> void:
+
+	# If the player is aiming, save the aim vector.
+	if aim_vector != Vector2.ZERO:
+		previous_aim_vector = aim_vector
+		# If the player is not aiming but moving, save the move vector.
+	elif move_vector != Vector2.ZERO:
+		previous_aim_vector = move_vector
+
+
+# This function checks if the player has fired a weapon.
+func check_for_weapons_fired() -> void:
 
 	if Input.is_action_pressed("primary action") and can_shoot:
-
 		shoot_laser()
 		can_shoot = false
 		$LaserTimer.start()
 
 	elif Input.is_action_pressed("secondary action"):
 		pass
-		#print("boom")
+	#print("boom")
 
 
-func get_thrust() -> float:
+# This function gets the move input from the player.
+func get_move_input() -> Vector2:
 
-	var thrust: float = Input.get_action_strength("forward")
-	
-	var thrust_all: Vector2 = Input.get_vector("left", "right", "backward", "forward")
-	
-	print(thrust_all)
-	
-	return thrust
-	
-func get_movement() -> Vector2:
-
-	return Input.get_vector("left", "right", "forward", "backward")
+	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 
-# View based movment function
-func player_movement(delta) -> void:
+# This function gets the aim input from the player.
+func get_aim_input() -> Vector2:
 
-	var input_vector: Vector2 = get_movement()
-	var look_dir: Vector2 = player_rotation()
+	var aim_input: Vector2 = Vector2.ZERO
 
-	input_vector.y = -input_vector.y
-
-	var thrust: float = input_vector.y
-	var strafe: float = input_vector.x
-
-	# Thrusting
-	if thrust >= 0.001:
-		var new_velocity: Vector2 = velocity
-		velocity = activate_thrusters(delta, thrust, Vector2(0,-1), new_velocity, FULL_SPEED_MULTI)
-
-	elif thrust <= -0.001:
-		var new_velocity: Vector2 = velocity
-		new_velocity = activate_thrusters(delta, thrust, Vector2(0,-1), new_velocity, reverse_speed_multiplier)
-
-		if new_velocity.length() > velocity.length():
-			velocity = new_velocity
-
-		else:
-			print("here")
-			deactivate_thrusters(delta)
-
+	# If the player is using a mouse and keyboard, get the aim input from the mouse position.
+	if using_m_and_k:
+		aim_input = (get_global_mouse_position() - position).normalized()
+		# If the player is using a controller, get the aim input from the controller.
 	else:
-		deactivate_thrusters(delta)
+		aim_input = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 
-	# Strafing
-	if strafe >= 0.001 || strafe <= -0.001:
-		var strafe_power: float = (strafe * accel * delta)
-		var right_left: Vector2 = Vector2(-look_dir.y, look_dir.x)
-		var strafe_velocity: Vector2 = right_left * strafe_power
-		velocity += strafe_velocity.limit_length(max_speed * strafe_speed_multiplier)
-
-	else:
-		deactivate_thrusters(delta)
-
-	move_and_slide()
+	return aim_input
 	
 	
-# Ship based movement function.
-func player_move(delta) -> void:
+func shoot_laser() -> void:
 
-	var input_vector: Vector2 = get_movement()
-	var look_dir: Vector2 = player_rotation()
+	var laser: Area2D = laser_scene.instantiate()
+	laser.global_position = Muzzle.global_position
+	laser.rotation = rotation
+	laser.player_speed = curr_speed
+	emit_signal("laser_shot", laser)
 
-	input_vector.y = -input_vector.y
 
-	var thrust: float = input_vector.y
-	var strafe: float = input_vector.x
-
-	# Thrusting
-	if thrust >= 0.001:
-		var new_velocity: Vector2 = velocity
-		velocity = activate_thrusters(delta, thrust, look_dir, new_velocity, FULL_SPEED_MULTI)
-
-	elif thrust <= -0.001:
-		var new_velocity: Vector2 = velocity
-		new_velocity = activate_thrusters(delta, thrust, look_dir, new_velocity, reverse_speed_multiplier)
-		
-		if new_velocity.length() > velocity.length():
-			velocity = new_velocity
-		
-		else:
-			deactivate_thrusters(delta)
-			
-	else:
-		deactivate_thrusters(delta)
+func handle_crosshair(_delta) -> void:
 	
-	# Strafing
-	if strafe >= 0.001 || strafe <= -0.001:
-		var strafe_power: float = (strafe * accel * delta)
-		var right_left: Vector2 = Vector2(-look_dir.y, look_dir.x)
-		var strafe_velocity: Vector2 = right_left * strafe_power
-		velocity += strafe_velocity.limit_length(max_speed * strafe_speed_multiplier)
-		
-	else:
-		deactivate_thrusters(delta)
+	Crosshair.position.y = lerp(Crosshair.position.y, get_local_mouse_position().y, .5)
 	
-	move_and_slide()
-
-func activate_thrusters(delta, thrust: float, look_dir: Vector2, new_velocity: Vector2, multiplier: float) ->  Vector2:
-	
-	var thrust_power: float = (thrust * accel * delta)
-	var thrust_velocity: Vector2 = look_dir * thrust_power
-	
-	new_velocity += thrust_velocity
-	new_velocity = new_velocity.limit_length(max_speed * multiplier)
-	
-	return new_velocity
-	
-	
-func deactivate_thrusters(delta) -> void:
-
-	if curr_speed > (friction * delta):
-		velocity -= velocity.normalized() * (friction * delta)
-
-	else:
-		velocity = Vector2.ZERO
-		
-		
-
-func player_rotation() -> Vector2:
-
-	var look_dir: Vector2
-
-	# TODO: Allow turning with A & D. And Controller.
-	# var left: float = Input.get_action_strength("left") 
-	# var right: float = Input.get_action_strength("right")
-
-	# Keyboard turning controls take priority, so always turn
-	# on keyboard input.
-	# if (left != 0 || right != 0):
-		# TODO: set look_dir to the correct direction.
-		# pass 
-	
-	# Then, if the mouse has not moved stay the direction
-	# player is currently facing. Or if the mouse has moved,
-	# go ahead and move toward mouse.
-	# elif !Input.get_last_mouse_velocity():
-	# 	look_dir = (get_global_mouse_position() - position).normalized()
-	# 	print(look_dir)
-	
-	look_dir = (get_global_mouse_position() - position).normalized()
-	var angle: float = look_dir.angle() + NINETY_DEGREES_RAD
-	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, .1))
-		
-	return look_dir
+	return
 
 
 func _on_timer_timeout() -> void:
 
 	can_shoot = true
-
-
-func shoot_laser() -> void:
-
-	var laser: Area2D = laser_scene.instantiate()
-	laser.global_position = muzzle.global_position
-	laser.rotation = rotation
-	laser.curr_speed = curr_speed
-	emit_signal("laser_shot", laser)

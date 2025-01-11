@@ -9,15 +9,15 @@ var movement_vector: Vector2 = Vector2.UP
 
 var force_direction: Vector2 = Vector2()
 
-var curr_speed: float:
+var player_speed: float:
 	set(value):
-		curr_speed = value
+		player_speed = value
 
 
 func _physics_process(delta) -> void:
 
 	force_direction = movement_vector.rotated(rotation)
-	global_position += force_direction * (speed + curr_speed) * delta
+	global_position += force_direction * (speed + player_speed) * delta
 
 
 func _on_body_entered(body:Node2D) -> void:
