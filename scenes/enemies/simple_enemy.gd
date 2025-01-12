@@ -8,6 +8,8 @@ signal laser_shot(laser)
 @export var friction: int = 100
 @export var rotation_speed: float = 0.1
 
+@export var health: int = 100
+
 @export var muzzle: Marker2D
 
 @export var player_test: Node2D
@@ -19,7 +21,6 @@ signal laser_shot(laser)
 @onready var enemy_attack_state: Node = $FiniteStateMachine/EnemyAttackState
 
 var laser_scene: PackedScene = preload("res://scenes/laser/enemy_laser.tscn")
-
 
 var current_state: Node = null
 
@@ -43,17 +44,13 @@ var curr_speed: float:
 func move(delta: float):
 
 	if current_state != enemy_chase_state:
-
 		if curr_speed > (friction * delta):
-
 			velocity -= velocity.normalized() * (friction * delta)
 
 		else:
-
 			velocity = Vector2.ZERO
 		
 	else:
-	
 		var thrust_power: float = acceleration * delta
 		var thrust_velocity: Vector2 = thrust_power * look_dir
 		
@@ -62,12 +59,14 @@ func move(delta: float):
 
 	move_and_slide()
 	
+	
 func enemy_rotation(moveTowards: Vector2, rotation_multi: float = 1.0):
-	#print("RM ", rotation_multi)
+	
 	look_dir = (moveTowards - position).normalized()
 	var angle: float = look_dir.angle() + NINETY_DEGREES_RAD
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotation_speed * rotation_multi))
 
+	
 func try_to_shoot():
 	
 	if can_shoot:
@@ -75,6 +74,7 @@ func try_to_shoot():
 		$ShootingTimer.start()
 		shoot_laser()
 
+		
 func shoot_laser() -> void:
 		
 	var laser: Area2D = laser_scene.instantiate()

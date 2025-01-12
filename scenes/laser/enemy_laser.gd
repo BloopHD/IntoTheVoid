@@ -2,6 +2,7 @@ extends Area2D
 
 @export var speed: float = 1000.0
 @export var force: float = 5.0
+@export var damage: float = 25.0
 
 var movement_vector: Vector2 = Vector2.UP
 
@@ -16,4 +17,8 @@ func _physics_process(delta) -> void:
 
 	force_direction = movement_vector.rotated(rotation)
 	global_position += force_direction * (speed + curr_speed) * delta
-	
+
+func _on_body_entered(body:Node2D) -> void:
+
+	if body.is_in_group("player"):
+		body.health -= damage

@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 signal laser_shot(laser)
 
+@export var health: int = 100
+
 @export var forward_speed: int = 1000
 @export var reverse_and_strafe_speed: int = 750
 @export var rotational_accel: float = 15
@@ -40,6 +42,7 @@ func _input(event: InputEvent) -> void:
 func _process(_delta) -> void:
 
 	check_for_input()
+	check_health()
 		
 
 func _physics_process(delta: float) -> void:
@@ -47,7 +50,7 @@ func _physics_process(delta: float) -> void:
 	player_movement(delta)
 	player_rotation(get_player_rotation_angle())
 #	handle_crosshair(delta)
-	print(curr_speed)
+#	print("Player Speed: ", curr_speed)
 
 	
 # Movment function.
@@ -82,12 +85,9 @@ func get_player_rotation_angle() -> float:
 
 	var angle: float = 0.0
 
-	# If the player is aiming, use the aim vector to determine the direction the player faces.
+	# If the player is aiming or moving, use the aim vector to determine the direction the player faces.
 	if aim_vector != Vector2.ZERO:
 		angle = aim_vector.angle() + NINETY_DEGREES_RAD
-		# If the player is not aiming but moving, use the move vector to determine the direction the player faces.
-	elif move_vector != Vector2.ZERO:
-		angle = move_vector.angle() + NINETY_DEGREES_RAD
 	# If the player is not moving or aiming, use the previous aim vector to determine the direction the player faces.
 	else:
 		angle = previous_aim_vector.angle() + NINETY_DEGREES_RAD
@@ -113,6 +113,10 @@ func check_for_input() -> void:
 	aim_vector = get_aim_input()
 	save_aim_vector()
 
+func check_health() -> void:
+
+	if health <= 0:
+		hide()
 
 # This function saves the current aim vevtor or move vector to allow us to keep the player 
 # facing the same direction when they stop moving.
@@ -133,9 +137,11 @@ func check_for_weapons_fired() -> void:
 		shoot_laser()
 		can_shoot = false
 		$LaserTimer.start()
-
 	elif Input.is_action_pressed("secondary action"):
 		pass
+	else:
+		pass
+
 	#print("boom")
 
 
@@ -152,10 +158,13 @@ func get_aim_input() -> Vector2:
 
 	# If the player is using a mouse and keyboard, get the aim input from the mouse position.
 	if using_m_and_k:
-		aim_input = (get_global_mouse_position() - position).normalized()
-		# If the player is using a controller, get the aim input from the controller.
+		aim_input = (get_global_mouse_position() - position).normalized() 
+ 	# If the player is using a controller, get the aim input from the controller.
 	else:
 		aim_input = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+		# If the player is not aiming, set the aim input to the move vector.
+		if aim_input == Vector2.ZERO:
+			aim_input = move_vector
 
 	return aim_input
 	

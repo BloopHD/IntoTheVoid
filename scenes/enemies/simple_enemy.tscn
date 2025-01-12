@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://scenes/enemies/enemy_attack_state.gd" id="7_e3itp"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
+radius = 20.0
+height = 68.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
 radius = 2500.0
@@ -30,6 +32,7 @@ friction = 500
 muzzle = NodePath("Marker2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
 texture = ExtResource("2_6f36q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemy"]]
