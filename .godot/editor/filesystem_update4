@@ -11,12 +11,3 @@ res://scenes/enemies/enemy_attack_state.gd
 res://scenes/laser/laser.gd
 res://scenes/crosshairs/crosshair.gd
 res://scenes/state_machine/state.gd
-res://scenes/world/world.tscn
-res://scenes/player/player.tscn
-res://scenes/asteroid/asteroid.tscn
-res://scenes/Asteroids/asteroid_2.tscn
-res://scenes/tests/test.tscn
-res://scenes/enemies/simple_enemy.tscn
-res://scenes/laser/laser.tscn
-res://scenes/laser/enemy_laser.tscn
-res://scenes/crosshairs/crosshair.tscn
