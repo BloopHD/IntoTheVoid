@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bdd130r3cnp88"]
+[gd_scene load_steps=14 format=3 uid="uid://bdd130r3cnp88"]
 
 [ext_resource type="Script" path="res://scenes/enemies/simple_enemy.gd" id="1_h22hu"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scenes/enemies/enemy_chase_state.gd" id="5_ahrbe"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_aware_state.gd" id="6_w7qao"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_attack_state.gd" id="7_e3itp"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy_death_state.gd" id="8_grrgi"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
 radius = 20.0
@@ -95,6 +96,9 @@ actor = NodePath("../..")
 [node name="EnemyAttackState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("7_e3itp")
 actor = NodePath("../..")
+
+[node name="EnemyDeathState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("8_grrgi")
 
 [connection signal="timeout" from="ShootingTimer" to="." method="_on_shooting_timer_timeout"]
 [connection signal="body_entered" from="Aware_Detection_Area" to="." method="_on_aware_detection_area_body_entered"]

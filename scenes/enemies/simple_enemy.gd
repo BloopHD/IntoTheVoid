@@ -19,10 +19,10 @@ signal laser_shot(laser)
 @onready var enemy_aware_state: Node = $FiniteStateMachine/EnemyAwareState
 @onready var enemy_chase_state: Node = $FiniteStateMachine/EnemyChaseState
 @onready var enemy_attack_state: Node = $FiniteStateMachine/EnemyAttackState
+@onready var enemy_death_state: Node = $FiniteStateMachine/EnemyDeathState
+var current_state: Node = null
 
 var laser_scene: PackedScene = preload("res://scenes/laser/enemy_laser.tscn")
-
-var current_state: Node = null
 
 const NINETY_DEGREES_RAD: float = 1.5708
 
@@ -31,14 +31,15 @@ var move_towards: Vector2 = Vector2.ZERO
 var look_dir: Vector2
 
 var engaged_thrusters: bool = false
-var can_shoot: bool = true
+var can_shoot: bool = true 
 
 var curr_speed: float:
 	get:
 		return velocity.length()
 
-#func _physics_process(delta: float) -> void:
-	#enemy_rotation(player_test.position)
+
+#func _process(_delta: float) -> void:
+#	check_health()
 
 
 func move(delta: float):
@@ -82,7 +83,25 @@ func shoot_laser() -> void:
 	laser.rotation = rotation
 	laser.curr_speed = curr_speed
 	emit_signal("laser_shot", laser)
+
+
+func check_health() -> void:
+
+	if health <= 0:
+		current_state = enemy_death_state
+		finite_state_machine.change_state(current_state)
+		queue_free()
+		
 	
+func change_state(body: Node2D, new_state: Node) -> void:
+	
+	player = body
+	
+	if current_state != enemy_death_state:
+		current_state = new_state
+		finite_state_machine.change_state(new_state)
+
+
 #region Signals
 
 func _on_shooting_timer_timeout() -> void:
@@ -90,38 +109,30 @@ func _on_shooting_timer_timeout() -> void:
 
 func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.is_in_group("player"):
-		current_state = enemy_attack_state
-		finite_state_machine.change_state(current_state)
+		change_state(body, enemy_attack_state)
 
 
 func _on_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.is_in_group("player"):
-		current_state = enemy_chase_state
-		finite_state_machine.change_state(enemy_aware_state)
+		change_state(body,enemy_chase_state)
 
 func _on_chase_detection_area_body_entered(body:Node2D):
 	if body.is_in_group("player"):
-		current_state = enemy_chase_state
-		finite_state_machine.change_state(current_state)
+		change_state(body,enemy_chase_state)
 
 func _on_chase_detection_area_body_exited(body:Node2D):
 	if body.is_in_group("player"):
-		current_state = enemy_aware_state
-		finite_state_machine.change_state(enemy_aware_state)
+		change_state(body, enemy_aware_state)
 
 
 func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 	if body.is_in_group("player"):
-		player = body
-		current_state = enemy_aware_state
-		finite_state_machine.change_state(current_state)
+		change_state(body, enemy_aware_state)
 
 
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 	if body.is_in_group("player"):
-		player = null
-		current_state = enemy_wander_state
-		finite_state_machine.change_state(enemy_wander_state)
+		change_state(null, enemy_wander_state)
 		
 #endregion
 		

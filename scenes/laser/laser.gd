@@ -2,6 +2,8 @@ extends Area2D
 
 @onready var destruction_area: CollisionPolygon2D = $Area2D/ExplosionArea
 
+@export var damage: float = 5.0
+
 @export var speed: float = 1000.0
 @export var force: float = 5.0
 
@@ -31,4 +33,5 @@ func _on_body_entered(body:Node2D) -> void:
 		queue_free()
 		
 	if body.is_in_group("enemy"):
-		print("Enemy Hit")
+		body.health -= damage
+		body.check_health()
