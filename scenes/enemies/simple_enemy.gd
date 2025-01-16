@@ -4,8 +4,8 @@ extends CharacterBody2D
 signal laser_shot(laser)
 
 @export var max_speed: int = 750
-@export var acceleration: int = 500
-@export var friction: int = 100
+@export var acceleration: int = 70
+@export var friction: int = 50
 @export var rotation_speed: float = 0.1
 
 @export var health: int = 100
@@ -25,10 +25,12 @@ var current_state: Node = null
 var laser_scene: PackedScene = preload("res://scenes/laser/enemy_laser.tscn")
 
 const NINETY_DEGREES_RAD: float = 1.5708
+const ONE_HUNDRED: int = 100
 
 var player: Node2D = null
 var move_towards: Vector2 = Vector2.ZERO
-var look_dir: Vector2
+var move_direction: Vector2
+var look_direction: Vector2
 
 var engaged_thrusters: bool = false
 var can_shoot: bool = true 
@@ -44,27 +46,35 @@ var curr_speed: float:
 
 func move(delta: float):
 
-	if current_state != enemy_chase_state:
-		if curr_speed > (friction * delta):
-			velocity -= velocity.normalized() * (friction * delta)
-
-		else:
-			velocity = Vector2.ZERO
+	if current_state == enemy_chase_state:
+		velocity = lerp(velocity, look_direction * max_speed, delta * acceleration / ONE_HUNDRED)
 		
+	elif curr_speed > (friction * delta):
+		velocity = lerp(velocity, look_direction * max_speed, delta * friction / ONE_HUNDRED)
+	
 	else:
-		var thrust_power: float = acceleration * delta
-		var thrust_velocity: Vector2 = thrust_power * look_dir
-		
-		velocity += thrust_velocity
-		velocity = velocity.limit_length(max_speed)
+		velocity = Vector2.ZERO
 
 	move_and_slide()
 	
+
+func enemy_move_direction(delta: float, moveTowards: Vector2):
 	
+	
+	
+	move_direction = (moveTowards - position).normalized()
+	
+	velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
+	
+	move_and_slide()
+
+
 func enemy_rotation(moveTowards: Vector2, rotation_multi: float = 1.0):
+
+	look_direction = (moveTowards - position).normalized()
 	
-	look_dir = (moveTowards - position).normalized()
-	var angle: float = look_dir.angle() + NINETY_DEGREES_RAD
+	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
+	
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotation_speed * rotation_multi))
 
 	

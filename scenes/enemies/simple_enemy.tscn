@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://bdd130r3cnp88"]
+[gd_scene load_steps=15 format=3 uid="uid://bdd130r3cnp88"]
 
 [ext_resource type="Script" path="res://scenes/enemies/simple_enemy.gd" id="1_h22hu"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
+[ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://shield.tscn" id="3_qwefe"]
 [ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="3_wtaja"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_wander_state.gd" id="4_db3q0"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_chase_state.gd" id="5_ahrbe"]
@@ -27,12 +28,12 @@ radius = 1000.0
 
 [node name="Simple_Enemy" type="CharacterBody2D" node_paths=PackedStringArray("muzzle") groups=["enemy"]]
 collision_layer = 32
-collision_mask = 7
+collision_mask = 6
 script = ExtResource("1_h22hu")
-friction = 500
 muzzle = NodePath("Marker2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.987329, 0.102765, 0, 1)
 scale = Vector2(2, 2)
 texture = ExtResource("2_6f36q")
 
@@ -42,30 +43,37 @@ shape = SubResource("CapsuleShape2D_10cgx")
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(0, -20)
 
+[node name="Shield" parent="." groups=["enemy shield"] instance=ExtResource("3_qwefe")]
+scale = Vector2(6, 6)
+collision_layer = 128
+collision_mask = 4
+
 [node name="ShootingTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
 
 [node name="Aware_Detection_Area" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Aware_Detection_Area"]
 shape = SubResource("CircleShape2D_ow8ix")
 
 [node name="Chase_Detection_Area" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 33
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Chase_Detection_Area"]
 shape = SubResource("CircleShape2D_21b31")
 
 [node name="Retreat_Detection_Area" type="Area2D" parent="."]
-visible = false
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Retreat_Detection_Area"]
+visible = false
 shape = SubResource("CircleShape2D_celd3")
 debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 
 [node name="Attack_Detection_Area" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_Detection_Area"]
 shape = SubResource("CircleShape2D_vu1h3")

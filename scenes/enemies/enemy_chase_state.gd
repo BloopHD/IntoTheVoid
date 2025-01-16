@@ -10,8 +10,8 @@ func _process(_delta):
 	pass
 
 func _physics_process(delta) -> void:
-	actor.enemy_rotation(actor.player.position)
-	actor.move(delta)
+	# actor.enemy_rotation(actor.player.position)
+	actor.enemy_move_direction(delta, actor.player.position)
 
 func _enter_state() -> void:
 	set_physics_process(true)

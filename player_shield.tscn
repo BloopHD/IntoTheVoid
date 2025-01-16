@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpl26nj1qff7b"]
+
+[ext_resource type="Texture2D" uid="uid://cu77sogu42dqr" path="res://sprites/SimpleAsteroidSmall.png" id="1_50aaw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nl2ya"]
+radius = 8.0
+
+[node name="PlayerShield" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 0.8, 0.333333)
+texture = ExtResource("1_50aaw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nl2ya")

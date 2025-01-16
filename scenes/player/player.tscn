@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgy3rqxws2l4w"]
+[gd_scene load_steps=6 format=3 uid="uid://dgy3rqxws2l4w"]
 
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_gvkbj"]
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_pf1yp"]
 [ext_resource type="PackedScene" uid="uid://dmtjjxxfv4b6f" path="res://scenes/crosshairs/crosshair.tscn" id="3_7ao8m"]
+[ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://shield.tscn" id="4_xtpps"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2v2iu"]
 radius = 14.0
 height = 58.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
-collision_mask = 42
+z_index = 10
+collision_mask = 10
 motion_mode = 1
 script = ExtResource("1_pf1yp")
 
@@ -17,6 +19,7 @@ script = ExtResource("1_pf1yp")
 shape = SubResource("CapsuleShape2D_2v2iu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.403922, 0.152941, 1, 1)
 texture_filter = 1
 scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
@@ -33,5 +36,10 @@ position = Vector2(0, -250)
 
 [node name="LaserMarker" type="Marker2D" parent="LaserMarkers"]
 position = Vector2(0, -40)
+
+[node name="Shield" parent="." groups=["player shield"] instance=ExtResource("4_xtpps")]
+scale = Vector2(6, 6)
+collision_layer = 64
+collision_mask = 40
 
 [connection signal="timeout" from="LaserTimer" to="." method="_on_timer_timeout"]

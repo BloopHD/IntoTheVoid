@@ -19,7 +19,15 @@ func _physics_process(delta) -> void:
 	global_position += force_direction * (speed + curr_speed) * delta
 
 func _on_body_entered(body:Node2D) -> void:
-
+	
 	if body.is_in_group("player"):
 		body.health -= damage
 		body.check_health()
+		queue_free()
+		
+
+func _on_area_entered(area:Area2D) -> void:
+	
+	if area.is_in_group("player shield"):
+		area.damage_shield(damage)
+		queue_free()
