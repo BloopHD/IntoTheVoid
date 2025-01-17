@@ -26,15 +26,12 @@ func damage_shield(damage: float) -> void:
 	fade_in = true
 	
 	$FadeTimer.start()
-
-	print("Shield Health: ", shield_health)
+	
 	if shield_health <= 0:
 		queue_free()
-		print("Shield Destroyed!")
 		return
 
 func shield_fade_in() -> void:
-	print(shield_sprite.modulate.a8)
 	
 	if shield_sprite.modulate.a8 < shield_color.a8:
 		shield_sprite.modulate = lerp(shield_sprite.modulate, shield_color, 0.3)

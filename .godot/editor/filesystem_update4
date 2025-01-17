@@ -14,3 +14,5 @@ res://scenes/enemies/simple_enemy.tscn
 res://scenes/laser/laser.tscn
 res://scenes/laser/enemy_laser.tscn
 res://scenes/crosshairs/crosshair.tscn
+res://scenes/enemies/enemy_wander_state.gd
+res://scenes/enemies/enemy_attack_state.gd

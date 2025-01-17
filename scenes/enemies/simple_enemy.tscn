@@ -85,9 +85,10 @@ state = NodePath("EnemyWanderState")
 
 [node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("4_db3q0")
+wander_range = 250.0
+speed = null
 actor = NodePath("../..")
 wander_timer = NodePath("WanderTimer")
-wander_range = 250.0
 
 [node name="WanderTimer" type="Timer" parent="FiniteStateMachine/EnemyWanderState"]
 wait_time = 3.0

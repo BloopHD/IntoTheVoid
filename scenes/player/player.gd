@@ -23,11 +23,12 @@ const ONE_HUNDRED: int = 100
 
 var move_vector: Vector2 = Vector2.ZERO
 var aim_vector: Vector2 = Vector2.ZERO
+var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var using_m_and_k: bool = false
 var can_shoot: bool = true
 
-var previous_aim_vector: Vector2 = Vector2.ZERO
+
 
 var curr_speed: float:
 	get:
@@ -57,8 +58,10 @@ func player_movement(delta: float) -> void:
 	
 	var current_forward_angle: float = rad_to_deg(move_vector.angle_to(aim_vector))
 	var forward_angle_max: float = 30
-	
-	# If the player is moving.
+
+	print("player ", aim_vector)
+
+# If the player is moving.
 	if move_vector > Vector2.ZERO || move_vector < Vector2.ZERO:
 		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
 			# Moving the direction player is facing.

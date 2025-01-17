@@ -23,7 +23,8 @@ func _process(_delta):
 		
 
 func _physics_process(delta):
-	actor.move(delta)
+	pass
+	#actor.move(delta)
 	#actor.move_and_slide()
 
 func _enter_state() -> void:
@@ -49,4 +50,3 @@ func _on_wander_timer_timeout():
 	wander_location_reached = false;
 
 	actor.velocity = actor.global_position.direction_to(wander_location) * speed
-
