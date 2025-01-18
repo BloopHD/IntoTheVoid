@@ -6,7 +6,7 @@ signal laser_shot(laser)
 @export var max_speed: int = 750
 @export var acceleration: int = 70
 @export var friction: int = 50
-@export var rotational_accel: float = 1
+@export var rotational_accel: float = .1
 
 @export var health: int = 100
 
@@ -20,11 +20,13 @@ signal laser_shot(laser)
 @onready var enemy_chase_state: Node = $FiniteStateMachine/EnemyChaseState
 @onready var enemy_attack_state: Node = $FiniteStateMachine/EnemyAttackState
 @onready var enemy_death_state: Node = $FiniteStateMachine/EnemyDeathState
+@onready var enemy_retreat_state: Node = $FiniteStateMachine/EnemyRetreatState
 var current_state: Node = null
 
 var laser_scene: PackedScene = preload("res://scenes/laser/enemy_laser.tscn")
 
 const NINETY_DEGREES_RAD: float = 1.5708
+const NINETY_DEGREES_DEG: float = 90
 const ONE_HUNDRED: int = 100
 
 var player: Node2D = null
@@ -37,6 +39,7 @@ var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var engaged_thrusters: bool = false
 var can_shoot: bool = true 
+var player_in_range: bool = false
 
 var curr_speed: float:
 	get:
@@ -52,7 +55,7 @@ func move_func(delta: float, moveTowards: Vector2):
 	move_direction = (moveTowards - position).normalized()
 
 	var current_rotation_vector: Vector2 = Vector2(cos(rotation), sin(rotation))
-	var current_forward_angle: float = rad_to_deg(move_direction.angle_to(current_rotation_vector))
+	var current_forward_angle: float = rad_to_deg(move_direction.angle_to(current_rotation_vector)) - NINETY_DEGREES_DEG
 	
 	print("enemy ", move_direction, " ", rotation)	
 
@@ -60,13 +63,18 @@ func move_func(delta: float, moveTowards: Vector2):
 
 	rotate_func(get_rotation_angle(moveTowards))
 
-	if current_state == enemy_chase_state:
+
+	# TODO - This really needs to be refactored, and player_in_range does not quite work.
+
+	if current_state == enemy_chase_state || current_state == enemy_retreat_state:
 		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
 			print("FORWARD")
-			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
+			player_in_range = true
+			#velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
 		
 		else:
 			print("NOT")
+			player_in_range = false
 			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration * 0.75 / ONE_HUNDRED)
 		
 	elif curr_speed > (friction * delta):
@@ -83,7 +91,7 @@ func rotate_func(angle: float) -> void:
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
 
 
-func get_rotation_angle(moveTowards: Vector2, rotation_multi: float = 1.0) -> float:
+func get_rotation_angle(moveTowards: Vector2) -> float:
 
 	look_direction = (moveTowards - position).normalized()
 
@@ -94,7 +102,7 @@ func get_rotation_angle(moveTowards: Vector2, rotation_multi: float = 1.0) -> fl
 	
 func try_to_shoot():
 	
-	if can_shoot:
+	if can_shoot && player_in_range:
 		can_shoot = false
 		$ShootingTimer.start()
 		shoot_laser()
@@ -154,6 +162,14 @@ func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 	if body.is_in_group("player"):
 		change_state(null, enemy_wander_state)
+		
+func _on_retreat_detection_area_body_entered(body:Node2D) -> void:
+	if body.is_in_group("player"):
+		change_state(body, enemy_retreat_state)
+
+func _on_retreat_detection_area_body_exited(body:Node2D) -> void:
+	if body.is_in_group("player"):
+		change_state(body, enemy_attack_state)
 		
 #endregion
 		

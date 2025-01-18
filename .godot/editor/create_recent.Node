@@ -1,3 +1,4 @@
+Node
 RigidBody2D
 Timer
 Area2D
@@ -6,10 +7,8 @@ Sprite2D
 Node2D
 MeshInstance2D
 State
-Node
 Marker2D
 DonutCollisionPolygon2D
 EnemyChaseState
 EnemyWanderState
 RayCast2D
-CharacterBody2D

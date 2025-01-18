@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bdd130r3cnp88"]
+[gd_scene load_steps=16 format=3 uid="uid://bdd130r3cnp88"]
 
 [ext_resource type="Script" path="res://scenes/enemies/simple_enemy.gd" id="1_h22hu"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
@@ -9,22 +9,23 @@
 [ext_resource type="Script" path="res://scenes/enemies/enemy_aware_state.gd" id="6_w7qao"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_attack_state.gd" id="7_e3itp"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_death_state.gd" id="8_grrgi"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy_retreat_state.gd" id="10_13kfp"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
 radius = 20.0
 height = 68.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
-radius = 2500.0
+radius = 3000.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
 radius = 2000.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
-radius = 150.0
+radius = 500.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
-radius = 1000.0
+radius = 1500.0
 
 [node name="Simple_Enemy" type="CharacterBody2D" node_paths=PackedStringArray("muzzle") groups=["enemy"]]
 collision_layer = 32
@@ -68,7 +69,6 @@ shape = SubResource("CircleShape2D_21b31")
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Retreat_Detection_Area"]
-visible = false
 shape = SubResource("CircleShape2D_celd3")
 debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 
@@ -85,10 +85,10 @@ state = NodePath("EnemyWanderState")
 
 [node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("4_db3q0")
-wander_range = 250.0
-speed = null
 actor = NodePath("../..")
 wander_timer = NodePath("WanderTimer")
+wander_range = 250.0
+speed = null
 
 [node name="WanderTimer" type="Timer" parent="FiniteStateMachine/EnemyWanderState"]
 wait_time = 3.0
@@ -108,6 +108,10 @@ actor = NodePath("../..")
 
 [node name="EnemyDeathState" type="Node" parent="FiniteStateMachine"]
 script = ExtResource("8_grrgi")
+
+[node name="EnemyRetreatState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+script = ExtResource("10_13kfp")
+actor = NodePath("../..")
 
 [connection signal="timeout" from="ShootingTimer" to="." method="_on_shooting_timer_timeout"]
 [connection signal="body_entered" from="Aware_Detection_Area" to="." method="_on_aware_detection_area_body_entered"]
