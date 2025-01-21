@@ -6,7 +6,7 @@ signal laser_shot(laser)
 @export var max_speed: int = 750
 @export var acceleration: int = 70
 @export var friction: int = 50
-@export var rotational_accel: float = .1
+@export var rotational_accel: float = 1
 
 @export var health: int = 100
 
@@ -50,9 +50,9 @@ var curr_speed: float:
 #	check_health()
 
 
-func move_func(delta: float, moveTowards: Vector2):
-
-	move_direction = (moveTowards - position).normalized()
+func move_func(delta: float, move_direction: Vector2) -> void:
+	
+	move_direction = (move_direction - position).normalized()
 
 	var current_rotation_vector: Vector2 = Vector2(cos(rotation), sin(rotation))
 	var current_forward_angle: float = rad_to_deg(move_direction.angle_to(current_rotation_vector)) - NINETY_DEGREES_DEG
@@ -61,16 +61,16 @@ func move_func(delta: float, moveTowards: Vector2):
 
 	var forward_angle_max: float = 30
 
-	rotate_func(get_rotation_angle(moveTowards))
+	#rotate_func(get_rotation_angle(player_position))
 
 
 	# TODO - This really needs to be refactored, and player_in_range does not quite work.
 
-	if current_state == enemy_chase_state || current_state == enemy_retreat_state:
+	if current_state == enemy_chase_state || current_state == enemy_retreat_state || current_state == enemy_attack_state:
 		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
 			print("FORWARD")
 			player_in_range = true
-			#velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
+			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
 		
 		else:
 			print("NOT")
@@ -91,13 +91,22 @@ func rotate_func(angle: float) -> void:
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
 
 
-func get_rotation_angle(moveTowards: Vector2) -> float:
+func get_rotation_angle(player_position: Vector2) -> float:
 
-	look_direction = (moveTowards - position).normalized()
+	look_direction = (player_position - position).normalized()
 
 	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
 
 	return angle
+	
+	
+func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
+
+	look_direction = (aim_position - position).normalized()
+
+	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
+
+	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
 
 	
 func try_to_shoot():

@@ -16,7 +16,7 @@ var player_speed: float:
 		player_speed = value
 
 
-func _physics_process(delta) -> void:
+func _physics_process(delta: float) -> void:
 
 	force_direction = movement_vector.rotated(rotation)
 	global_position += force_direction * (speed + player_speed) * delta

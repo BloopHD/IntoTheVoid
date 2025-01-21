@@ -8,7 +8,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	actor.move_func(delta, -actor.player.position)
+	actor.move_func(delta, actor.player.position)
+	actor.rotate_function((actor.player.position - actor.position))
 	actor.try_to_shoot()
 
 
