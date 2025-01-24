@@ -8,11 +8,10 @@ signal laser_shot(laser)
 @export var friction: int = 50
 @export var rotational_accel: float = 1
 
-@export var health: int = 100
-
 @export var muzzle: Marker2D
-
 @export var player_test: Node2D
+
+@onready var health: Node2D = $Health
 
 @onready var finite_state_machine: Node = $FiniteStateMachine
 @onready var enemy_wander_state: Node = $FiniteStateMachine/EnemyWanderState
@@ -56,8 +55,6 @@ func move_func(delta: float, move_direction: Vector2) -> void:
 
 	var current_rotation_vector: Vector2 = Vector2(cos(rotation), sin(rotation))
 	var current_forward_angle: float = rad_to_deg(move_direction.angle_to(current_rotation_vector)) - NINETY_DEGREES_DEG
-	
-	print("enemy ", move_direction, " ", rotation)	
 
 	var forward_angle_max: float = 30
 
@@ -126,11 +123,10 @@ func shoot_laser() -> void:
 	emit_signal("laser_shot", laser)
 
 
-func check_health() -> void:
+func handle_hit(damage: int) -> void: 
+	health.health -= damage
 
-	if health <= 0:
-		current_state = enemy_death_state
-		finite_state_machine.change_state(current_state)
+	if health.health <= 0:
 		queue_free()
 		
 	

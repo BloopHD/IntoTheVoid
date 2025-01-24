@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dgy3rqxws2l4w"]
+[gd_scene load_steps=8 format=3 uid="uid://dgy3rqxws2l4w"]
 
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_gvkbj"]
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_pf1yp"]
 [ext_resource type="PackedScene" uid="uid://dmtjjxxfv4b6f" path="res://scenes/crosshairs/crosshair.tscn" id="3_7ao8m"]
-[ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://shield.tscn" id="4_xtpps"]
+[ext_resource type="Script" path="res://scenes/weapon/weapon.gd" id="3_hd6mn"]
+[ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="4_xtpps"]
+[ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="5_pdjii"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2v2iu"]
 radius = 14.0
@@ -24,22 +26,29 @@ texture_filter = 1
 scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
 
-[node name="LaserTimer" type="Timer" parent="."]
+[node name="Weapon" type="Node2D" parent="."]
+script = ExtResource("3_hd6mn")
+
+[node name="LaserCooldown" type="Timer" parent="Weapon"]
 wait_time = 0.15
 one_shot = true
 
-[node name="Crosshair" parent="." instance=ExtResource("3_7ao8m")]
-visible = false
-position = Vector2(0, -250)
+[node name="LaserMarkers" type="Node2D" parent="Weapon"]
 
-[node name="LaserMarkers" type="Node2D" parent="."]
-
-[node name="LaserMarker" type="Marker2D" parent="LaserMarkers"]
+[node name="LaserMarker" type="Marker2D" parent="Weapon/LaserMarkers"]
 position = Vector2(0, -40)
+
+[node name="MuzzleFlash" type="Sprite2D" parent="Weapon"]
 
 [node name="Shield" parent="." groups=["player shield"] instance=ExtResource("4_xtpps")]
 scale = Vector2(6, 6)
 collision_layer = 64
 collision_mask = 40
 
-[connection signal="timeout" from="LaserTimer" to="." method="_on_timer_timeout"]
+[node name="Health" parent="." instance=ExtResource("5_pdjii")]
+
+[node name="Crosshair" parent="." instance=ExtResource("3_7ao8m")]
+visible = false
+position = Vector2(0, -250)
+
+[connection signal="timeout" from="Weapon/LaserCooldown" to="." method="_on_timer_timeout"]

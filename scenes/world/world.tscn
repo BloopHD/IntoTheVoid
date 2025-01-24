@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwlv7ix15whqd"]
+[gd_scene load_steps=6 format=3 uid="uid://bwlv7ix15whqd"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_8rw03"]
 [ext_resource type="PackedScene" uid="uid://dgy3rqxws2l4w" path="res://scenes/player/player.tscn" id="1_e5wuh"]
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_c3qrl"]
 [ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemies/simple_enemy.tscn" id="5_i4gcu"]
+[ext_resource type="Script" path="res://scenes/world/projectile_manager.gd" id="5_lefb3"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
@@ -29,6 +30,7 @@ acceleration = 50
 friction = 10
 player_test = NodePath("../Player")
 
-[connection signal="laser_shot" from="Player" to="." method="laser_shot"]
-[connection signal="laser_shot" from="Player" to="." method="_on_player_laser_shot"]
+[node name="ProjectileManager" type="Node2D" parent="."]
+script = ExtResource("5_lefb3")
+
 [connection signal="laser_shot" from="SimpleEnemy" to="." method="laser_shot"]

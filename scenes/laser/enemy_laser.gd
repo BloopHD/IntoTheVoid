@@ -2,7 +2,7 @@ extends Area2D
 
 @export var speed: float = 1000.0
 @export var force: float = 5.0
-@export var damage: float = 5.0
+@export var damage: int = 5
 
 var movement_vector: Vector2 = Vector2.UP
 
@@ -21,8 +21,7 @@ func _physics_process(delta) -> void:
 func _on_body_entered(body:Node2D) -> void:
 	
 	if body.is_in_group("player"):
-		body.health -= damage
-		body.check_health()
+		body.handle_hit(damage)
 		queue_free()
 		
 

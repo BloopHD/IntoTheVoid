@@ -1,8 +1,7 @@
 extends CharacterBody2D
+class_name Player
 
-signal laser_shot(laser)
-
-@export var health: int = 100
+signal player_fired_laser(laser, position, rotation, starting_speed)
 
 @export var forward_speed: int = 1000
 @export var reverse_and_strafe_speed: int = 750
@@ -11,10 +10,15 @@ signal laser_shot(laser)
 @export var reverse_and_strafe_accel: float = 65
 @export var friction: float = 50
 
-@onready var Muzzle: Marker2D = $LaserMarkers/LaserMarker
+var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
+
+@onready var Muzzle: Marker2D = $Weapon/LaserMarkers/LaserMarker
+@onready var laser_cooldown: Timer = $Weapon/LaserCooldown
+
+@onready var health: Node2D = $Health
 @onready var Crosshair: Node = $Crosshair
 
-var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
+
 
 const NINETY_DEGREES: int = 90
 const NINETY_DEGREES_RAD: float = 1.5708
@@ -30,7 +34,7 @@ var can_shoot: bool = true
 
 
 
-var curr_speed: float:
+var current_speed: float:
 	get:
 		return velocity.length()
 
@@ -38,6 +42,8 @@ var curr_speed: float:
 func _input(event: InputEvent) -> void:
 
 	set_input_type(event)
+	
+	
 
 	
 func _process(_delta) -> void:
@@ -50,7 +56,7 @@ func _physics_process(delta: float) -> void:
 	player_movement(delta)
 	player_rotation(get_player_rotation_angle())
 #	handle_crosshair(delta)
-#	print("Player Speed: ", curr_speed)
+#	print("Player Speed: ", current_speed)
 
 	
 # Movment function.
@@ -58,8 +64,6 @@ func player_movement(delta: float) -> void:
 	
 	var current_forward_angle: float = rad_to_deg(move_vector.angle_to(aim_vector))
 	var forward_angle_max: float = 30
-
-	print("player ", aim_vector)
 
 # If the player is moving.
 	if move_vector > Vector2.ZERO || move_vector < Vector2.ZERO:
@@ -115,10 +119,11 @@ func check_for_input() -> void:
 	aim_vector = get_aim_input()
 	save_aim_vector()
 
-func check_health() -> void:
+func handle_hit(damage: int) -> void:
 
-	if health <= 0:
-		hide()
+	health.health -= damage
+	
+	
 
 # This function saves the current aim vevtor or move vector to allow us to keep the player 
 # facing the same direction when they stop moving.
@@ -138,13 +143,15 @@ func check_for_weapons_fired() -> void:
 	if Input.is_action_pressed("primary action") and can_shoot:
 		shoot_laser()
 		can_shoot = false
-		$LaserTimer.start()
+		laser_cooldown.start()
 	elif Input.is_action_pressed("secondary action"):
 		pass
 	else:
 		pass
 
 	#print("boom")
+
+
 
 
 # This function gets the move input from the player.
@@ -172,12 +179,17 @@ func get_aim_input() -> Vector2:
 	
 	
 func shoot_laser() -> void:
-
 	var laser: Area2D = laser_scene.instantiate()
-	laser.global_position = Muzzle.global_position
-	laser.rotation = rotation
-	laser.player_speed = curr_speed
-	emit_signal("laser_shot", laser)
+	var current_directional_speed: float = max(get_speed_in_direction(aim_vector), 0.0) # If current speed is negative, set it to 0.
+	
+	emit_signal("player_fired_laser", laser, Muzzle.global_position, rotation, current_directional_speed)
+
+
+# This function gets the speed of the player in a given direction,
+# which is used to determine the starting speed of a laser.
+func get_speed_in_direction(direction: Vector2) -> float:
+	var normalized_direction = direction.normalized()
+	return velocity.dot(normalized_direction)
 
 
 func handle_crosshair(_delta) -> void:
