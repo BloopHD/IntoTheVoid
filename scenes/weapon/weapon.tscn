@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://crasmqmrosgc"]
+
+[ext_resource type="Script" path="res://scenes/weapon/weapon.gd" id="1_2yyai"]
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_2yyai")
+
+[node name="LaserCooldown" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
+[node name="LaserMarkers" type="Node2D" parent="."]
+
+[node name="LaserMarker" type="Marker2D" parent="LaserMarkers"]
+position = Vector2(0, -40)
+
+[node name="MuzzleFlash" type="Sprite2D" parent="."]

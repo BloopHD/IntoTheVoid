@@ -10,15 +10,9 @@ signal player_fired_laser(laser, position, rotation, starting_speed)
 @export var reverse_and_strafe_accel: float = 65
 @export var friction: float = 50
 
-var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
-
-@onready var Muzzle: Marker2D = $Weapon/LaserMarkers/LaserMarker
-@onready var laser_cooldown: Timer = $Weapon/LaserCooldown
-
 @onready var health: Node2D = $Health
+@onready var weapon: Node2D = $Weapon
 @onready var Crosshair: Node = $Crosshair
-
-
 
 const NINETY_DEGREES: int = 90
 const NINETY_DEGREES_RAD: float = 1.5708
@@ -44,6 +38,8 @@ func _input(event: InputEvent) -> void:
 	set_input_type(event)
 	
 	
+func _ready() -> void:
+	weapon.weapon_fired.connect(self.shoot_laser)
 
 	
 func _process(_delta) -> void:
@@ -141,9 +137,7 @@ func save_aim_vector() -> void:
 func check_for_weapons_fired() -> void:
 
 	if Input.is_action_pressed("primary action") and can_shoot:
-		shoot_laser()
-		can_shoot = false
-		laser_cooldown.start()
+		weapon.fire_weapon(current_speed, rotation)
 	elif Input.is_action_pressed("secondary action"):
 		pass
 	else:
@@ -178,11 +172,8 @@ func get_aim_input() -> Vector2:
 	return aim_input
 	
 	
-func shoot_laser() -> void:
-	var laser: Area2D = laser_scene.instantiate()
-	var current_directional_speed: float = max(get_speed_in_direction(aim_vector), 0.0) # If current speed is negative, set it to 0.
-	
-	emit_signal("player_fired_laser", laser, Muzzle.global_position, rotation, current_directional_speed)
+func shoot_laser(laser, position, rotation, current_directional_speed) -> void:
+	emit_signal("player_fired_laser", laser, position, rotation, current_directional_speed)
 
 
 # This function gets the speed of the player in a given direction,
@@ -197,8 +188,4 @@ func handle_crosshair(_delta) -> void:
 	Crosshair.position.y = lerp(Crosshair.position.y, get_local_mouse_position().y, .5)
 	
 	return
-
-
-func _on_timer_timeout() -> void:
-
-	can_shoot = true
+	
