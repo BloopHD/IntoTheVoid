@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bdd130r3cnp88"]
+[gd_scene load_steps=18 format=3 uid="uid://bdd130r3cnp88"]
 
 [ext_resource type="Script" path="res://scenes/enemies/simple_enemy.gd" id="1_h22hu"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="3_wtaja"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_wander_state.gd" id="4_db3q0"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_chase_state.gd" id="5_ahrbe"]
+[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="5_hblv0"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_aware_state.gd" id="6_w7qao"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_attack_state.gd" id="7_e3itp"]
 [ext_resource type="Script" path="res://scenes/enemies/enemy_death_state.gd" id="8_grrgi"]
@@ -51,6 +52,8 @@ collision_layer = 128
 collision_mask = 4
 
 [node name="Health" parent="." instance=ExtResource("11_06wvo")]
+
+[node name="Weapon" parent="." instance=ExtResource("5_hblv0")]
 
 [node name="ShootingTimer" type="Timer" parent="."]
 wait_time = 0.5

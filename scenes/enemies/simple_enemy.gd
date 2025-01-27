@@ -2,6 +2,7 @@ class_name Enemy
 extends CharacterBody2D
 
 signal laser_shot(laser)
+signal enemy_fired_laser(laser, position, rotation, starting_speed)
 
 @export var max_speed: int = 750
 @export var acceleration: int = 70

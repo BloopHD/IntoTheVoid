@@ -6,4 +6,3 @@ func handle_spawning_laser(laser: Area2D, position: Vector2, rotation: float, st
 	laser.rotation = rotation
 	laser.starting_speed = starting_speed
 	add_child(laser)
-	print("Projectile Manager")
