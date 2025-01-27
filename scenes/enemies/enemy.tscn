@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://bdd130r3cnp88"]
 
-[ext_resource type="Script" path="res://scenes/enemies/simple_enemy.gd" id="1_h22hu"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_h22hu"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="3_qwefe"]
 [ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="3_wtaja"]
@@ -29,7 +29,7 @@ radius = 500.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
 radius = 1500.0
 
-[node name="Simple_Enemy" type="CharacterBody2D" node_paths=PackedStringArray("muzzle") groups=["enemy"]]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("muzzle") groups=["enemy"]]
 collision_layer = 32
 collision_mask = 6
 script = ExtResource("1_h22hu")

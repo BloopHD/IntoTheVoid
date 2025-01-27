@@ -5,9 +5,9 @@ signal laser_shot(laser)
 signal enemy_fired_laser(laser, position, rotation, starting_speed)
 
 @export var max_speed: int = 750
-@export var acceleration: int = 70
-@export var friction: int = 50
-@export var rotational_accel: float = 1
+@export var acceleration: int = 50
+@export var friction: int = 10
+@export var rotational_accel: float = 10
 
 @export var muzzle: Marker2D
 @export var player_test: Node2D

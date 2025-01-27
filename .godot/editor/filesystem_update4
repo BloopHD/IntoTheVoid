@@ -3,3 +3,13 @@ res://scenes/weapon/weapon.gd
 res://scenes/world/projectile_manager.gd
 res://scenes/player/player.gd
 res://scenes/enemies/simple_enemy.gd
+res://scenes/enemies/simple_enemy.tscn
+res://scenes/enemies/enemy.gd
+res://scenes/world/world.tscn
+res://scenes/player/player.tscn
+res://scenes/laser/laser.tscn
+res://scenes/laser/enemy_laser.tscn
+res://scenes/crosshairs/crosshair.tscn
+res://scenes/shield/shield.tscn
+res://scenes/enemies/enemy.tscn
+res://scenes/state_machine/finite_state_machine.gd
