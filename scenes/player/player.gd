@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name Player
 
-signal player_fired_laser(laser, position, rotation, starting_speed)
 
 @export var forward_speed: int = 1000
 @export var reverse_and_strafe_speed: int = 750
@@ -27,39 +26,29 @@ var using_m_and_k: bool = false
 var can_shoot: bool = true
 
 
-
 var current_speed: float:
 	get:
 		return velocity.length()
 
 
 func _input(event: InputEvent) -> void:
-
 	set_input_type(event)
-	
-	
-func _ready() -> void:
-	weapon.weapon_fired.connect(self.shoot_laser)
 
 	
 func _process(_delta) -> void:
-
 	check_for_input()
 		
 
 func _physics_process(delta: float) -> void:
-
 	player_movement(delta)
 	player_rotation(get_player_rotation_angle())
-#	handle_crosshair(delta)
-#	print("Player Speed: ", current_speed)
 
 	
 # Movment function.
 func player_movement(delta: float) -> void:
-	
 	var current_forward_angle: float = rad_to_deg(move_vector.angle_to(aim_vector))
 	var forward_angle_max: float = 30
+
 
 # If the player is moving.
 	if move_vector > Vector2.ZERO || move_vector < Vector2.ZERO:
@@ -137,15 +126,13 @@ func save_aim_vector() -> void:
 func check_for_weapons_fired() -> void:
 
 	if Input.is_action_pressed("primary action") and can_shoot:
-		weapon.fire_weapon(current_speed, rotation)
+		weapon.fire_weapon(get_speed_in_direction(aim_vector), rotation)
 	elif Input.is_action_pressed("secondary action"):
 		pass
 	else:
 		pass
 
 	#print("boom")
-
-
 
 
 # This function gets the move input from the player.
@@ -170,10 +157,6 @@ func get_aim_input() -> Vector2:
 			aim_input = move_vector
 
 	return aim_input
-	
-	
-func shoot_laser(laser, position, rotation, current_directional_speed) -> void:
-	emit_signal("player_fired_laser", laser, position, rotation, current_directional_speed)
 
 
 # This function gets the speed of the player in a given direction,

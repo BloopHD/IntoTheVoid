@@ -1,5 +1,6 @@
-class_name Enemy
 extends CharacterBody2D
+class_name Enemy
+
 
 signal laser_shot(laser)
 signal enemy_fired_laser(laser, position, rotation, starting_speed)
@@ -12,7 +13,9 @@ signal enemy_fired_laser(laser, position, rotation, starting_speed)
 @export var muzzle: Marker2D
 @export var player_test: Node2D
 
-@onready var health: Node2D = $Health
+@onready var health: Health = $Health
+@onready var weapon: Weapon = $Weapon
+@onready var ai: AI = $AI
 
 @onready var finite_state_machine: Node = $FiniteStateMachine
 @onready var enemy_wander_state: Node = $FiniteStateMachine/EnemyWanderState
@@ -51,7 +54,6 @@ var curr_speed: float:
 
 
 func move_func(delta: float, move_direction: Vector2) -> void:
-	
 	move_direction = (move_direction - position).normalized()
 
 	var current_rotation_vector: Vector2 = Vector2(cos(rotation), sin(rotation))
@@ -59,19 +61,12 @@ func move_func(delta: float, move_direction: Vector2) -> void:
 
 	var forward_angle_max: float = 30
 
-	#rotate_func(get_rotation_angle(player_position))
-
-
-	# TODO - This really needs to be refactored, and player_in_range does not quite work.
-
 	if current_state == enemy_chase_state || current_state == enemy_retreat_state || current_state == enemy_attack_state:
 		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
-			print("FORWARD")
 			player_in_range = true
 			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
 		
 		else:
-			print("NOT")
 			player_in_range = false
 			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration * 0.75 / ONE_HUNDRED)
 		
@@ -85,12 +80,10 @@ func move_func(delta: float, move_direction: Vector2) -> void:
 
 
 func rotate_func(angle: float) -> void:
-
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
 
 
 func get_rotation_angle(player_position: Vector2) -> float:
-
 	look_direction = (player_position - position).normalized()
 
 	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
@@ -99,7 +92,6 @@ func get_rotation_angle(player_position: Vector2) -> float:
 	
 	
 func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
-
 	look_direction = (aim_position - position).normalized()
 
 	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
@@ -108,20 +100,24 @@ func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
 
 	
 func try_to_shoot():
-	
 	if can_shoot && player_in_range:
 		can_shoot = false
 		$ShootingTimer.start()
 		shoot_laser()
 
 		
-func shoot_laser() -> void:
-		
-	var laser: Area2D = laser_scene.instantiate()
-	laser.global_position = muzzle.global_position
-	laser.rotation = rotation
-	laser.curr_speed = curr_speed
-	emit_signal("laser_shot", laser)
+func shoot_laser() -> void:	
+#	var laser: Area2D = laser_scene.instantiate()
+#	laser.global_position = muzzle.global_position
+#	laser.rotation = rotation
+#	laser.curr_speed = curr_speed
+#	emit_signal("laser_shot", laser)
+	weapon.fire_weapon(get_speed_in_direction(look_direction), rotation)
+
+
+func get_speed_in_direction(direction: Vector2) -> float:
+	var normalized_direction = direction.normalized()
+	return velocity.dot(normalized_direction)
 
 
 func handle_hit(damage: int) -> void: 
@@ -132,7 +128,6 @@ func handle_hit(damage: int) -> void:
 		
 	
 func change_state(body: Node2D, new_state: Node) -> void:
-	
 	player = body
 	
 	if current_state != enemy_death_state:

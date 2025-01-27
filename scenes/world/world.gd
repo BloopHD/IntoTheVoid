@@ -4,7 +4,7 @@ extends Node2D
 @onready var player: Player = $Player
 
 func _ready() -> void:
-	player.player_fired_laser.connect(projectile_manager.handle_spawning_laser)
+	GlobalSignals.shot_fired.connect(projectile_manager.handle_spawning_laser)
 	
-func laser_shot(laser:Variant):
-	$Projectiles.call_deferred("add_child", laser)
+#func laser_shot(laser:Variant):
+#	$Projectiles.call_deferred("add_child", laser)
