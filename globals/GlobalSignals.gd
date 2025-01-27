@@ -1,3 +1,3 @@
 extends Node
 
-signal shot_fired(laser, position, rotation, starting_speed)
+signal shot_fired(laser: Area2D)

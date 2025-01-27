@@ -18,6 +18,5 @@ func _enter_state() -> void:
 	actor.try_to_shoot()
 
 
-
 func _exit_state() -> void:
 	set_physics_process(false)

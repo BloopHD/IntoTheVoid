@@ -9,15 +9,14 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	actor.move_func(delta, actor.player.position)
-	actor.rotate_function((actor.player.position - actor.position))
+	actor.rotate_function((actor.player.position))
 	actor.try_to_shoot()
 
 
 func _enter_state() -> void:
 	set_physics_process(true)
 	actor.try_to_shoot()
-
-
-
+	
+	
 func _exit_state() -> void:
 	set_physics_process(false)

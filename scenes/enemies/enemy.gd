@@ -42,32 +42,22 @@ var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var engaged_thrusters: bool = false
 var can_shoot: bool = true 
-var player_in_range: bool = false
+var angle_to_player_in_range: bool = false
+var moving_forward: bool = false
 
 var curr_speed: float:
 	get:
 		return velocity.length()
 
 
-#func _process(_delta: float) -> void:
-#	check_health()
-
-
-func move_func(delta: float, move_direction: Vector2) -> void:
-	move_direction = (move_direction - position).normalized()
-
-	var current_rotation_vector: Vector2 = Vector2(cos(rotation), sin(rotation))
-	var current_forward_angle: float = rad_to_deg(move_direction.angle_to(current_rotation_vector)) - NINETY_DEGREES_DEG
-
-	var forward_angle_max: float = 30
+func move_func(delta: float, player_location: Vector2) -> void:
+	self.move_direction = (player_location - position).normalized()
 
 	if current_state == enemy_chase_state || current_state == enemy_retreat_state || current_state == enemy_attack_state:
-		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
-			player_in_range = true
+		if moving_forward:
 			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
 		
 		else:
-			player_in_range = false
 			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration * 0.75 / ONE_HUNDRED)
 		
 	elif curr_speed > (friction * delta):
@@ -77,46 +67,46 @@ func move_func(delta: float, move_direction: Vector2) -> void:
 		velocity = Vector2.ZERO
 
 	move_and_slide()
-
-
-func rotate_func(angle: float) -> void:
-	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
-
-
-func get_rotation_angle(player_position: Vector2) -> float:
-	look_direction = (player_position - position).normalized()
-
-	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
-
-	return angle
 	
 	
 func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
 	look_direction = (aim_position - position).normalized()
 
-	var angle: float = look_direction.angle() + NINETY_DEGREES_RAD
-
-	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
-
+	var target_rotation_angle: float = look_direction.angle() + NINETY_DEGREES_RAD
+	var target_in_range_angle: float = 15
+	var moving_forward_angle: float = 30
 	
+	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, target_rotation_angle, rotational_accel / ONE_HUNDRED))
+	
+	angle_to_player_in_range = check_within_angle_range(target_rotation_angle, target_in_range_angle)
+	moving_forward = check_within_angle_range(target_rotation_angle, moving_forward_angle)
+	
+	print("Player in range: ", angle_to_player_in_range)
+	print("Moving forward: ", moving_forward)
+	
+	
+func check_within_angle_range(target_angle: float, degree_range: float) -> bool:
+	print(abs(rotation_degrees - rad_to_deg(target_angle)))
+	if abs(rotation_degrees - rad_to_deg(target_angle)) < degree_range:
+		return true
+	else:
+		return false
+	
+
 func try_to_shoot():
-	if can_shoot && player_in_range:
+	if can_shoot && angle_to_player_in_range:
 		can_shoot = false
 		$ShootingTimer.start()
 		shoot_laser()
-
 		
-func shoot_laser() -> void:	
-#	var laser: Area2D = laser_scene.instantiate()
-#	laser.global_position = muzzle.global_position
-#	laser.rotation = rotation
-#	laser.curr_speed = curr_speed
-#	emit_signal("laser_shot", laser)
-	weapon.fire_weapon(get_speed_in_direction(look_direction), rotation)
+		
+func shoot_laser() -> void:
+	weapon.fire_weapon(get_speed_in_direction(look_direction))
 
 
 func get_speed_in_direction(direction: Vector2) -> float:
 	var normalized_direction = direction.normalized()
+	
 	return velocity.dot(normalized_direction)
 
 

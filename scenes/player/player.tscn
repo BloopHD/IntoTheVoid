@@ -27,7 +27,6 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
 
 [node name="Weapon" parent="." instance=ExtResource("3_yom0l")]
-PlayerWeapon = true
 
 [node name="Shield" parent="." groups=["player shield"] instance=ExtResource("4_xtpps")]
 scale = Vector2(6, 6)

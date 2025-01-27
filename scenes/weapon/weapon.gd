@@ -2,9 +2,6 @@ extends Node2D
 class_name Weapon
 
 
-@export var PlayerWeapon: bool = false
-
-
 @onready var Muzzle: Marker2D = $LaserMarkers/LaserMarker
 @onready var laser_cooldown: Timer = $LaserCooldown
 
@@ -17,31 +14,46 @@ const PLAYER_SHIELD_MARK: int = 7
 const ENEMY_SHIELD_MARK: int = 8
 
 
-
 var laser_scene: PackedScene = preload("res://scenes/laser/laser.tscn")
 
+var PlayerWeapon: bool = false
 
-func fire_weapon(actor_directional_speed: float, actor_rotation: float) -> void:
+
+func _ready() -> void:
+	for i in self.get_parent().get_groups():
+		if i == "player":
+			PlayerWeapon = true
+			break
+			
+		else:
+			PlayerWeapon = false
+			break
+	
+
+func fire_weapon(actor_directional_speed: float) -> void:
 	if laser_cooldown.is_stopped():
 		
 		var laser: Area2D = laser_scene.instantiate()
-		
-		set_collision_layer_and_masks(laser)
-
 		var laser_starting_directional_speed: float = max(actor_directional_speed, 0.0) # If current speed is negative, set it to 0.
 		
-		laser_cooldown.start()
+		set_collision_layer_and_masks(laser)	
 	
-		GlobalSignals.emit_signal("shot_fired", laser, Muzzle.global_position, actor_rotation, laser_starting_directional_speed)
-		
+		laser_cooldown.start()
 
+		laser.global_position = Muzzle.global_position
+		laser.rotation = global_rotation
+		laser.starting_speed = laser_starting_directional_speed
+		
+		GlobalSignals.emit_signal("shot_fired", laser)		
+
+		
 func set_collision_layer_and_masks(laser):
 	if PlayerWeapon:
 		laser.set_collision_layer_value(PLAYER_PROJECTILE_LAYER, true)
 		laser.set_collision_mask_value(ENEMY_MASK, true)
 		laser.set_collision_mask_value(ENEMY_SHIELD_MARK, true)
+	
 	else:
-		print("heere")
 		laser.set_collision_layer_value(ENEMY_PROJECTILE_LAYER, true)
 		laser.set_collision_mask_value(PLAYER_MASK, true)
 		laser.set_collision_mask_value(PLAYER_SHIELD_MARK, true)

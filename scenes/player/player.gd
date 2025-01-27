@@ -126,7 +126,7 @@ func save_aim_vector() -> void:
 func check_for_weapons_fired() -> void:
 
 	if Input.is_action_pressed("primary action") and can_shoot:
-		weapon.fire_weapon(get_speed_in_direction(aim_vector), rotation)
+		weapon.fire_weapon(get_speed_in_direction(aim_vector))
 	elif Input.is_action_pressed("secondary action"):
 		pass
 	else:
