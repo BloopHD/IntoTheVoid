@@ -29,5 +29,3 @@ position = Vector2(1535, 889)
 
 [node name="ProjectileManager" type="Node2D" parent="."]
 script = ExtResource("5_lefb3")
-
-[connection signal="laser_shot" from="Enemy" to="." method="laser_shot"]

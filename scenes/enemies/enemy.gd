@@ -2,13 +2,13 @@ extends CharacterBody2D
 class_name Enemy
 
 
-signal laser_shot(laser)
-signal enemy_fired_laser(laser, position, rotation, starting_speed)
+#signal laser_shot(laser)
+#signal enemy_fired_laser(laser, position, rotation, starting_speed)
 
 @export var max_speed: int = 750
 @export var acceleration: int = 50
 @export var friction: int = 10
-@export var rotational_accel: float = 10
+@export var rotational_accel: float = 5
 
 @export var muzzle: Marker2D
 @export var player_test: Node2D
@@ -28,8 +28,6 @@ var current_state: Node = null
 
 var laser_scene: PackedScene = preload("res://scenes/laser/enemy_laser.tscn")
 
-const NINETY_DEGREES_RAD: float = 1.5708
-const NINETY_DEGREES_DEG: float = 90
 const ONE_HUNDRED: int = 100
 
 var player: Node2D = null
@@ -72,7 +70,7 @@ func move_func(delta: float, player_location: Vector2) -> void:
 func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
 	look_direction = (aim_position - position).normalized()
 
-	var target_rotation_angle: float = look_direction.angle() + NINETY_DEGREES_RAD
+	var target_rotation_angle: float = look_direction.angle()
 	var target_in_range_angle: float = 15
 	var moving_forward_angle: float = 30
 	

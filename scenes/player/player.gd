@@ -9,12 +9,10 @@ class_name Player
 @export var reverse_and_strafe_accel: float = 65
 @export var friction: float = 50
 
-@onready var health: Node2D = $Health
-@onready var weapon: Node2D = $Weapon
+@onready var health: Health = $Health
+@onready var weapon: Weapon = $Weapon
 @onready var Crosshair: Node = $Crosshair
 
-const NINETY_DEGREES: int = 90
-const NINETY_DEGREES_RAD: float = 1.5708
 const FULL_SPEED_MULTI: float = 1.0
 const ONE_HUNDRED: int = 100
 
@@ -78,10 +76,10 @@ func get_player_rotation_angle() -> float:
 
 	# If the player is aiming or moving, use the aim vector to determine the direction the player faces.
 	if aim_vector != Vector2.ZERO:
-		angle = aim_vector.angle() + NINETY_DEGREES_RAD
+		angle = aim_vector.angle()
 	# If the player is not moving or aiming, use the previous aim vector to determine the direction the player faces.
 	else:
-		angle = previous_aim_vector.angle() + NINETY_DEGREES_RAD
+		angle = previous_aim_vector.angle()
 
 	return angle
 
@@ -98,22 +96,19 @@ func set_input_type(event: InputEvent) -> void:
 
 # This function checks for player game input.
 func check_for_input() -> void:
-
 	check_for_weapons_fired()
 	move_vector = get_move_input()
 	aim_vector = get_aim_input()
 	save_aim_vector()
 
-func handle_hit(damage: int) -> void:
-
-	health.health -= damage
 	
+func handle_hit(damage: int) -> void:
+	health.health -= damage
 	
 
 # This function saves the current aim vevtor or move vector to allow us to keep the player 
 # facing the same direction when they stop moving.
 func save_aim_vector() -> void:
-
 	# If the player is aiming, save the aim vector.
 	if aim_vector != Vector2.ZERO:
 		previous_aim_vector = aim_vector

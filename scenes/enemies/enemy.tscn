@@ -34,18 +34,17 @@ radius = 1500.0
 collision_layer = 32
 collision_mask = 6
 script = ExtResource("1_h22hu")
-muzzle = NodePath("Marker2D")
+muzzle = NodePath("")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.987329, 0.102765, 0, 1)
+rotation = 1.5708
 scale = Vector2(2, 2)
 texture = ExtResource("2_6f36q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemy"]]
+rotation = 1.5708
 shape = SubResource("CapsuleShape2D_10cgx")
-
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(0, -20)
 
 [node name="Shield" parent="." groups=["enemy shield"] instance=ExtResource("3_qwefe")]
 scale = Vector2(6, 6)
@@ -64,18 +63,21 @@ one_shot = true
 script = ExtResource("6_arwoa")
 
 [node name="Aware_Detection_Area" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Aware_Detection_Area"]
 shape = SubResource("CircleShape2D_ow8ix")
 
 [node name="Chase_Detection_Area" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Chase_Detection_Area"]
 shape = SubResource("CircleShape2D_21b31")
 
 [node name="Retreat_Detection_Area" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Retreat_Detection_Area"]
@@ -83,6 +85,7 @@ shape = SubResource("CircleShape2D_celd3")
 debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 
 [node name="Attack_Detection_Area" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_Detection_Area"]

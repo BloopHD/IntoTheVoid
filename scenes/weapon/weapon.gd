@@ -40,7 +40,7 @@ func fire_weapon(actor_directional_speed: float) -> void:
 	
 		laser_cooldown.start()
 
-		laser.global_position = Muzzle.global_position
+		laser.position = Muzzle.global_position
 		laser.rotation = global_rotation
 		laser.starting_speed = laser_starting_directional_speed
 		

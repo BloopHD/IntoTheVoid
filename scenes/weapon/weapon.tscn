@@ -12,6 +12,6 @@ one_shot = true
 [node name="LaserMarkers" type="Node2D" parent="."]
 
 [node name="LaserMarker" type="Marker2D" parent="LaserMarkers"]
-position = Vector2(0, -40)
+position = Vector2(40, 0)
 
 [node name="MuzzleFlash" type="Sprite2D" parent="."]

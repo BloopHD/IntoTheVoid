@@ -8,7 +8,7 @@ extends Area2D
 @export var speed: float = 1500.0
 @export var force: float = 5.0
 
-var movement_vector: Vector2 = Vector2.UP
+var movement_vector: Vector2 = Vector2.RIGHT
 
 var force_direction: Vector2 = Vector2()
 
@@ -26,7 +26,7 @@ func _physics_process(delta: float) -> void:
 	global_position += force_direction * (speed + starting_speed) * delta
 
 
-func _on_body_entered(body:Node2D) -> void:
+func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("asteroids"):
 		#destruction_area.rotation = global_rotation
 		body.clip($CollisionShape2D, force_direction)
