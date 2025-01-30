@@ -21,7 +21,6 @@ var aim_vector: Vector2 = Vector2.ZERO
 var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var using_m_and_k: bool = false
-var can_shoot: bool = true
 
 
 var current_speed: float:
@@ -40,17 +39,16 @@ func _process(_delta) -> void:
 func _physics_process(delta: float) -> void:
 	player_movement(delta)
 	player_rotation(get_player_rotation_angle())
+	print(velocity.length())
 
 	
 # Movment function.
 func player_movement(delta: float) -> void:
-	var current_forward_angle: float = rad_to_deg(move_vector.angle_to(aim_vector))
 	var forward_angle_max: float = 30
-
-
-# If the player is moving.
+	
+	# If the player is moving.
 	if move_vector > Vector2.ZERO || move_vector < Vector2.ZERO:
-		if current_forward_angle < forward_angle_max && current_forward_angle > -forward_angle_max:
+		if check_within_angle_range(move_vector.angle(), forward_angle_max):
 			# Moving the direction player is facing.
 			velocity = lerp(velocity, move_vector * forward_speed, delta * forward_accel / ONE_HUNDRED)
 		else:
@@ -65,13 +63,19 @@ func player_movement(delta: float) -> void:
 
 # This function rotates the player.
 func player_rotation(angle: float) -> void:
-	
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
+
+
+func check_within_angle_range(target_angle: float, degree_range: float) -> bool:
+	if abs(abs(rotation) - abs(target_angle)) < deg_to_rad(degree_range):
+		return true
+
+	else:
+		return false
 
 
 # This function gets the angle the player is facing.
 func get_player_rotation_angle() -> float:
-
 	var angle: float = 0.0
 
 	# If the player is aiming or moving, use the aim vector to determine the direction the player faces.
@@ -86,7 +90,6 @@ func get_player_rotation_angle() -> float:
 
 # This function checks the type of input the player is using.
 func set_input_type(event: InputEvent) -> void:
-
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		using_m_and_k = true
 
@@ -120,14 +123,12 @@ func save_aim_vector() -> void:
 # This function checks if the player has fired a weapon.
 func check_for_weapons_fired() -> void:
 
-	if Input.is_action_pressed("primary action") and can_shoot:
-		weapon.fire_weapon(get_speed_in_direction(aim_vector))
+	if Input.is_action_pressed("primary action"):
+		weapon.fire_weapon(get_directional_speed(aim_vector))
 	elif Input.is_action_pressed("secondary action"):
 		pass
 	else:
 		pass
-
-	#print("boom")
 
 
 # This function gets the move input from the player.
@@ -156,7 +157,7 @@ func get_aim_input() -> Vector2:
 
 # This function gets the speed of the player in a given direction,
 # which is used to determine the starting speed of a laser.
-func get_speed_in_direction(direction: Vector2) -> float:
+func get_directional_speed(direction: Vector2) -> float:
 	var normalized_direction = direction.normalized()
 	return velocity.dot(normalized_direction)
 

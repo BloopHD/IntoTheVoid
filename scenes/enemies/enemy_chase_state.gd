@@ -11,7 +11,7 @@ func _process(_delta):
 
 func _physics_process(delta) -> void:
 	actor.move_func(delta, actor.player.position)
-	actor.rotate_function(actor.player.position)
+	#actor.rotate_function(actor.player.position)
 
 func _enter_state() -> void:
 	set_physics_process(true)

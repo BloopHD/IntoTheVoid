@@ -24,8 +24,8 @@ position_smoothing_speed = 3.0
 
 [node name="Asteroids" type="Node2D" parent="."]
 
-[node name="Enemy" parent="." instance=ExtResource("5_i4gcu")]
-position = Vector2(1535, 889)
-
 [node name="ProjectileManager" type="Node2D" parent="."]
 script = ExtResource("5_lefb3")
+
+[node name="Enemy" parent="." instance=ExtResource("5_i4gcu")]
+position = Vector2(1671, 734)

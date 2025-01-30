@@ -15,4 +15,3 @@ func change_state(new_state: State):
 	new_state._enter_state()
 	state = new_state
 	
-	#print(new_state)

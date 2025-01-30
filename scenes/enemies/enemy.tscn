@@ -19,22 +19,21 @@ radius = 20.0
 height = 68.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
-radius = 3000.0
+radius = 1000.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
-radius = 2000.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
-radius = 500.0
+radius = 750.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
-radius = 1500.0
+radius = 500.0
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("muzzle") groups=["enemy"]]
+[sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
+radius = 50.0
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 collision_layer = 32
 collision_mask = 6
 script = ExtResource("1_h22hu")
-muzzle = NodePath("")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.987329, 0.102765, 0, 1)
@@ -55,84 +54,74 @@ collision_mask = 4
 
 [node name="Weapon" parent="." instance=ExtResource("5_hblv0")]
 
-[node name="ShootingTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
-[node name="AI" type="Node2D" parent="."]
+[node name="AI" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
 script = ExtResource("6_arwoa")
+actor = NodePath("..")
 
-[node name="Aware_Detection_Area" type="Area2D" parent="."]
-visible = false
+[node name="Aware_Detection_Area" type="Area2D" parent="AI"]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Aware_Detection_Area"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Aware_Detection_Area"]
 shape = SubResource("CircleShape2D_ow8ix")
 
-[node name="Chase_Detection_Area" type="Area2D" parent="."]
-visible = false
+[node name="Chase_Detection_Area" type="Area2D" parent="AI"]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Chase_Detection_Area"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Chase_Detection_Area"]
 shape = SubResource("CircleShape2D_21b31")
 
-[node name="Retreat_Detection_Area" type="Area2D" parent="."]
-visible = false
+[node name="Attack_Detection_Area" type="Area2D" parent="AI"]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Retreat_Detection_Area"]
-shape = SubResource("CircleShape2D_celd3")
-debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
-
-[node name="Attack_Detection_Area" type="Area2D" parent="."]
-visible = false
-collision_layer = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_Detection_Area"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Attack_Detection_Area"]
 shape = SubResource("CircleShape2D_vu1h3")
 debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
 
-[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("state")]
+[node name="Retreat_Detection_Area" type="Area2D" parent="AI"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Retreat_Detection_Area"]
+shape = SubResource("CircleShape2D_celd3")
+debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
+
+[node name="FiniteStateMachine" type="Node" parent="AI" node_paths=PackedStringArray("state")]
 script = ExtResource("3_wtaja")
 state = NodePath("EnemyWanderState")
 
-[node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
+[node name="EnemyWanderState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("4_db3q0")
-actor = NodePath("../..")
+actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
-wander_range = 250.0
-speed = null
 
-[node name="WanderTimer" type="Timer" parent="FiniteStateMachine/EnemyWanderState"]
+[node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/EnemyWanderState"]
 wait_time = 3.0
 one_shot = true
 
-[node name="EnemyAwareState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="EnemyAwareState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("6_w7qao")
-actor = NodePath("../..")
+actor = NodePath("../../..")
 
-[node name="EnemyChaseState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="EnemyChaseState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("5_ahrbe")
-actor = NodePath("../..")
+actor = NodePath("../../..")
 
-[node name="EnemyAttackState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="EnemyAttackState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("7_e3itp")
-actor = NodePath("../..")
+actor = NodePath("../../..")
 
-[node name="EnemyDeathState" type="Node" parent="FiniteStateMachine"]
+[node name="EnemyDeathState" type="Node" parent="AI/FiniteStateMachine"]
 script = ExtResource("8_grrgi")
 
-[node name="EnemyRetreatState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="EnemyRetreatState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("10_13kfp")
-actor = NodePath("../..")
+actor = NodePath("../../..")
 
-[connection signal="timeout" from="ShootingTimer" to="." method="_on_shooting_timer_timeout"]
-[connection signal="body_entered" from="Aware_Detection_Area" to="." method="_on_aware_detection_area_body_entered"]
-[connection signal="body_exited" from="Aware_Detection_Area" to="." method="_on_aware_detection_area_body_exited"]
-[connection signal="body_entered" from="Chase_Detection_Area" to="." method="_on_chase_detection_area_body_entered"]
-[connection signal="body_exited" from="Chase_Detection_Area" to="." method="_on_chase_detection_area_body_exited"]
-[connection signal="body_entered" from="Retreat_Detection_Area" to="." method="_on_retreat_detection_area_body_entered"]
-[connection signal="body_exited" from="Retreat_Detection_Area" to="." method="_on_retreat_detection_area_body_exited"]
-[connection signal="body_entered" from="Attack_Detection_Area" to="." method="_on_attack_detection_area_body_entered"]
-[connection signal="body_exited" from="Attack_Detection_Area" to="." method="_on_attack_detection_area_body_exited"]
-[connection signal="timeout" from="FiniteStateMachine/EnemyWanderState/WanderTimer" to="FiniteStateMachine/EnemyWanderState" method="_on_wander_timer_timeout"]
+[connection signal="body_entered" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_exited"]
+[connection signal="body_entered" from="AI/Chase_Detection_Area" to="AI" method="_on_chase_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Chase_Detection_Area" to="AI" method="_on_chase_detection_area_body_exited"]
+[connection signal="body_entered" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_exited"]
+[connection signal="body_entered" from="AI/Retreat_Detection_Area" to="AI" method="_on_retreat_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Retreat_Detection_Area" to="AI" method="_on_retreat_detection_area_body_exited"]
+[connection signal="timeout" from="AI/FiniteStateMachine/EnemyWanderState/WanderTimer" to="AI/FiniteStateMachine/EnemyWanderState" method="_on_wander_timer_timeout"]

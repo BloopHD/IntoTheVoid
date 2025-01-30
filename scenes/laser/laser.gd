@@ -5,7 +5,7 @@ extends Area2D
 
 @export var damage: float = 5.0
 
-@export var speed: float = 1500.0
+@export var speed: float = 1250.0
 @export var force: float = 5.0
 
 var movement_vector: Vector2 = Vector2.RIGHT

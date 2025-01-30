@@ -12,8 +12,6 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_m418u")
 damage = 10.0
-speed = 1250.0
-force = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(12, 0)
