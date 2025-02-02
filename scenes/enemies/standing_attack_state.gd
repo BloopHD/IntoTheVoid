@@ -1,5 +1,5 @@
 extends State
-class_name RetreatState
+class_name StandingAttackState
 
 @export var actor: Enemy
 
@@ -8,8 +8,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	#actor.move_func(delta, actor.player.position)
-	actor.rotate_function(actor.player.position)
+	actor.move_func(delta, Vector2.ZERO)
+	actor.rotate_function(actor.target.position)
 	actor.try_to_shoot()
 
 

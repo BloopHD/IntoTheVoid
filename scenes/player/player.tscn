@@ -2,10 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_gvkbj"]
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_pf1yp"]
-[ext_resource type="PackedScene" uid="uid://dmtjjxxfv4b6f" path="res://scenes/crosshairs/crosshair.tscn" id="3_7ao8m"]
 [ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="3_yom0l"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="4_xtpps"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="5_pdjii"]
+[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team.tscn" id="7_cbco3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2v2iu"]
 radius = 14.0
@@ -28,15 +28,13 @@ rotation = 1.5708
 scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
 
-[node name="Weapon" parent="." instance=ExtResource("3_yom0l")]
+[node name="Team" parent="." instance=ExtResource("7_cbco3")]
+
+[node name="Health" parent="." instance=ExtResource("5_pdjii")]
 
 [node name="Shield" parent="." groups=["player shield"] instance=ExtResource("4_xtpps")]
 scale = Vector2(6, 6)
 collision_layer = 64
 collision_mask = 8
 
-[node name="Health" parent="." instance=ExtResource("5_pdjii")]
-
-[node name="Crosshair" parent="." instance=ExtResource("3_7ao8m")]
-visible = false
-position = Vector2(0, -250)
+[node name="Weapon" parent="." instance=ExtResource("3_yom0l")]

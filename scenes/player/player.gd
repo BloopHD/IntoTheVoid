@@ -9,9 +9,10 @@ class_name Player
 @export var reverse_and_strafe_accel: float = 65
 @export var friction: float = 50
 
+@onready var team: Team = $Team
 @onready var health: Health = $Health
 @onready var weapon: Weapon = $Weapon
-@onready var Crosshair: Node = $Crosshair
+
 
 const FULL_SPEED_MULTI: float = 1.0
 const ONE_HUNDRED: int = 100
@@ -39,7 +40,6 @@ func _process(_delta) -> void:
 func _physics_process(delta: float) -> void:
 	player_movement(delta)
 	player_rotation(get_player_rotation_angle())
-	print(velocity.length())
 
 	
 # Movment function.
@@ -66,8 +66,8 @@ func player_rotation(angle: float) -> void:
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, angle, rotational_accel / ONE_HUNDRED))
 
 
-func check_within_angle_range(target_angle: float, degree_range: float) -> bool:
-	if abs(abs(rotation) - abs(target_angle)) < deg_to_rad(degree_range):
+func check_within_angle_range(target_angle: float, angle_in_range: float) -> bool:
+	if abs(abs(rotation) - abs(target_angle)) < deg_to_rad(angle_in_range):
 		return true
 
 	else:
@@ -103,21 +103,6 @@ func check_for_input() -> void:
 	move_vector = get_move_input()
 	aim_vector = get_aim_input()
 	save_aim_vector()
-
-	
-func handle_hit(damage: int) -> void:
-	health.health -= damage
-	
-
-# This function saves the current aim vevtor or move vector to allow us to keep the player 
-# facing the same direction when they stop moving.
-func save_aim_vector() -> void:
-	# If the player is aiming, save the aim vector.
-	if aim_vector != Vector2.ZERO:
-		previous_aim_vector = aim_vector
-		# If the player is not aiming but moving, save the move vector.
-	elif move_vector != Vector2.ZERO:
-		previous_aim_vector = move_vector
 
 
 # This function checks if the player has fired a weapon.
@@ -155,6 +140,17 @@ func get_aim_input() -> Vector2:
 	return aim_input
 
 
+# This function saves the current aim vevtor or move vector to allow us to keep the player 
+# facing the same direction when they stop moving.
+func save_aim_vector() -> void:
+	# If the player is aiming, save the aim vector.
+	if aim_vector != Vector2.ZERO:
+		previous_aim_vector = aim_vector
+		# If the player is not aiming but moving, save the move vector.
+	elif move_vector != Vector2.ZERO:
+		previous_aim_vector = move_vector
+
+
 # This function gets the speed of the player in a given direction,
 # which is used to determine the starting speed of a laser.
 func get_directional_speed(direction: Vector2) -> float:
@@ -162,9 +158,10 @@ func get_directional_speed(direction: Vector2) -> float:
 	return velocity.dot(normalized_direction)
 
 
-func handle_crosshair(_delta) -> void:
-	
-	Crosshair.position.y = lerp(Crosshair.position.y, get_local_mouse_position().y, .5)
-	
-	return
+func get_team() -> int:
+	return team.team
+
+
+func handle_hit(damage: int) -> void:
+	health.health -= damage
 	

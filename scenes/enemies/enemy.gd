@@ -4,17 +4,18 @@ class_name Enemy
 
 @export var max_speed: int = 750
 @export var acceleration: int = 50
-@export var friction: int = 10
+@export var friction: int = 50
 @export var rotational_accel: float = 5
 
 @export var muzzle: Marker2D
 @export var player_test: Node2D
 
+@onready var ai: AI = $AI
+@onready var team: Team = $Team
 @onready var health: Health = $Health
 @onready var weapon: Weapon = $Weapon
-@onready var ai: AI = $AI
 
-var player: Node2D = null
+var target: Node2D = null
 
 const ONE_HUNDRED: int = 100
 
@@ -24,7 +25,7 @@ var look_direction: Vector2
 var aim_vector: Vector2 = Vector2.ZERO
 var previous_aim_vector: Vector2 = Vector2.ZERO
 
-var angle_to_player_in_range: bool = false
+var angle_to_target_in_range: bool = false
 var moving_forward: bool = false
 
 var curr_speed: float:
@@ -59,7 +60,7 @@ func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
 	
 	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, target_rotation_angle, rotational_accel / ONE_HUNDRED))
 	
-	angle_to_player_in_range = check_within_angle_range(target_rotation_angle, target_in_range_angle)
+	angle_to_target_in_range = check_within_angle_range(target_rotation_angle, target_in_range_angle)
 	moving_forward = check_within_angle_range(target_rotation_angle, moving_forward_angle)
 	
 	
@@ -72,7 +73,7 @@ func check_within_angle_range(target_angle: float, degree_range: float) -> bool:
 	
 
 func try_to_shoot():
-	if angle_to_player_in_range:
+	if angle_to_target_in_range:
 		shoot_laser()
 		
 		
@@ -84,6 +85,10 @@ func get_speed_in_direction(direction: Vector2) -> float:
 	var normalized_direction = direction.normalized()
 	
 	return velocity.dot(normalized_direction)
+
+
+func get_team() -> int:
+	return team.team
 
 
 func handle_hit(damage: int) -> void: 

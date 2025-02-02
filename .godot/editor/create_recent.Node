@@ -9,6 +9,4 @@ MeshInstance2D
 State
 Marker2D
 DonutCollisionPolygon2D
-EnemyChaseState
-EnemyWanderState
 RayCast2D
