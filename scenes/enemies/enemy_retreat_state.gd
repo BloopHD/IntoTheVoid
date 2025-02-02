@@ -1,5 +1,5 @@
 extends State
-class_name EnemyRetreatState
+class_name RetreatState
 
 @export var actor: Enemy
 

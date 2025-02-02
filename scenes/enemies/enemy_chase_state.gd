@@ -1,4 +1,4 @@
-class_name EnemyChaseState
+class_name ChaseState
 extends State
 
 @export var actor: Enemy

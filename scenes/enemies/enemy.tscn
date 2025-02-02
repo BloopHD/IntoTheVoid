@@ -86,33 +86,33 @@ debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 
 [node name="FiniteStateMachine" type="Node" parent="AI" node_paths=PackedStringArray("state")]
 script = ExtResource("3_wtaja")
-state = NodePath("EnemyWanderState")
+state = NodePath("WanderState")
 
-[node name="EnemyWanderState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
+[node name="WanderState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("4_db3q0")
 actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
 
-[node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/EnemyWanderState"]
+[node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/WanderState"]
 wait_time = 3.0
 one_shot = true
 
-[node name="EnemyAwareState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="AwareState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("6_w7qao")
 actor = NodePath("../../..")
 
-[node name="EnemyChaseState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="ChaseState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("5_ahrbe")
 actor = NodePath("../../..")
 
-[node name="EnemyAttackState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="AttackState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("7_e3itp")
 actor = NodePath("../../..")
 
-[node name="EnemyDeathState" type="Node" parent="AI/FiniteStateMachine"]
+[node name="DeathState" type="Node" parent="AI/FiniteStateMachine"]
 script = ExtResource("8_grrgi")
 
-[node name="EnemyRetreatState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
+[node name="RetreatState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
 script = ExtResource("10_13kfp")
 actor = NodePath("../../..")
 
@@ -124,4 +124,4 @@ actor = NodePath("../../..")
 [connection signal="body_exited" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_exited"]
 [connection signal="body_entered" from="AI/Retreat_Detection_Area" to="AI" method="_on_retreat_detection_area_body_entered"]
 [connection signal="body_exited" from="AI/Retreat_Detection_Area" to="AI" method="_on_retreat_detection_area_body_exited"]
-[connection signal="timeout" from="AI/FiniteStateMachine/EnemyWanderState/WanderTimer" to="AI/FiniteStateMachine/EnemyWanderState" method="_on_wander_timer_timeout"]
+[connection signal="timeout" from="AI/FiniteStateMachine/WanderState/WanderTimer" to="AI/FiniteStateMachine/WanderState" method="_on_wander_timer_timeout"]

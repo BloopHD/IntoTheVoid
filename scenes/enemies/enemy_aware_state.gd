@@ -1,4 +1,4 @@
-class_name EnemyAwareState
+class_name AwareState
 extends State
 
 @export var actor: Enemy
