@@ -10,10 +10,10 @@ class_name Enemy
 @export var muzzle: Marker2D
 @export var player_test: Node2D
 
-@onready var ai: AI = $AI
 @onready var team: Team = $Team
 @onready var health: Health = $Health
 @onready var weapon: Weapon = $Weapon
+@onready var ai: AI = $AI
 
 var target: Node2D = null
 
@@ -31,6 +31,10 @@ var moving_forward: bool = false
 var curr_speed: float:
 	get:
 		return velocity.length()
+
+
+func _ready() -> void:
+	ai.deferred_initialize(team.team)
 
 
 func move_func(delta: float, target_location: Vector2) -> void:

@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bwlv7ix15whqd"]
+[gd_scene load_steps=7 format=3 uid="uid://bwlv7ix15whqd"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_8rw03"]
 [ext_resource type="PackedScene" uid="uid://dgy3rqxws2l4w" path="res://scenes/player/player.tscn" id="1_e5wuh"]
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_c3qrl"]
 [ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemies/enemy.tscn" id="5_i4gcu"]
 [ext_resource type="Script" path="res://scenes/world/projectile_manager.gd" id="5_lefb3"]
+[ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="6_4fgxj"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
@@ -29,3 +30,6 @@ script = ExtResource("5_lefb3")
 
 [node name="Enemy" parent="." instance=ExtResource("5_i4gcu")]
 position = Vector2(2138, 1119)
+
+[node name="Ally" parent="." instance=ExtResource("6_4fgxj")]
+position = Vector2(377, 1062)

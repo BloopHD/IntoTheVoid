@@ -13,14 +13,13 @@ class_name AI
 
 var current_state: Node = null
 
-var parent_team: int = -1
+var team: int = -1
+		
+	
+func deferred_initialize(parent_team: int) -> void:
+	team = parent_team
 
-
-func _ready() -> void:
-	if actor.has_method("get_team"):
-		parent_team = actor.get_team()
-
-
+		
 func change_state(body: Node2D, new_state: Node) -> void:
 	actor.target = body
 	
@@ -32,35 +31,35 @@ func change_state(body: Node2D, new_state: Node) -> void:
 #region Signals
 
 func _on_attack_detection_area_body_entered(body:Node2D) -> void:
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body, attack_state)
 
 func _on_attack_detection_area_body_exited(body:Node2D) -> void:
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body,chase_state)
 
 func _on_chase_detection_area_body_entered(body:Node2D):
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body,chase_state)
 
 func _on_chase_detection_area_body_exited(body:Node2D):
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body, aware_state)
 
 func _on_aware_detection_area_body_entered(body:Node2D) -> void:
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body, aware_state)
 
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(null, wander_state)
 
 func _on_stand_attack_detection_area_body_entered(body:Node2D) -> void:
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body, standing_attack_state)
 
 func _on_stand_attack_detection_area_body_exited(body:Node2D) -> void:
-	if body.has_method("get_team") and body.get_team() != parent_team:
+	if body.has_method("get_team") and body.get_team() != team:
 		change_state(body, attack_state)
 		
 #endregion

@@ -1,19 +1,19 @@
-[gd_scene load_steps=20 format=3 uid="uid://bdd130r3cnp88"]
+[gd_scene load_steps=20 format=3 uid="uid://chq22uahlmag1"]
 
-[ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_h22hu"]
-[ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
-[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team.tscn" id="3_88t8a"]
-[ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="3_qwefe"]
-[ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="3_wtaja"]
-[ext_resource type="Script" path="res://scenes/enemies/wander_state.gd" id="4_db3q0"]
-[ext_resource type="Script" path="res://scenes/enemies/chase_state.gd" id="5_ahrbe"]
-[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="5_hblv0"]
-[ext_resource type="Script" path="res://scenes/enemies/ai.gd" id="6_arwoa"]
-[ext_resource type="Script" path="res://scenes/enemies/aware_state.gd" id="6_w7qao"]
-[ext_resource type="Script" path="res://scenes/enemies/attack_state.gd" id="7_e3itp"]
-[ext_resource type="Script" path="res://scenes/enemies/death_state.gd" id="8_grrgi"]
-[ext_resource type="Script" path="res://scenes/enemies/standing_attack_state.gd" id="10_13kfp"]
-[ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="11_06wvo"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_ubdep"]
+[ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_op0ba"]
+[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team.tscn" id="3_87ved"]
+[ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="4_urgas"]
+[ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="5_7cnc4"]
+[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="6_al8nm"]
+[ext_resource type="Script" path="res://scenes/enemies/ai.gd" id="7_725ou"]
+[ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="8_2ljcy"]
+[ext_resource type="Script" path="res://scenes/enemies/wander_state.gd" id="9_558ht"]
+[ext_resource type="Script" path="res://scenes/enemies/aware_state.gd" id="10_6ij6f"]
+[ext_resource type="Script" path="res://scenes/enemies/chase_state.gd" id="11_1hha1"]
+[ext_resource type="Script" path="res://scenes/enemies/attack_state.gd" id="12_a06ns"]
+[ext_resource type="Script" path="res://scenes/enemies/standing_attack_state.gd" id="13_ec0ih"]
+[ext_resource type="Script" path="res://scenes/enemies/death_state.gd" id="14_1r044"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
 radius = 20.0
@@ -31,69 +31,67 @@ radius = 750.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
 radius = 500.0
 
-[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
-collision_layer = 32
+[node name="Ally" type="CharacterBody2D" groups=["enemy"]]
 collision_mask = 6
-script = ExtResource("1_h22hu")
+script = ExtResource("1_ubdep")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(0.924549, 0.266025, 0.137415, 1)
+modulate = Color(8.66354e-07, 0.637123, 0.383905, 1)
 rotation = 1.5708
 scale = Vector2(2, 2)
-texture = ExtResource("2_6f36q")
+texture = ExtResource("2_op0ba")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemy"]]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_10cgx")
 
-[node name="Team" parent="." instance=ExtResource("3_88t8a")]
-team = 1
+[node name="Team" parent="." instance=ExtResource("3_87ved")]
 
-[node name="Health" parent="." instance=ExtResource("11_06wvo")]
+[node name="Health" parent="." instance=ExtResource("4_urgas")]
 
-[node name="Shield" parent="." groups=["enemy shield"] instance=ExtResource("3_qwefe")]
+[node name="Shield" parent="." groups=["enemy shield"] instance=ExtResource("5_7cnc4")]
 scale = Vector2(6, 6)
 collision_layer = 128
 collision_mask = 4
 
-[node name="Weapon" parent="." instance=ExtResource("5_hblv0")]
+[node name="Weapon" parent="." instance=ExtResource("6_al8nm")]
 
 [node name="AI" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
-script = ExtResource("6_arwoa")
+script = ExtResource("7_725ou")
 actor = NodePath("..")
 
 [node name="Aware_Detection_Area" type="Area2D" parent="AI"]
-collision_layer = 0
+collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Aware_Detection_Area"]
 shape = SubResource("CircleShape2D_ow8ix")
 
 [node name="Chase_Detection_Area" type="Area2D" parent="AI"]
-collision_layer = 0
+collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Chase_Detection_Area"]
 shape = SubResource("CircleShape2D_21b31")
 
 [node name="Attack_Detection_Area" type="Area2D" parent="AI"]
-collision_layer = 0
+collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Attack_Detection_Area"]
 shape = SubResource("CircleShape2D_vu1h3")
 debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
 
 [node name="Stand_Attack_Detection_Area" type="Area2D" parent="AI"]
-collision_layer = 0
+collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Stand_Attack_Detection_Area"]
 shape = SubResource("CircleShape2D_celd3")
 debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 
 [node name="FiniteStateMachine" type="Node" parent="AI" node_paths=PackedStringArray("state")]
-script = ExtResource("3_wtaja")
+script = ExtResource("8_2ljcy")
 state = NodePath("WanderState")
 
 [node name="WanderState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
-script = ExtResource("4_db3q0")
+script = ExtResource("9_558ht")
 actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
 
@@ -102,23 +100,23 @@ wait_time = 3.0
 one_shot = true
 
 [node name="AwareState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
-script = ExtResource("6_w7qao")
+script = ExtResource("10_6ij6f")
 actor = NodePath("../../..")
 
 [node name="ChaseState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
-script = ExtResource("5_ahrbe")
+script = ExtResource("11_1hha1")
 actor = NodePath("../../..")
 
 [node name="AttackState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
-script = ExtResource("7_e3itp")
+script = ExtResource("12_a06ns")
 actor = NodePath("../../..")
 
 [node name="StandingAttackState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor")]
-script = ExtResource("10_13kfp")
+script = ExtResource("13_ec0ih")
 actor = NodePath("../../..")
 
 [node name="DeathState" type="Node" parent="AI/FiniteStateMachine"]
-script = ExtResource("8_grrgi")
+script = ExtResource("14_1r044")
 
 [connection signal="body_entered" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_entered"]
 [connection signal="body_exited" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_exited"]
