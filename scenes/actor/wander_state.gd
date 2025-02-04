@@ -1,7 +1,7 @@
 class_name WanderState
 extends State
 
-@export var actor: Enemy
+@export var actor: Actor
 
 @export var wander_timer: Timer
 @export var wander_range: float = 500
@@ -14,13 +14,16 @@ var wander_location_reached: bool = true
 
 func _ready():
 	set_physics_process(false)
+	
+	if wander_timer != null and not wander_timer.is_inside_tree(): 
+		add_child(wander_timer)
 
 
 func _enter_state() -> void:
 	set_physics_process(true)
 
 	wander_origin = actor.global_position
-	wander_timer.start()
+	wander_timer.call_deferred("start")
 	wander_location_reached = true
 
 

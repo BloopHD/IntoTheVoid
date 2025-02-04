@@ -12,6 +12,8 @@ var movement_vector: Vector2 = Vector2.RIGHT
 
 var force_direction: Vector2 = Vector2()
 
+var team: int = -1
+
 var starting_speed: float:
 	set(value):
 		starting_speed = value
@@ -19,6 +21,7 @@ var starting_speed: float:
 
 func _ready() -> void:
 	kill_timer.start()
+	print(team)
 
 
 func _physics_process(delta: float) -> void:
@@ -35,13 +38,17 @@ func _on_body_entered(body: Node2D) -> void:
 
 		queue_free()
 		
-	if body.is_in_group("enemy") || body.is_in_group("player"):
+#	if body.is_in_group("enemy") || body.is_in_group("player"):
+#		body.handle_hit(damage)
+#		queue_free()
+
+	if body.has_method("handle_hit") and body.team.team != team:
 		body.handle_hit(damage)
 		queue_free()
-		
+
 
 func _on_area_entered(area:Area2D) -> void:
-	if area.is_in_group("enemy shield") || area.is_in_group("player shield"):
+	if area.has_method("damage_shield") and area.shield_team != team:
 		area.damage_shield(damage)
 		queue_free()
 

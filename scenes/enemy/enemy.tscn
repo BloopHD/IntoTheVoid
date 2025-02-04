@@ -1,40 +1,44 @@
 [gd_scene load_steps=20 format=3 uid="uid://bdd130r3cnp88"]
 
-[ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_h22hu"]
+[ext_resource type="Script" path="res://scenes/actor/actor.gd" id="1_h22hu"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
 [ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team.tscn" id="3_88t8a"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="3_qwefe"]
 [ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="3_wtaja"]
-[ext_resource type="Script" path="res://scenes/enemies/wander_state.gd" id="4_db3q0"]
-[ext_resource type="Script" path="res://scenes/enemies/chase_state.gd" id="5_ahrbe"]
+[ext_resource type="Script" path="res://scenes/actor/wander_state.gd" id="4_db3q0"]
+[ext_resource type="Script" path="res://scenes/actor/chase_state.gd" id="5_ahrbe"]
 [ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="5_hblv0"]
-[ext_resource type="Script" path="res://scenes/enemies/ai.gd" id="6_arwoa"]
-[ext_resource type="Script" path="res://scenes/enemies/aware_state.gd" id="6_w7qao"]
-[ext_resource type="Script" path="res://scenes/enemies/attack_state.gd" id="7_e3itp"]
-[ext_resource type="Script" path="res://scenes/enemies/death_state.gd" id="8_grrgi"]
-[ext_resource type="Script" path="res://scenes/enemies/standing_attack_state.gd" id="10_13kfp"]
+[ext_resource type="Script" path="res://scenes/actor/ai.gd" id="6_arwoa"]
+[ext_resource type="Script" path="res://scenes/actor/aware_state.gd" id="6_w7qao"]
+[ext_resource type="Script" path="res://scenes/actor/attack_state.gd" id="7_e3itp"]
+[ext_resource type="Script" path="res://scenes/actor/death_state.gd" id="8_grrgi"]
+[ext_resource type="Script" path="res://scenes/actor/standing_attack_state.gd" id="10_13kfp"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="11_06wvo"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
 radius = 20.0
 height = 68.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
-radius = 1150.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
-radius = 1000.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
+radius = 500.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
 radius = 750.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
-radius = 500.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
+radius = 1000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
+radius = 1150.0
 
 [node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 collision_layer = 32
-collision_mask = 6
+collision_mask = 18
 script = ExtResource("1_h22hu")
+max_speed = null
+acceleration = null
+friction = null
+rotational_accel = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.924549, 0.266025, 0.137415, 1)
@@ -54,7 +58,7 @@ team = 1
 [node name="Shield" parent="." groups=["enemy shield"] instance=ExtResource("3_qwefe")]
 scale = Vector2(6, 6)
 collision_layer = 128
-collision_mask = 4
+collision_mask = 16
 
 [node name="Weapon" parent="." instance=ExtResource("5_hblv0")]
 
@@ -62,17 +66,12 @@ collision_mask = 4
 script = ExtResource("6_arwoa")
 actor = NodePath("..")
 
-[node name="Aware_Detection_Area" type="Area2D" parent="AI"]
+[node name="Stand_Attack_Detection_Area" type="Area2D" parent="AI"]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Aware_Detection_Area"]
-shape = SubResource("CircleShape2D_ow8ix")
-
-[node name="Chase_Detection_Area" type="Area2D" parent="AI"]
-collision_layer = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Chase_Detection_Area"]
-shape = SubResource("CircleShape2D_21b31")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Stand_Attack_Detection_Area"]
+shape = SubResource("CircleShape2D_celd3")
+debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
 
 [node name="Attack_Detection_Area" type="Area2D" parent="AI"]
 collision_layer = 0
@@ -81,12 +80,17 @@ collision_layer = 0
 shape = SubResource("CircleShape2D_vu1h3")
 debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
 
-[node name="Stand_Attack_Detection_Area" type="Area2D" parent="AI"]
+[node name="Chase_Detection_Area" type="Area2D" parent="AI"]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Stand_Attack_Detection_Area"]
-shape = SubResource("CircleShape2D_celd3")
-debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Chase_Detection_Area"]
+shape = SubResource("CircleShape2D_21b31")
+
+[node name="Aware_Detection_Area" type="Area2D" parent="AI"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Aware_Detection_Area"]
+shape = SubResource("CircleShape2D_ow8ix")
 
 [node name="FiniteStateMachine" type="Node" parent="AI" node_paths=PackedStringArray("state")]
 script = ExtResource("3_wtaja")
@@ -120,12 +124,12 @@ actor = NodePath("../../..")
 [node name="DeathState" type="Node" parent="AI/FiniteStateMachine"]
 script = ExtResource("8_grrgi")
 
-[connection signal="body_entered" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_entered"]
-[connection signal="body_exited" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_exited"]
-[connection signal="body_entered" from="AI/Chase_Detection_Area" to="AI" method="_on_chase_detection_area_body_entered"]
-[connection signal="body_exited" from="AI/Chase_Detection_Area" to="AI" method="_on_chase_detection_area_body_exited"]
-[connection signal="body_entered" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_entered"]
-[connection signal="body_exited" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_exited"]
 [connection signal="body_entered" from="AI/Stand_Attack_Detection_Area" to="AI" method="_on_stand_attack_detection_area_body_entered"]
 [connection signal="body_exited" from="AI/Stand_Attack_Detection_Area" to="AI" method="_on_stand_attack_detection_area_body_exited"]
+[connection signal="body_entered" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Attack_Detection_Area" to="AI" method="_on_attack_detection_area_body_exited"]
+[connection signal="body_entered" from="AI/Chase_Detection_Area" to="AI" method="_on_chase_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Chase_Detection_Area" to="AI" method="_on_chase_detection_area_body_exited"]
+[connection signal="body_entered" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_entered"]
+[connection signal="body_exited" from="AI/Aware_Detection_Area" to="AI" method="_on_aware_detection_area_body_exited"]
 [connection signal="timeout" from="AI/FiniteStateMachine/WanderState/WanderTimer" to="AI/FiniteStateMachine/WanderState" method="_on_wander_timer_timeout"]

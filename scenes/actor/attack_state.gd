@@ -1,7 +1,7 @@
 extends State
 class_name AttackState
 
-@export var actor: Enemy
+@export var actor: Actor
 
 func _ready() -> void:
 	set_physics_process(false)

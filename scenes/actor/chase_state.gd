@@ -1,7 +1,7 @@
+class_name ChaseState
 extends State
-class_name DeathState
 
-@export var actor: Enemy
+@export var actor: Actor
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -9,11 +9,10 @@ func _ready() -> void:
 func _process(_delta):
 	pass
 
-func _physics_process(_delta) -> void:
-	pass
+func _physics_process(delta) -> void:
+	actor.move_func(delta, actor.target.position)
 
 func _enter_state() -> void:
-	print("DEAD!")
 	set_physics_process(true)
 
 func _exit_state() -> void:

@@ -1,6 +1,3 @@
-res://scenes/world/world.tscn
-res://scenes/enemies/enemy.tscn
-res://scenes/player/player.tscn
 res://scenes/enemies/ai.gd
 res://scenes/enemies/standing_attack_state.gd
 res://scenes/enemies/wander_state.gd
@@ -12,3 +9,20 @@ res://scenes/enemies/aware_state.gd
 res://scenes/enemies/chase_state.gd
 res://scenes/enemies/death_state.gd
 res://scenes/ally/ally.tscn
+res://scenes/world/world.tscn
+res://scenes/enemies/enemy.tscn
+res://scenes/player/player.tscn
+res://scenes/laser/laser.gd
+res://scenes/weapon/weapon.gd
+res://scenes/laser/laser.tscn
+res://scenes/weapon/weapon.tscn
+res://scenes/health/health.gd
+res://scenes/state_machine/state.gd
+res://globals/GlobalSignals.gd
+res://scenes/world/projectile_manager.gd
+res://scenes/world/world.gd
+res://scenes/shield/shield.gd
+res://scenes/shield/shield.tscn
+res://scenes/enemies/actor.gd
+res://scenes/enemies/idle.gd
+res://scenes/enemy/enemy.tscn

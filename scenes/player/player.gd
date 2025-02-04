@@ -11,6 +11,7 @@ class_name Player
 
 @onready var team: Team = $Team
 @onready var health: Health = $Health
+@onready var shield: Shield = $Shield
 @onready var weapon: Weapon = $Weapon
 
 
@@ -27,6 +28,10 @@ var using_m_and_k: bool = false
 var current_speed: float:
 	get:
 		return velocity.length()
+
+func _ready() -> void:
+	weapon.initialize_weapon(team.team)
+	shield.initialize_shield(team.team)
 
 
 func _input(event: InputEvent) -> void:
@@ -109,7 +114,7 @@ func check_for_input() -> void:
 func check_for_weapons_fired() -> void:
 
 	if Input.is_action_pressed("primary action"):
-		weapon.fire_weapon(get_directional_speed(aim_vector))
+		weapon.fire_weapon(team.team, get_directional_speed(aim_vector))
 	elif Input.is_action_pressed("secondary action"):
 		pass
 	else:

@@ -1,5 +1,5 @@
 extends CharacterBody2D
-class_name Enemy
+class_name Actor
 
 
 @export var max_speed: int = 750
@@ -12,6 +12,7 @@ class_name Enemy
 
 @onready var team: Team = $Team
 @onready var health: Health = $Health
+@onready var shield: Shield = $Shield
 @onready var weapon: Weapon = $Weapon
 @onready var ai: AI = $AI
 
@@ -34,7 +35,9 @@ var curr_speed: float:
 
 
 func _ready() -> void:
-	ai.deferred_initialize(team.team)
+	ai.initialize_ai(team.team)
+	weapon.initialize_weapon(team.team)
+	shield.initialize_shield(team.team)
 
 
 func move_func(delta: float, target_location: Vector2) -> void:
@@ -82,7 +85,7 @@ func try_to_shoot():
 		
 		
 func shoot_laser() -> void:
-	weapon.fire_weapon(get_speed_in_direction(look_direction))
+	weapon.fire_weapon(team.team, get_speed_in_direction(look_direction))
 
 
 func get_speed_in_direction(direction: Vector2) -> float:
