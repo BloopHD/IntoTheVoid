@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwlv7ix15whqd"]
+[gd_scene load_steps=8 format=3 uid="uid://bwlv7ix15whqd"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_8rw03"]
 [ext_resource type="PackedScene" uid="uid://dgy3rqxws2l4w" path="res://scenes/player/player.tscn" id="1_e5wuh"]
@@ -6,14 +6,18 @@
 [ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemy/enemy.tscn" id="5_i4gcu"]
 [ext_resource type="Script" path="res://scenes/world/projectile_manager.gd" id="5_lefb3"]
 [ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="6_4fgxj"]
+[ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="7_xxhgs"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
 
 [node name="SimpleParallaxBG" parent="." instance=ExtResource("2_c3qrl")]
 
+[node name="CapturableLocation" parent="." instance=ExtResource("7_xxhgs")]
+position = Vector2(1468, 342)
+
 [node name="Player" parent="." instance=ExtResource("1_e5wuh")]
-position = Vector2(1110, 214)
+position = Vector2(321, 286)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(0.5, 0.5)
@@ -32,16 +36,16 @@ script = ExtResource("5_lefb3")
 position = Vector2(2703, 1147)
 
 [node name="Enemy2" parent="." instance=ExtResource("5_i4gcu")]
-position = Vector2(1347, 177)
+position = Vector2(1667, -517)
 
 [node name="Enemy3" parent="." instance=ExtResource("5_i4gcu")]
-position = Vector2(2272, 174)
+position = Vector2(2721, -21)
 
 [node name="Ally" parent="." instance=ExtResource("6_4fgxj")]
-position = Vector2(514, 1104)
+position = Vector2(22, 919)
 
 [node name="Ally2" parent="." instance=ExtResource("6_4fgxj")]
-position = Vector2(1114, 1190)
+position = Vector2(1367, 1087)
 
 [node name="Ally3" parent="." instance=ExtResource("6_4fgxj")]
-position = Vector2(267, 217)
+position = Vector2(158, -350)

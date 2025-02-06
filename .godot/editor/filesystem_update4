@@ -26,3 +26,8 @@ res://scenes/shield/shield.tscn
 res://scenes/enemies/actor.gd
 res://scenes/enemies/idle.gd
 res://scenes/enemy/enemy.tscn
+res://scenes/team/team.gd
+res://scenes/capturable/capturable_location.gd
+res://scenes/capturable/capturable_location.tscn
+res://scenes/state_machine/finite_state_machine.gd
+res://scenes/actor/ai.gd

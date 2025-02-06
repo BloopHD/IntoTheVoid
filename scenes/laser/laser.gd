@@ -21,7 +21,6 @@ var starting_speed: float:
 
 func _ready() -> void:
 	kill_timer.start()
-	print(team)
 
 
 func _physics_process(delta: float) -> void:

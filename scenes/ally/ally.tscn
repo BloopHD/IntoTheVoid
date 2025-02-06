@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/actor/actor.gd" id="1_ubdep"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_op0ba"]
-[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team.tscn" id="3_87ved"]
+[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="3_87ved"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="4_urgas"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="5_7cnc4"]
 [ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="6_al8nm"]
@@ -46,10 +46,12 @@ scale = Vector2(2, 2)
 texture = ExtResource("2_op0ba")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemy"]]
+visible = false
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_10cgx")
 
 [node name="Team" parent="." instance=ExtResource("3_87ved")]
+team = 1
 
 [node name="Health" parent="." instance=ExtResource("4_urgas")]
 
@@ -61,6 +63,7 @@ collision_mask = 16
 [node name="Weapon" parent="." instance=ExtResource("6_al8nm")]
 
 [node name="AI" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
+visible = false
 script = ExtResource("7_725ou")
 actor = NodePath("..")
 

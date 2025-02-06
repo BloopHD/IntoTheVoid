@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="3_yom0l"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="4_xtpps"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="5_pdjii"]
-[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team.tscn" id="7_cbco3"]
+[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="7_cbco3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2v2iu"]
 radius = 14.0
@@ -35,6 +35,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_gvkbj")
 
 [node name="Team" parent="." instance=ExtResource("7_cbco3")]
+team = 1
 
 [node name="Health" parent="." instance=ExtResource("5_pdjii")]
 

@@ -24,8 +24,6 @@ func initialize_ai(parent_team: int) -> void:
 func change_state(body: Node2D, new_state: Node) -> void:
 	actor.target = body
 	
-	print("Actor: ", actor, " New State: ", new_state)
-	
 	if current_state != death_state:
 		current_state = new_state
 		finite_state_machine.change_state(new_state)
