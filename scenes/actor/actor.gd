@@ -35,7 +35,7 @@ var curr_speed: float:
 
 
 func _ready() -> void:
-	ai.initialize_ai(team.team)
+	ai.initialize_ai(self, team.team)
 	weapon.initialize_weapon(team.team)
 	shield.initialize_shield(team.team)
 

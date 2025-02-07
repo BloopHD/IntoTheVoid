@@ -3,6 +3,7 @@ extends State
 
 @export var actor: Actor
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	set_physics_process(false)

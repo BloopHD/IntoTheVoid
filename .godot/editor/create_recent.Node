@@ -1,9 +1,9 @@
+Node
+Node2D
 Timer
 Sprite2D
 CollisionShape2D
 Area2D
-Node2D
-Node
 RigidBody2D
 MeshInstance2D
 State

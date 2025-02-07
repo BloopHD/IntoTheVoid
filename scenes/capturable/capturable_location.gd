@@ -1,10 +1,11 @@
 extends Area2D
+class_name CapturableLocation
 
 signal base_captured(new_team)
 
 @export var neutral_color: Color = Color(1, 1, 1, 0.255)
-@export var player_color: Color = Color(0.00, 0.637, 0.384)
-@export var enemy_color: Color = Color(0.925, 0.266, 0.137)
+@export var player_color: Color = Color(0.00, 0.637, 0.384, 0.255)
+@export var enemy_color: Color = Color(0.925, 0.266, 0.137, 0.255)
 
 @onready var team = $Team
 @onready var capture_timer = $CaptureTimer

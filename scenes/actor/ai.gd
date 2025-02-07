@@ -10,14 +10,16 @@ class_name AI
 @onready var attack_state: Node = $FiniteStateMachine/AttackState
 @onready var death_state: Node = $FiniteStateMachine/DeathState
 @onready var standing_attack_state: Node = $FiniteStateMachine/StandingAttackState
+@onready var travel_state: Node = $FiniteStateMachine/TravelState
+@onready var idle_state: Node = $FiniteStateMachine/IdleState
 
 var current_state: Node = null
 
-#var target: Node2D = null
 var team: int = -1
 		
 	
-func initialize_ai(parent_team: int) -> void:
+func initialize_ai(parent: Actor, parent_team: int) -> void:
+	actor = parent
 	team = parent_team
 
 		
@@ -33,8 +35,8 @@ func change_state(body: Node2D, new_state: Node) -> void:
 # This helps when the target is destroyed. Keep us from trying to access a null target.
 func target_exists() -> bool:
 	return actor.target != null
-
-		
+	
+	
 
 #region Signals
 

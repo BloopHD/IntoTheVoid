@@ -1,0 +1,98 @@
+[gd_scene load_steps=15 format=3 uid="uid://bwo04xef4wdw2"]
+
+[ext_resource type="Script" path="res://scenes/actor/ai.gd" id="1_vijfy"]
+[ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="2_hqtuw"]
+[ext_resource type="Script" path="res://scenes/actor/wander_state.gd" id="3_nkujx"]
+[ext_resource type="Script" path="res://scenes/actor/aware_state.gd" id="4_l3sow"]
+[ext_resource type="Script" path="res://scenes/actor/chase_state.gd" id="5_ipj31"]
+[ext_resource type="Script" path="res://scenes/actor/attack_state.gd" id="6_fc6o5"]
+[ext_resource type="Script" path="res://scenes/actor/standing_attack_state.gd" id="7_vkl0x"]
+[ext_resource type="Script" path="res://scenes/actor/death_state.gd" id="8_36gq4"]
+[ext_resource type="Script" path="res://scenes/actor/travel_state.gd" id="9_oktug"]
+[ext_resource type="Script" path="res://scenes/actor/idle_state.gd" id="10_aqk11"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_celd3"]
+radius = 500.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vu1h3"]
+radius = 750.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_21b31"]
+radius = 1000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
+radius = 1025.0
+
+[node name="AI" type="Node2D"]
+script = ExtResource("1_vijfy")
+
+[node name="Detection_Areas" type="Node" parent="."]
+
+[node name="Stand_Attack_Detection_Area" type="Area2D" parent="Detection_Areas"]
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_Areas/Stand_Attack_Detection_Area"]
+shape = SubResource("CircleShape2D_celd3")
+debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
+
+[node name="Attack_Detection_Area" type="Area2D" parent="Detection_Areas"]
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_Areas/Attack_Detection_Area"]
+shape = SubResource("CircleShape2D_vu1h3")
+debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
+
+[node name="Chase_Detection_Area" type="Area2D" parent="Detection_Areas"]
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_Areas/Chase_Detection_Area"]
+shape = SubResource("CircleShape2D_21b31")
+
+[node name="Aware_Detection_Area" type="Area2D" parent="Detection_Areas"]
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection_Areas/Aware_Detection_Area"]
+shape = SubResource("CircleShape2D_ow8ix")
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("2_hqtuw")
+state = NodePath("WanderState")
+
+[node name="WanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("wander_timer")]
+script = ExtResource("3_nkujx")
+wander_timer = NodePath("WanderTimer")
+
+[node name="WanderTimer" type="Timer" parent="FiniteStateMachine/WanderState"]
+wait_time = 3.0
+one_shot = true
+
+[node name="AwareState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("4_l3sow")
+
+[node name="ChaseState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("5_ipj31")
+
+[node name="AttackState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("6_fc6o5")
+
+[node name="StandingAttackState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("7_vkl0x")
+
+[node name="DeathState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("8_36gq4")
+
+[node name="TravelState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("9_oktug")
+
+[node name="IdleState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("10_aqk11")
+
+[connection signal="body_entered" from="Detection_Areas/Stand_Attack_Detection_Area" to="." method="_on_stand_attack_detection_area_body_entered"]
+[connection signal="body_exited" from="Detection_Areas/Stand_Attack_Detection_Area" to="." method="_on_stand_attack_detection_area_body_exited"]
+[connection signal="body_entered" from="Detection_Areas/Attack_Detection_Area" to="." method="_on_attack_detection_area_body_entered"]
+[connection signal="body_exited" from="Detection_Areas/Attack_Detection_Area" to="." method="_on_attack_detection_area_body_exited"]
+[connection signal="body_entered" from="Detection_Areas/Chase_Detection_Area" to="." method="_on_chase_detection_area_body_entered"]
+[connection signal="body_exited" from="Detection_Areas/Chase_Detection_Area" to="." method="_on_chase_detection_area_body_exited"]
+[connection signal="body_entered" from="Detection_Areas/Aware_Detection_Area" to="." method="_on_aware_detection_area_body_entered"]
+[connection signal="body_exited" from="Detection_Areas/Aware_Detection_Area" to="." method="_on_aware_detection_area_body_exited"]
+[connection signal="timeout" from="FiniteStateMachine/WanderState/WanderTimer" to="FiniteStateMachine/WanderState" method="_on_wander_timer_timeout"]

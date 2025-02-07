@@ -6,17 +6,30 @@ extends State
 @export var wander_timer: Timer
 @export var wander_range: float = 500
 
-@onready var actor_velocity: Vector2 = actor.velocity
-
 var wander_origin: Vector2 = Vector2.ZERO
 var wander_location: Vector2 = Vector2.ZERO
 var wander_location_reached: bool = true
+
 
 func _ready():
 	set_physics_process(false)
 	
 	if wander_timer != null and not wander_timer.is_inside_tree(): 
 		add_child(wander_timer)
+
+
+func _process(_delta):
+	pass
+		
+
+func _physics_process(delta):
+	if not wander_location_reached:
+		actor.move_func(delta, wander_location)
+		if actor.global_position.distance_to(wander_location) < 25:
+			wander_location_reached = true
+			wander_timer.start()
+	else:
+		actor.move_func(delta, Vector2.ZERO)
 
 
 func _enter_state() -> void:
@@ -31,22 +44,7 @@ func _exit_state() -> void:
 	set_physics_process(false)
 
 	wander_timer.stop()
-
-
-func _process(_delta):
-	pass
-		
-
-func _physics_process(delta):
-	if not wander_location_reached:
-		actor.move_func(delta, wander_location)
-		if actor.global_position.distance_to(wander_location) < 25:
-			wander_location_reached = true
-			#actor.velocity = Vector2.ZERO
-			wander_timer.start()
-	else:
-		actor.move_func(delta, Vector2.ZERO)
-
+	
 
 func _on_wander_timer_timeout():
 	var random_x: float = randf_range(-wander_range, wander_range)
