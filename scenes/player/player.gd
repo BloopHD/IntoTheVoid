@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Player
 
+signal player_health_changed(new_health: int)
+signal died
 
 @export var forward_speed: int = 1000
 @export var reverse_and_strafe_speed: int = 750
@@ -13,6 +15,7 @@ class_name Player
 @onready var health: Health = $Health
 @onready var shield: Shield = $Shield
 @onready var weapon: Weapon = $Weapon
+@onready var camera_transform: RemoteTransform2D = $CameraTransform
 
 
 const FULL_SPEED_MULTI: float = 1.0
@@ -40,6 +43,10 @@ func _input(event: InputEvent) -> void:
 	
 func _process(_delta) -> void:
 	check_for_input()
+	
+	if shield.shield_health != null:
+		print(shield.shield_health)
+		
 		
 
 func _physics_process(delta: float) -> void:
@@ -123,13 +130,11 @@ func check_for_weapons_fired() -> void:
 
 # This function gets the move input from the player.
 func get_move_input() -> Vector2:
-
 	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 
 # This function gets the aim input from the player.
 func get_aim_input() -> Vector2:
-
 	var aim_input: Vector2 = Vector2.ZERO
 
 	# If the player is using a mouse and keyboard, get the aim input from the mouse position.
@@ -163,10 +168,22 @@ func get_directional_speed(direction: Vector2) -> float:
 	return velocity.dot(normalized_direction)
 
 
+func set_camera_transform(camera_path: NodePath) -> void:
+	camera_transform.remote_path = camera_path
+
+
 func get_team() -> int:
 	return team.team
 
 
 func handle_hit(damage: int) -> void:
 	health.health -= damage
+	emit_signal("player_health_changed", health.health)
 	
+	if health.health <= 0:
+		die()
+		
+		
+func die() -> void:
+	emit_signal("died")
+	queue_free()

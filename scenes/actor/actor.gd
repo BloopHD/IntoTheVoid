@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Actor
 
+signal died()
+
 
 @export var max_speed: int = 750
 @export var acceleration: int = 50
@@ -102,5 +104,9 @@ func handle_hit(damage: int) -> void:
 	health.health -= damage
 
 	if health.health <= 0:
-		queue_free()
+		die()
+
 		
+func die() -> void:
+	emit_signal("died")
+	queue_free()

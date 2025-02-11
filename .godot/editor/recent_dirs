@@ -1,7 +1,8 @@
+res://scenes/ui
+res://scenes/world
 res://scenes/actor
 res://scenes/actor/ai
 res://scenes/capturable
-res://scenes/world
 res://scenes
 res://globals
 res://scenes/weapon
@@ -14,6 +15,5 @@ res://scenes/Asteroids
 res://scenes/crosshairs
 res://scenes/background
 res://scenes/player
-res://scenes/UI
 res://scenes/asteroid
 res://scenes/laser

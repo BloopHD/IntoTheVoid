@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://fgexrmib5i88"]
-
-[ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_48c6f"]
-
-[node name="UILife" type="TextureRect"]
-texture_filter = 1
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("1_48c6f")

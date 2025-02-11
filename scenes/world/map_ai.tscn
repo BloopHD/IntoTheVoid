@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfrr5oclkajfu"]
+
+[ext_resource type="Script" path="res://scenes/world/map_ai.gd" id="1_gmhbe"]
+[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="2_ijxhs"]
+
+[node name="MapAI" type="Node2D"]
+script = ExtResource("1_gmhbe")
+
+[node name="Team" parent="." instance=ExtResource("2_ijxhs")]
+
+[node name="UnitContainer" type="Node2D" parent="."]
+
+[node name="RespawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]

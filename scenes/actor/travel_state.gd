@@ -15,7 +15,7 @@ func _physics_process(delta: float) -> void:
 	if not target_location_reached:
 		actor.move_func(delta, target_location)
 	
-		if actor.global_position.distance_to(target_location) < 25:
+		if actor.global_position.distance_to(target_location) < 25 && actor.velocity.length() < 5:
 			target_location_reached = true
 		
 	else:

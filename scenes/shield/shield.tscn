@@ -19,5 +19,11 @@ texture = ExtResource("1_v1k4e")
 shape = SubResource("CircleShape2D_rd0wc")
 
 [node name="FadeTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ShieldRegenTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
 
 [connection signal="timeout" from="FadeTimer" to="." method="_on_fade_timer_timeout"]
+[connection signal="timeout" from="ShieldRegenTimer" to="." method="_on_shield_regen_timer_timeout"]

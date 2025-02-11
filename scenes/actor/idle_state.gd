@@ -8,7 +8,7 @@ func _ready() -> void:
 	set_physics_process(false)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Do nothing. This is the idle state.
 	# But we could add some idle movements here,
 	# maybe have the actor look around, bob up and down, etc..

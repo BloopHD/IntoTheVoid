@@ -16,7 +16,6 @@ z_index = 10
 collision_mask = 18
 motion_mode = 1
 script = ExtResource("1_pf1yp")
-forward_speed = 750
 reverse_and_strafe_speed = 500
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -41,3 +40,5 @@ collision_layer = 64
 collision_mask = 16
 
 [node name="Weapon" parent="." instance=ExtResource("3_yom0l")]
+
+[node name="CameraTransform" type="RemoteTransform2D" parent="."]

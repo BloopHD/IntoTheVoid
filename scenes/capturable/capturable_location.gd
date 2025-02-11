@@ -1,7 +1,7 @@
 extends Area2D
 class_name CapturableLocation
 
-signal base_captured(new_team)
+signal location_captured(new_team)
 
 @export var neutral_color: Color = Color(1, 1, 1, 0.255)
 @export var player_color: Color = Color(0.00, 0.637, 0.384, 0.255)
@@ -20,14 +20,14 @@ func check_for_base_capture() -> void:
 	var majority_team = get_team_with_majoirty()
 	
 	if majority_team == Team.TeamName.NEUTRAL:
-		print("Capture point contested, stopping capture clock.")
+		#print("Capture point contested, stopping capture clock.")
 		capture_timer.stop()
 	elif majority_team == team.team:
-		print("Owning team is majority, stopping capture clock.")
+		#print("Owning team is majority, stopping capture clock.")
 		#team_to_capture = Team.TeamName.NEUTRAL
 		capture_timer.stop()
 	elif team_to_capture != majority_team:
-		print("New team is majority, starting capture clock.")
+		#print("New team is majority, starting capture clock.")
 		team_to_capture = majority_team
 		capture_timer.start()
 
@@ -45,7 +45,7 @@ func get_team_with_majoirty() -> int:
 		
 func set_team(new_team: int) -> void:
 	team.team = new_team
-	emit_signal("base_captured", new_team)
+	emit_signal("location_captured", new_team)
 	match new_team:
 		Team.TeamName.NEUTRAL:
 			sprite.modulate = neutral_color
@@ -68,9 +68,9 @@ func _on_body_entered(body:Node2D) -> void:
 		else:
 			pass
 		
-		print("Actor Entered")
-		print("Player unit count: ", player_unit_count)
-		print("Enemy unit count: ", enemy_unit_count)
+		#print("Actor Entered")
+		#print("Player unit count: ", player_unit_count)
+		#print("Enemy unit count: ", enemy_unit_count)
 
 		check_for_base_capture()
 		
@@ -92,5 +92,6 @@ func _on_body_exited(body:Node2D) -> void:
 	
 		check_for_base_capture()
 
+		
 func _on_capture_timer_timeout() -> void:
 	set_team(team_to_capture)

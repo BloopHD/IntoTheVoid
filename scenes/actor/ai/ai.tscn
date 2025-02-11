@@ -26,7 +26,7 @@ radius = 1025.0
 [node name="AI" type="Node2D"]
 script = ExtResource("1_vijfy")
 
-[node name="Detection_Areas" type="Node" parent="."]
+[node name="Detection_Areas" type="Node2D" parent="."]
 
 [node name="Stand_Attack_Detection_Area" type="Area2D" parent="Detection_Areas"]
 collision_mask = 32

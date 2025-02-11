@@ -1,0 +1,115 @@
+[gd_scene load_steps=5 format=3 uid="uid://dcf1b1n0ijxcv"]
+
+[ext_resource type="Script" path="res://scenes/ui/gui.gd" id="1_wrvop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wthn"]
+bg_color = Color(1, 1, 1, 0.0196078)
+skew = Vector2(0.75, 0)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(1, 1, 1, 0.141176)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arptt"]
+bg_color = Color(1, 0.175537, 0.261776, 1)
+skew = Vector2(0.75, 0)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(1, 0.176471, 0.262745, 0.686275)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mgwhd"]
+bg_color = Color(0.347359, 0.602166, 0.958101, 1)
+skew = Vector2(0.75, 0)
+shadow_color = Color(0.34902, 0.603922, 0.956863, 0.686275)
+shadow_size = 10
+
+[node name="GUI" type="CanvasLayer"]
+script = ExtResource("1_wrvop")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="Rows" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TopRow" type="HBoxContainer" parent="MarginContainer/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="TopLeft" type="VBoxContainer" parent="MarginContainer/Rows/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="HealthBarMargin" type="MarginContainer" parent="MarginContainer/Rows/TopRow/TopLeft"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 10
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/Rows/TopRow/TopLeft/HealthBarMargin"]
+custom_minimum_size = Vector2(50, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_0wthn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_arptt")
+value = 75.0
+show_percentage = false
+
+[node name="ShieldBarMargin" type="MarginContainer" parent="MarginContainer/Rows/TopRow/TopLeft"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="ShieldBar" type="ProgressBar" parent="MarginContainer/Rows/TopRow/TopLeft/ShieldBarMargin"]
+custom_minimum_size = Vector2(50, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_0wthn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mgwhd")
+value = 75.0
+show_percentage = false
+
+[node name="TopMiddle" type="HBoxContainer" parent="MarginContainer/Rows/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 2
+
+[node name="TopRight" type="HBoxContainer" parent="MarginContainer/Rows/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MiddleRow" type="HBoxContainer" parent="MarginContainer/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 6.0
+mouse_filter = 2
+
+[node name="BottomRow" type="HBoxContainer" parent="MarginContainer/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
