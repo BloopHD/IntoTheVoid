@@ -47,8 +47,8 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _on_area_entered(area:Area2D) -> void:
-	if area.has_method("damage_shield") and area.shield_team != team:
-		area.damage_shield(damage)
+	if area.has_method("handle_hit") and area.shield_team != team:
+		area.handle_hit(damage)
 		queue_free()
 
 func _on_kill_timer_timeout() -> void:

@@ -11,19 +11,20 @@ collision_mask = 0
 script = ExtResource("1_daygc")
 shield_sprite = NodePath("Sprite2D")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rd0wc")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0, 1, 0.764706, 0)
 texture = ExtResource("1_v1k4e")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_rd0wc")
-
-[node name="FadeTimer" type="Timer" parent="."]
+[node name="FadeOutTimer" type="Timer" parent="."]
+wait_time = 2.0
 one_shot = true
 
 [node name="ShieldRegenTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 8.0
 one_shot = true
 
-[connection signal="timeout" from="FadeTimer" to="." method="_on_fade_timer_timeout"]
+[connection signal="timeout" from="FadeOutTimer" to="." method="_on_fade_out_timer_timeout"]
 [connection signal="timeout" from="ShieldRegenTimer" to="." method="_on_shield_regen_timer_timeout"]

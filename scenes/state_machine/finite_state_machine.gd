@@ -1,14 +1,15 @@
 extends Node
 class_name FiniteStateMachine
 
-@export var state: State
+@export var starting_state: State
+
+var state: State = null
 
 func _ready():
-	change_state(state)
+	change_state(starting_state)
 
 func change_state(new_state: State):
-   
-	# If state is not Null
+	# If state is not Null, safe to call exit_state().
 	if state is State:
 		state._exit_state()
 
