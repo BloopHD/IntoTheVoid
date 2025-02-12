@@ -14,7 +14,7 @@ shadow_color = Color(1, 1, 1, 0.141176)
 shadow_size = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arptt"]
-bg_color = Color(1, 0.175537, 0.261776, 1)
+bg_color = Color(1, 0.270588, 0.14902, 1)
 skew = Vector2(0.75, 0)
 border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 5
@@ -25,9 +25,9 @@ shadow_color = Color(1, 0.176471, 0.262745, 0.686275)
 shadow_size = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mgwhd"]
-bg_color = Color(0.347359, 0.602166, 0.958101, 1)
+bg_color = Color(0.180392, 0.862745, 0.556863, 1)
 skew = Vector2(0.75, 0)
-shadow_color = Color(0.34902, 0.603922, 0.956863, 0.686275)
+shadow_color = Color(0.180392, 0.862745, 0.556863, 0.686275)
 shadow_size = 10
 
 [node name="GUI" type="CanvasLayer"]
@@ -83,7 +83,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 5
 
 [node name="ShieldBar" type="ProgressBar" parent="MarginContainer/Rows/TopRow/TopLeft/ShieldBarMargin"]
-custom_minimum_size = Vector2(50, 25)
+custom_minimum_size = Vector2(50, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2

@@ -35,7 +35,7 @@ var current_speed: float:
 func _ready() -> void:
 	weapon.initialize_weapon(team.team)
 	shield.initialize_shield(team.team)
-
+	
 
 func _input(event: InputEvent) -> void:
 	set_input_type(event)

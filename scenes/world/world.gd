@@ -30,10 +30,8 @@ func _ready() -> void:
 func spawn_player() -> void:
 	var player: Player = Player.instantiate()
 	add_child(player)
- 	#call_deferred("add_child", player)
 	player.global_position = player_spawn.global_position
 	player.call_deferred("set_camera_transform", camera.get_path())
-	#player.set_camera_transform(camera.get_path())
 	player.died.connect(spawn_player)
 	gui.set_player(player)
 	

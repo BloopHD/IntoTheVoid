@@ -98,6 +98,7 @@ func handle_hit(damage: int) -> void:
 	current_visibility = ShieldVisibility.FADING_IN
 	
 	shield_health -= damage
+	emit_signal("shield_health_changed", shield_health)
 
 	fade_out_timer.start()
 	shield_regen_timer.start()
@@ -114,6 +115,8 @@ func regen_shield() -> void:
 		shield_health = 100
 		current_state = ShieldState.FULL_HEALTH
 		current_visibility = ShieldVisibility.FADING_OUT
+		
+	emit_signal("shield_health_changed", shield_health)
 		
 		
 func shield_fade_in() -> void:
