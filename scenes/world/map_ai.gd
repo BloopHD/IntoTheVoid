@@ -29,7 +29,10 @@ func initialize(capturable_locations: Array, spawn_points: Array) -> void:
 	team.team = team_intiger
 	
 	self.spawn_points = spawn_points
+	
 	for spawn in spawn_points:
+		if unit_container.get_child_count() >= max_units_alive:
+			break
 		spawn_unit(spawn.global_position)
 
 	self.capturable_locations = capturable_locations
@@ -84,6 +87,7 @@ func spawn_unit(spaw_location: Vector2) -> void:
 func set_unit_ai_to_advance_to_next_base(unit: Actor) -> void:
 	if target_location != null:
 		var ai: AI = unit.ai
+		print(target_location)
 		ai.change_state(target_location, ai.travel_state)
 	
 	

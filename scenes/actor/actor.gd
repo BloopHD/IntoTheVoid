@@ -18,15 +18,18 @@ signal died()
 @onready var weapon: Weapon = $Weapon
 @onready var ai: AI = $AI
 
-var target: Node2D = null
-
 const ONE_HUNDRED: int = 100
+
+var target: Node2D = null
 
 var move_direction: Vector2
 var look_direction: Vector2
 
 var aim_vector: Vector2 = Vector2.ZERO
 var previous_aim_vector: Vector2 = Vector2.ZERO
+
+var enemy_targets: Array = []
+var current_target: Node2D = null
 
 var angle_to_target_in_range: bool = false
 var moving_forward: bool = false
@@ -106,7 +109,24 @@ func handle_hit(damage: int) -> void:
 	if health.health <= 0:
 		die()
 
-		
+
+#func handle_enemy_entered(enemy: Node2D) -> void:
+#	if enemy_targets.size() == 0:
+#		current_target = enemy
+#	
+#	enemy_targets.append(enemy)
+#
+#
+#func handle_enemy_exited(enemy: Node2D) -> void:
+#	if current_target == enemy && enemy_targets.size() > 0:
+#		current_target = enemy_targets[1]
+#	elif enemy_targets.size() <= 0: 
+#		current_target = null
+#		ai.change_state(null, ai.wander_state)
+#
+#	enemy_targets.erase(enemy)
+	
+
 func die() -> void:
 	emit_signal("died")
 	queue_free()

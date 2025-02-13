@@ -26,6 +26,9 @@ func initialize_ai(parent: Actor, parent_team: int) -> void:
 func change_state(body: Node2D, new_state: Node) -> void:
 	actor.target = body
 	
+	if team == 1:
+		print("Changing state to: ", new_state, " Enemy: ", body)
+	
 	if current_state != death_state:
 		current_state = new_state
 		finite_state_machine.change_state(new_state)
@@ -42,44 +45,130 @@ func target_exists() -> bool:
 
 func _on_stand_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-		change_state(body, standing_attack_state)
+
+		var target: Node2D = actor.target
+
+		if target != body:
+			actor.enemy_targets.erase(body)
+			actor.enemy_targets.append(actor.target)
+			target = body
+		
+		change_state(target, standing_attack_state)
 
 func _on_stand_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-		if target_exists():
+
+		
+		
+		
+		if is_instance_valid(body):
+			if team == 1:
+				print("Check 1, ", body)
 			change_state(body, attack_state)
 		else:
-			change_state(null, wander_state)
+			if actor.enemy_targets.size() > 0:
+				print("Check 2, ", body)
+				var target = actor.enemy_targets.pop_front()
+				change_state(target, attack_state)
+			else:
+				change_state(null, wander_state)
 
 func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-		change_state(body, attack_state)
+
+		var target: Node2D = actor.target
+
+		if target != body:
+			actor.enemy_targets.erase(body)
+			actor.enemy_targets.append(actor.target)
+			target = body
+		
+		change_state(target, attack_state)
 
 func _on_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
+		
 		if target_exists():
 			change_state(body, chase_state)
 		else:
-			change_state(null, wander_state)
+			if actor.enemy_targets.size() > 0:
+				var target = actor.enemy_targets.pop_front()
+				change_state(target, attack_state)
+			else:
+				change_state(null, wander_state)
 
 func _on_chase_detection_area_body_entered(body:Node2D):
 	if body.has_method("get_team") and body.get_team() != team:
-		change_state(body,chase_state)
+		
+#		if actor.target == null:
+#			actor.target = body
+#		else:
+#			actor.enemy_targets.append(body)
+
+		var target: Node2D = actor.target
+
+		if target != body:
+			actor.enemy_targets.erase(body)
+			actor.enemy_targets.append(actor.target)
+			target = body
+			
+		change_state(target,chase_state)
 
 func _on_chase_detection_area_body_exited(body:Node2D):
 	if body.has_method("get_team") and body.get_team() != team:
+		
+#		if body == actor.target:
+#			if actor.enemy_targets.size() > 0:
+#				actor.target = actor.enemy_targets.pop_front()
+#			else:
+#				actor.target = null
+#		else:
+#			if actor.enemy_targets.size() > 0:
+#				actor.enemy_targets.erase(body)
+#			else:
+#				printerr("Error: No targets in enemy_targets array.")
+		
 		if target_exists():
 			change_state(body, aware_state)
 		else:
-			change_state(null, wander_state)
+			if actor.enemy_targets.size() > 0:
+				var target = actor.enemy_targets.pop_front()
+				change_state(target, chase_state)
+			else:
+				change_state(null, wander_state)
 
 func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-		change_state(body, aware_state)
+		
+		if actor.target == null:
+			print("target: ", actor.target, " body: ", body)
+			actor.target = body 
+			change_state(body, aware_state)
+			
+		else:
+			actor.enemy_targets.append(body)
+			
 
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-		change_state(null, wander_state)
+		
+		var target: Node2D = null
+		
+		if body == actor.target:
+			if actor.enemy_targets.size() > 0:
+				target = actor.enemy_targets.pop_front()
+			else:
+				target = null
+		else:
+			if actor.enemy_targets.size() > 0:
+				actor.enemy_targets.erase(body)
+			else:
+				printerr("Error: No targets in enemy_targets array: ")
+				for t in actor.enemy_targets:
+					printerr(t)
+				
+		
+		change_state(target, wander_state)
 		
 		
 #endregion

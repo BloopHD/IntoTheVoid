@@ -43,10 +43,6 @@ func _input(event: InputEvent) -> void:
 	
 func _process(_delta) -> void:
 	check_for_input()
-	
-	if shield.shield_health != null:
-		print(shield.shield_health)
-		
 		
 
 func _physics_process(delta: float) -> void:

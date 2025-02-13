@@ -19,3 +19,12 @@ res://scenes/actor/attack_state.gd
 res://scenes/enemy/enemy.tscn
 res://scenes/actor/ai.gd
 res://scenes/ally/ally.tscn
+res://scenes/actor/travel_state.gd
+res://scenes/actor/aware_state.gd
+res://scenes/actor/chase_state.gd
+res://scenes/actor/death_state.gd
+res://scenes/actor/idle_state.gd
+res://scenes/actor/standing_attack_state.gd
+res://scenes/actor/wander_state.gd
+res://scenes/world/testing.tscn
+res://scenes/capturable/capturable_location.tscn
