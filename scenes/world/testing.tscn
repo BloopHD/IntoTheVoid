@@ -44,10 +44,10 @@ max_units_alive = 1
 base_capture_start_order = 1
 team_intiger = 2
 unit = ExtResource("8_06w7a")
-max_units_alive = 2
+max_units_alive = 1
 
 [node name="AllyRespawnPoints" type="Node2D" parent="."]
-position = Vector2(3718, 33)
+position = Vector2(3252, 31)
 
 [node name="Marker2D" type="Marker2D" parent="AllyRespawnPoints"]
 position = Vector2(-4832, -503)
@@ -62,7 +62,7 @@ position = Vector2(-4957, 168)
 position = Vector2(-4843, 466)
 
 [node name="EnemyRespawnPoints" type="Node2D" parent="."]
-position = Vector2(-3324, -3)
+position = Vector2(-3136, -12)
 
 [node name="Marker2D" type="Marker2D" parent="EnemyRespawnPoints"]
 position = Vector2(4718, -472)

@@ -87,7 +87,7 @@ func spawn_unit(spaw_location: Vector2) -> void:
 func set_unit_ai_to_advance_to_next_base(unit: Actor) -> void:
 	if target_location != null:
 		var ai: AI = unit.ai
-		print(target_location)
+		#print(target_location)
 		ai.change_state(target_location, ai.travel_state)
 	
 	

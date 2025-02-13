@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 
 func _enter_state() -> void:
 	set_physics_process(true)
-	print(actor.target)
+	#print(actor.target)
 	target_location = actor.target.position
 
 

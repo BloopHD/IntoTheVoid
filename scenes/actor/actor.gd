@@ -38,6 +38,8 @@ var curr_speed: float:
 	get:
 		return velocity.length()
 
+var alive: bool = true
+
 
 func _ready() -> void:
 	ai.initialize_ai(self, team.team)
@@ -129,4 +131,5 @@ func handle_hit(damage: int) -> void:
 
 func die() -> void:
 	emit_signal("died")
+	alive = false
 	queue_free()
