@@ -89,6 +89,7 @@ func set_unit_ai_to_advance_to_next_base(unit: Actor) -> void:
 		var ai: AI = unit.ai
 		#print(target_location)
 		ai.change_state(target_location, ai.travel_state)
+		ai.provide_location(target_location)
 	
 	
 func handle_unit_death() -> void:

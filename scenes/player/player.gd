@@ -2,7 +2,7 @@ extends CharacterBody2D
 class_name Player
 
 signal player_health_changed(new_health: int)
-signal died
+signal died()
 
 @export var forward_speed: int = 1000
 @export var reverse_and_strafe_speed: int = 750

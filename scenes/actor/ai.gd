@@ -24,21 +24,25 @@ func initialize_ai(parent: Actor, parent_team: int) -> void:
 
 		
 func change_state(body: Node2D, new_state: Node) -> void:
+#	if body != null:
+#		if body.is_in_group("attackable"):
+#			actor.attackable_targets.append(body)
+#		else:
+#			actor.location_targets.append(body)
+	
 	actor.target = body
 	
 	if team == 1:
 		print("Changing state to: ", new_state, " Target: ", body)
-		print("Targets, ", actor.enemy_targets.size())
+		print("Targets, ", actor.attackable_targets.size())
 	
 	if current_state != death_state:
 		current_state = new_state
 		finite_state_machine.change_state(new_state)
 		
 		
-# This function makes sure that the target still exsits.
-# This helps when the target is destroyed. Keep us from trying to access a null target.
-func target_exists() -> bool:
-	return actor.target != null
+func provide_location(location: Node2D) -> void:
+	actor.location_targets.append(location)
 
 
 
@@ -50,8 +54,8 @@ func _on_stand_attack_detection_area_body_entered(body:Node2D) -> void:
 		var target: Node2D = actor.target
 	
 		if target != body:
-			actor.enemy_targets.erase(body)
-			actor.enemy_targets.append(actor.target)
+			actor.attackable_targets.erase(body)
+			actor.attackable_targets.append(actor.target)
 			target = body
 
 		change_state(target,standing_attack_state)
@@ -70,8 +74,8 @@ func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 		var target: Node2D = actor.target
 	
 		if target != body:
-			actor.enemy_targets.erase(body)
-			actor.enemy_targets.append(actor.target)
+			actor.attackable_targets.erase(body)
+			actor.attackable_targets.append(actor.target)
 			target = body
 
 		change_state(target,attack_state)
@@ -90,8 +94,9 @@ func _on_chase_detection_area_body_entered(body:Node2D):
 		var target: Node2D = actor.target
 
 		if target != body:
-			actor.enemy_targets.erase(body)
-			actor.enemy_targets.append(actor.target)
+			actor.attackable_targets.erase(body)
+			actor.attackable_targets.append(actor.target)
+			actor.attackable_targets.push_front(body)
 			target = body
 
 		change_state(target,chase_state)
@@ -112,16 +117,15 @@ func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 		
 		# TODO: This causes a bug, our map_ai is telling our units their target is the capturable location.
 		# This sets our actor's target to the capturable location. So the first enemy unit enters the 
-		# aware detection area, they are instantly put into the enemy_targets array. This causes the capurable location 
+		# aware detection area, they are instantly put into the attackable_targets array. This causes the capurable location 
 		# to be put into the array and eventually targeted and attacked by the actor.
 		
 		if actor.target == null:
 			print("target: ", actor.target, " body: ", body)
-			actor.target = body
 			change_state(body, aware_state)
 
 		else:
-			actor.enemy_targets.append(body)
+			actor.attackable_targets.append(body)
 			
 
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
@@ -134,15 +138,15 @@ func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 		# This should also catch actor.targets that have been destroyed. B/c destroyed units exit the outter 
 		# most detection area first. (aware)
 		if actor.target == body:
-			if actor.enemy_targets.size() > 0:
-				var target = actor.enemy_targets.pop_front()
+			if actor.attackable_targets.size() > 0:
+				var target = actor.attackable_targets.pop_front()
 				change_state(target, attack_state)
 			else:
 				change_state(null, wander_state)
 		
 		else:
-			if actor.enemy_targets.size() > 0:
-				actor.enemy_targets.erase(body)
+			if actor.attackable_targets.size() > 0:
+				actor.attackable_targets.erase(body)
 				
 		
 #endregion

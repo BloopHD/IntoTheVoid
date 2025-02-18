@@ -22,7 +22,7 @@ position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
-position = Vector2(-1118, 771)
+position = Vector2(-1684, -4)
 
 [node name="CapturableManager" type="Node2D" parent="."]
 script = ExtResource("3_b0x4l")

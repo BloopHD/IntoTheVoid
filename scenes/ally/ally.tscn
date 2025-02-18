@@ -33,7 +33,7 @@ radius = 1000.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
 radius = 1025.0
 
-[node name="Ally" type="CharacterBody2D" groups=["player"]]
+[node name="Ally" type="CharacterBody2D" groups=["attackable"]]
 collision_mask = 16
 script = ExtResource("1_ubdep")
 
@@ -43,7 +43,7 @@ rotation = 1.5708
 scale = Vector2(2, 2)
 texture = ExtResource("2_op0ba")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["enemy"]]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_10cgx")
 
@@ -52,7 +52,7 @@ team = 1
 
 [node name="Health" parent="." instance=ExtResource("4_urgas")]
 
-[node name="Shield" parent="." groups=["enemy shield"] instance=ExtResource("5_7cnc4")]
+[node name="Shield" parent="." instance=ExtResource("5_7cnc4")]
 scale = Vector2(6, 6)
 collision_layer = 64
 collision_mask = 16
@@ -99,6 +99,7 @@ starting_state = NodePath("WanderState")
 script = ExtResource("9_sw5a0")
 actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
+wander_range = null
 
 [node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/WanderState"]
 wait_time = 3.0

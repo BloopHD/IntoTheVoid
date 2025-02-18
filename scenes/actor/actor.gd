@@ -28,7 +28,8 @@ var look_direction: Vector2
 var aim_vector: Vector2 = Vector2.ZERO
 var previous_aim_vector: Vector2 = Vector2.ZERO
 
-var enemy_targets: Array = []
+var attackable_targets: Array = []
+var location_targets: Array = []
 var current_target: Node2D = null
 
 var angle_to_target_in_range: bool = false
