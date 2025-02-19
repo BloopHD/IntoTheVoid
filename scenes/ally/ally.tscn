@@ -70,26 +70,28 @@ collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Detection_Areas/Stand_Attack_Detection_Area"]
 shape = SubResource("CircleShape2D_celd3")
-debug_color = Color(0.810603, 0.683102, 0.104256, 0.42)
+debug_color = Color(0.811765, 0.682353, 0.105882, 0.0980392)
 
 [node name="Attack_Detection_Area" type="Area2D" parent="AI/Detection_Areas"]
 collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Detection_Areas/Attack_Detection_Area"]
 shape = SubResource("CircleShape2D_vu1h3")
-debug_color = Color(0.847059, 0.215686, 0.45098, 0.419608)
+debug_color = Color(0.847059, 0.215686, 0.45098, 0.0980392)
 
 [node name="Chase_Detection_Area" type="Area2D" parent="AI/Detection_Areas"]
 collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Detection_Areas/Chase_Detection_Area"]
 shape = SubResource("CircleShape2D_21b31")
+debug_color = Color(0, 0.6, 0.701961, 0.0980392)
 
 [node name="Aware_Detection_Area" type="Area2D" parent="AI/Detection_Areas"]
 collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AI/Detection_Areas/Aware_Detection_Area"]
 shape = SubResource("CircleShape2D_ow8ix")
+debug_color = Color(0, 0.6, 0.701961, 0.0980392)
 
 [node name="FiniteStateMachine" type="Node" parent="AI" node_paths=PackedStringArray("starting_state")]
 script = ExtResource("8_f58ii")
@@ -97,9 +99,9 @@ starting_state = NodePath("WanderState")
 
 [node name="WanderState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("9_sw5a0")
+wander_range = null
 actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
-wander_range = null
 
 [node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/WanderState"]
 wait_time = 3.0

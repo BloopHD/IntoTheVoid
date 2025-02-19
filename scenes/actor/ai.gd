@@ -16,6 +16,13 @@ class_name AI
 var current_state: Node = null
 
 var team: int = -1
+
+var _current_target: Node2D = null
+
+var stand_attack_targets: Array = [Node2D]
+var attack_range_targets: Array = [Node2D]
+var chase_range_targets: Array = [Node2D]
+var aware_range_targets: Array = [Node2D]
 		
 	
 func initialize_ai(parent: Actor, parent_team: int) -> void:
@@ -51,31 +58,31 @@ func provide_location(location: Node2D) -> void:
 func _on_stand_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
-		var target: Node2D = actor.target
-	
-		if target != body:
-			actor.attackable_targets.erase(body)
-			actor.attackable_targets.append(actor.target)
-			target = body
+		var target: Node2D = actor.attackable_targets.front()
 
-		change_state(target,standing_attack_state)
+#		if target != body:
+#			actor.attackable_targets.erase(body)
+#			actor.attackable_targets.push_front(body)
+#			target = body
+#
+#		change_state(target,standing_attack_state)
 		
 
 func _on_stand_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
-		if actor.target == body:
+		if not actor.attackable_targets.is_empty() and actor.attackable_targets.front() == body:
 			change_state(body, attack_state)
 			
 
 func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
-		var target: Node2D = actor.target
-	
+		var target: Node2D = actor.attackable_targets.front()
+
 		if target != body:
 			actor.attackable_targets.erase(body)
-			actor.attackable_targets.append(actor.target)
+			actor.attackable_targets.push_front(body)
 			target = body
 
 		change_state(target,attack_state)
@@ -84,18 +91,17 @@ func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 func _on_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
-		if actor.target == body:
+		if not actor.attackable_targets.is_empty() and actor.attackable_targets.front() == body:
 			change_state(body, chase_state)
 			
 
 func _on_chase_detection_area_body_entered(body:Node2D):
 	if body.has_method("get_team") and body.get_team() != team:
 		
-		var target: Node2D = actor.target
+		var target: Node2D = actor.attackable_targets.front()
 
 		if target != body:
 			actor.attackable_targets.erase(body)
-			actor.attackable_targets.append(actor.target)
 			actor.attackable_targets.push_front(body)
 			target = body
 
@@ -105,7 +111,7 @@ func _on_chase_detection_area_body_entered(body:Node2D):
 func _on_chase_detection_area_body_exited(body:Node2D):
 	if body.has_method("get_team") and body.get_team() != team:
 
-		if actor.target == body:
+		if not actor.attackable_targets.is_empty() and actor.attackable_targets.front() == body:
 			change_state(body, aware_state)
 			
 			
@@ -120,12 +126,18 @@ func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 		# aware detection area, they are instantly put into the attackable_targets array. This causes the capurable location 
 		# to be put into the array and eventually targeted and attacked by the actor.
 		
-		if actor.target == null:
-			print("target: ", actor.target, " body: ", body)
-			change_state(body, aware_state)
-
+		if actor.attackable_targets.is_empty():
+			actor.attackable_targets.push_front(body)
+			change_state(body, aware_state)	
 		else:
 			actor.attackable_targets.append(body)
+	
+#		if actor.target == null:
+#			print("target: ", actor.target, " body: ", body)
+#			change_state(body, aware_state)
+#
+#		else:
+#			actor.attackable_targets.append(body)
 			
 
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
@@ -133,20 +145,20 @@ func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 	
 	# TO KNOW: 
 	# When a unit is destroyed/qued_free, it's null body is passed to this exit function first and 
-	# continues to exit chase, attack, and stand_attack states. In this order.
+	# continues to exit chase, attack, and stand_attack states. In that order.
 			
 		# This should also catch actor.targets that have been destroyed. B/c destroyed units exit the outter 
 		# most detection area first. (aware)
-		if actor.target == body:
-			if actor.attackable_targets.size() > 0:
-				var target = actor.attackable_targets.pop_front()
+		if actor.attackable_targets.front() == body:
+			actor.attackable_targets.pop_front()
+			if not actor.attackable_targets.is_empty():
+				var target = actor.attackable_targets.front()
 				change_state(target, attack_state)
 			else:
 				change_state(null, wander_state)
 		
-		else:
-			if actor.attackable_targets.size() > 0:
-				actor.attackable_targets.erase(body)
+		elif not actor.attackable_targets.is_empty():
+			actor.attackable_targets.erase(body)
 				
 		
 #endregion
