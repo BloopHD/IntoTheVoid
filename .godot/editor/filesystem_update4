@@ -24,3 +24,4 @@ res://scenes/laser/laser.gd
 res://scenes/state_machine/state.gd
 res://scenes/actor/standing_attack_state.gd
 res://scenes/laser/laser.tscn
+res://scenes/shield/shield.gd

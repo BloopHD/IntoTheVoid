@@ -36,6 +36,10 @@ radius = 1025.0
 [node name="Ally" type="CharacterBody2D" groups=["attackable"]]
 collision_mask = 16
 script = ExtResource("1_ubdep")
+max_speed = null
+acceleration = null
+friction = null
+rotational_accel = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(8.66354e-07, 0.637123, 0.383905, 1)

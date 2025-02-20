@@ -27,6 +27,8 @@ var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var using_m_and_k: bool = false
 
+var is_alive: bool = true
+
 
 var current_speed: float:
 	get:
@@ -35,6 +37,7 @@ var current_speed: float:
 func _ready() -> void:
 	weapon.initialize_weapon(team.team)
 	shield.initialize_shield(team.team)
+	is_alive = true
 	
 
 func _input(event: InputEvent) -> void:
@@ -171,6 +174,8 @@ func set_camera_transform(camera_path: NodePath) -> void:
 func get_team() -> int:
 	return team.team
 
+func get_alive_status() -> bool:
+	return is_alive
 
 func handle_hit(damage: int) -> void:
 	health.health -= damage
@@ -182,4 +187,5 @@ func handle_hit(damage: int) -> void:
 		
 func die() -> void:
 	emit_signal("died")
+	is_alive = false
 	queue_free()

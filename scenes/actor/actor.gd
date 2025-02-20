@@ -39,7 +39,7 @@ var curr_speed: float:
 	get:
 		return velocity.length()
 
-var alive: bool = true
+var is_alive: bool = true
 
 
 func _ready() -> void:
@@ -104,6 +104,9 @@ func get_speed_in_direction(direction: Vector2) -> float:
 
 func get_team() -> int:
 	return team.team
+	
+func get_alive_status() -> bool:
+	return is_alive
 
 
 func handle_hit(damage: int) -> void: 
@@ -132,5 +135,5 @@ func handle_hit(damage: int) -> void:
 
 func die() -> void:
 	emit_signal("died")
-	alive = false
+	is_alive = false
 	queue_free()
