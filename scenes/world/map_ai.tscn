@@ -11,7 +11,6 @@ script = ExtResource("1_gmhbe")
 [node name="UnitContainer" type="Node2D" parent="."]
 
 [node name="RespawnTimer" type="Timer" parent="."]
-wait_time = 3.0
 one_shot = true
 
 [connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]

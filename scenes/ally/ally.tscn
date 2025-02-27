@@ -31,15 +31,11 @@ radius = 750.0
 radius = 1000.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow8ix"]
-radius = 1025.0
+radius = 1050.0
 
 [node name="Ally" type="CharacterBody2D" groups=["attackable"]]
 collision_mask = 16
 script = ExtResource("1_ubdep")
-max_speed = null
-acceleration = null
-friction = null
-rotational_accel = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(8.66354e-07, 0.637123, 0.383905, 1)
@@ -103,9 +99,9 @@ starting_state = NodePath("WanderState")
 
 [node name="WanderState" type="Node" parent="AI/FiniteStateMachine" node_paths=PackedStringArray("actor", "wander_timer")]
 script = ExtResource("9_sw5a0")
-wander_range = null
 actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
+wander_range = null
 
 [node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/WanderState"]
 wait_time = 3.0

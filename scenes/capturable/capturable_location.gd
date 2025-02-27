@@ -18,19 +18,27 @@ var team_to_capture: int = Team.TeamName.NEUTRAL
 
 func check_for_base_capture() -> void:
 	var majority_team = get_team_with_majoirty()
+#	print("Majority team: ", majority_team)
+#	print("Team to capture: ", team_to_capture)
 	
 	if majority_team == Team.TeamName.NEUTRAL:
-		#print("Capture point contested, stopping capture clock.")
+#		print("Capture point contested or empty, stopping capture clock.")
 		capture_timer.stop()
 	elif majority_team == team.team:
-		#print("Owning team is majority, stopping capture clock.")
-		#team_to_capture = Team.TeamName.NEUTRAL
+#		print("Owning team is majority, stopping capture clock.")
+		team_to_capture = majority_team
 		capture_timer.stop()
-	elif team_to_capture != majority_team:
-		#print("New team is majority, starting capture clock.")
+	elif majority_team != team.team:
+#		print("New team is majority, starting capture clock.")
 		team_to_capture = majority_team
 		capture_timer.start()
+		
+#	print("--------------------")
 
+
+func get_location_team() -> int:
+	return team.team
+	
 
 func get_team_with_majoirty() -> int:
 	if player_unit_count > enemy_unit_count:
@@ -59,6 +67,7 @@ func set_team(new_team: int) -> void:
 
 func _on_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team"):
+		
 		var body_team = body.get_team()
 		
 		if body_team == Team.TeamName.PLAYER:
@@ -67,16 +76,13 @@ func _on_body_entered(body:Node2D) -> void:
 			enemy_unit_count += 1
 		else:
 			pass
-		
-		#print("Actor Entered")
-		#print("Player unit count: ", player_unit_count)
-		#print("Enemy unit count: ", enemy_unit_count)
 
 		check_for_base_capture()
 		
 
 func _on_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team"):
+		
 		var body_team = body.get_team()
 
 		if body_team == Team.TeamName.PLAYER:
@@ -85,11 +91,7 @@ func _on_body_exited(body:Node2D) -> void:
 			enemy_unit_count -= 1
 		else:
 			pass
-			
-		print("Actor Exited")
-		print("Player unit count: ", player_unit_count)
-		print("Enemy unit count: ", enemy_unit_count)	
-	
+
 		check_for_base_capture()
 
 		

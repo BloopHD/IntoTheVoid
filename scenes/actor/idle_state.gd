@@ -9,10 +9,11 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	pass
 	# Do nothing. This is the idle state.
 	# But we could add some idle movements here,
 	# maybe have the actor look around, bob up and down, etc..
-	pass
+	#print("Idle")
 
 
 func _enter_state() -> void:

@@ -49,6 +49,7 @@ func _ready() -> void:
 
 
 func move_func(delta: float, target_location: Vector2) -> void:
+	
 	if target_location != Vector2.ZERO:
 		rotate_function(target_location)
 		
@@ -108,32 +109,19 @@ func get_team() -> int:
 func get_alive_status() -> bool:
 	return is_alive
 
-
 func handle_hit(damage: int) -> void: 
 	health.health -= damage
 
-	if health.health <= 0:
+	if health.health == 0:
 		die()
-
-
-#func handle_enemy_entered(enemy: Node2D) -> void:
-#	if enemy_targets.size() == 0:
-#		current_target = enemy
-#	
-#	enemy_targets.append(enemy)
-#
-#
-#func handle_enemy_exited(enemy: Node2D) -> void:
-#	if current_target == enemy && enemy_targets.size() > 0:
-#		current_target = enemy_targets[1]
-#	elif enemy_targets.size() <= 0: 
-#		current_target = null
-#		ai.change_state(null, ai.wander_state)
-#
-#	enemy_targets.erase(enemy)
-	
+	elif health.health < 0:
+		printerr("Health is less than 0!!!")
+			
 
 func die() -> void:
-	emit_signal("died")
+	
 	is_alive = false
+	if team.team == 1: print(self, " Actor died")
+	emit_signal("died")
 	queue_free()
+	

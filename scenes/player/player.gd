@@ -171,8 +171,8 @@ func set_camera_transform(camera_path: NodePath) -> void:
 	camera_transform.remote_path = camera_path
 
 
-func get_team() -> int:
-	return team.team
+#func get_team() -> int:
+#	return team.team
 
 func get_alive_status() -> bool:
 	return is_alive
