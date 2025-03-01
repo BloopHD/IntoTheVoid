@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ds5740b67r6eo"]
+[gd_scene load_steps=8 format=3 uid="uid://ds5740b67r6eo"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_fh4md"]
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_17tki"]
@@ -6,8 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="4_iigeh"]
 [ext_resource type="Script" path="res://scenes/world/projectile_manager.gd" id="5_k3j3x"]
 [ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/world/map_ai.tscn" id="6_ih4sa"]
-[ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="7_6gpm5"]
-[ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemy/enemy.tscn" id="8_06w7a"]
 [ext_resource type="PackedScene" uid="uid://dcf1b1n0ijxcv" path="res://scenes/ui/gui.tscn" id="9_xdhmw"]
 
 [node name="World" type="Node2D"]
@@ -16,13 +14,13 @@ script = ExtResource("1_fh4md")
 [node name="SimpleParallaxBG" parent="." instance=ExtResource("2_17tki")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.25, 0.25)
+zoom = Vector2(0.3, 0.3)
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
-position = Vector2(-10, -4)
+position = Vector2(-12, -1261)
 
 [node name="CapturableManager" type="Node2D" parent="."]
 script = ExtResource("3_b0x4l")
@@ -37,13 +35,11 @@ script = ExtResource("5_k3j3x")
 
 [node name="AllyMapAI" parent="." instance=ExtResource("6_ih4sa")]
 team_intiger = 1
-unit = ExtResource("7_6gpm5")
 max_units_alive = 8
 
 [node name="EnemyMapAI" parent="." instance=ExtResource("6_ih4sa")]
 base_capture_start_order = 1
 team_intiger = 2
-unit = ExtResource("8_06w7a")
 max_units_alive = 8
 
 [node name="GUI" parent="." instance=ExtResource("9_xdhmw")]

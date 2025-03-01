@@ -22,18 +22,19 @@ position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(0, -2500)
 
 [node name="CapturableManager" type="Node2D" parent="."]
 script = ExtResource("3_xtih7")
 
 [node name="CapturableLocation" parent="CapturableManager" instance=ExtResource("7_xxhgs")]
-position = Vector2(-4000, 0)
+position = Vector2(-4000, -2500)
 
 [node name="CapturableLocation2" parent="CapturableManager" instance=ExtResource("7_xxhgs")]
 position = Vector2(0.5, 0)
 
 [node name="CapturableLocation3" parent="CapturableManager" instance=ExtResource("7_xxhgs")]
-position = Vector2(4000, 0)
+position = Vector2(4000, 2500)
 
 [node name="Asteroids" type="Node2D" parent="."]
 
@@ -43,12 +44,12 @@ script = ExtResource("5_lefb3")
 [node name="AllyMapAI" parent="." instance=ExtResource("7_s6psl")]
 base_capture_start_order = 1
 team_intiger = 1
-unit = ExtResource("8_y18hb")
+unit_scene = ExtResource("8_y18hb")
 max_units_alive = 16
 
 [node name="EnemyMapAI" parent="." instance=ExtResource("7_s6psl")]
 team_intiger = 2
-unit = ExtResource("9_27g86")
+unit_scene = ExtResource("9_27g86")
 max_units_alive = 16
 
 [node name="AllyRespawnPoints" type="Node2D" parent="."]
@@ -78,6 +79,30 @@ position = Vector2(250, 250)
 [node name="Marker2D8" type="Marker2D" parent="AllyRespawnPoints"]
 position = Vector2(250, 750)
 
+[node name="Marker2D9" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(500, -750)
+
+[node name="Marker2D10" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(500, -250)
+
+[node name="Marker2D11" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(500, 250)
+
+[node name="Marker2D12" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(500, 750)
+
+[node name="Marker2D13" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(750, -750)
+
+[node name="Marker2D14" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(750, -250)
+
+[node name="Marker2D15" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(750, 250)
+
+[node name="Marker2D16" type="Marker2D" parent="AllyRespawnPoints"]
+position = Vector2(750, 750)
+
 [node name="EnemyRespawnPoints" type="Node2D" parent="."]
 position = Vector2(-7500, 0)
 
@@ -104,5 +129,29 @@ position = Vector2(-250, 250)
 
 [node name="Marker2D8" type="Marker2D" parent="EnemyRespawnPoints"]
 position = Vector2(-250, 750)
+
+[node name="Marker2D9" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-500, -750)
+
+[node name="Marker2D10" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-500, -250)
+
+[node name="Marker2D11" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-500, 250)
+
+[node name="Marker2D12" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-500, 750)
+
+[node name="Marker2D13" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-750, -750)
+
+[node name="Marker2D14" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-750, -250)
+
+[node name="Marker2D15" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-750, 250)
+
+[node name="Marker2D16" type="Marker2D" parent="EnemyRespawnPoints"]
+position = Vector2(-750, 750)
 
 [node name="GUI" parent="." instance=ExtResource("9_8qhb2")]

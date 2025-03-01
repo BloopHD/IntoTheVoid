@@ -18,22 +18,15 @@ var team_to_capture: int = Team.TeamName.NEUTRAL
 
 func check_for_base_capture() -> void:
 	var majority_team = get_team_with_majoirty()
-#	print("Majority team: ", majority_team)
-#	print("Team to capture: ", team_to_capture)
 	
 	if majority_team == Team.TeamName.NEUTRAL:
-#		print("Capture point contested or empty, stopping capture clock.")
 		capture_timer.stop()
 	elif majority_team == team.team:
-#		print("Owning team is majority, stopping capture clock.")
 		team_to_capture = majority_team
 		capture_timer.stop()
-	elif majority_team != team.team:
-#		print("New team is majority, starting capture clock.")
+	elif majority_team != team.team and capture_timer.is_stopped():
 		team_to_capture = majority_team
 		capture_timer.start()
-		
-#	print("--------------------")
 
 
 func get_location_team() -> int:
