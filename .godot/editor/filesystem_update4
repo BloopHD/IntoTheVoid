@@ -17,3 +17,9 @@ res://scenes/capturable/capturable_location.tscn
 res://scenes/world/map_ai.tscn
 res://scenes/laser/laser.tscn
 res://scenes/weapon/weapon.tscn
+res://scenes/shield/shield.gd
+res://test_script.gd
+res://Test.gd
+res://TestScripts/test_script.tscn
+res://TestScripts/test_script.gd
+res://scenes/actor/aware_state.gd

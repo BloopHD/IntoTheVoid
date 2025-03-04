@@ -1,3 +1,4 @@
+Node
 AnimationTree
 AnimationPlayer
 Timer
@@ -9,6 +10,5 @@ CanvasLayer
 Marker2D
 RemoteTransform2D
 Node2D
-Node
 Sprite2D
 CollisionShape2D

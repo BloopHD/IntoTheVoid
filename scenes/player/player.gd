@@ -17,7 +17,6 @@ signal died()
 @onready var weapon: Weapon = $Weapon
 @onready var camera_transform: RemoteTransform2D = $CameraTransform
 
-
 const FULL_SPEED_MULTI: float = 1.0
 const ONE_HUNDRED: int = 100
 
@@ -80,7 +79,6 @@ func player_rotation(angle: float) -> void:
 func check_within_angle_range(target_angle: float, angle_in_range: float) -> bool:
 	if abs(abs(rotation) - abs(target_angle)) < deg_to_rad(angle_in_range):
 		return true
-
 	else:
 		return false
 

@@ -37,9 +37,6 @@ radius = 1050.0
 collision_mask = 16
 script = ExtResource("1_ubdep")
 max_speed = 1000
-acceleration = 75
-friction = 75
-rotational_accel = 10.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(8.66354e-07, 0.637123, 0.383905, 1)

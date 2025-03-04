@@ -1,13 +1,17 @@
 extends CharacterBody2D
 class_name Actor
+## Actor class is the parent class for all NPC in the game. It contains the basic functionality that all NPC will need to have.
+##
+## ToDo: Lots of magic numbers still in this class. Need to refactor them out.
+##
+
 
 signal died()
 
-
 @export var max_speed: int = 750
-@export var acceleration: int = 50
-@export var friction: int = 50
-@export var rotational_accel: float = 5
+@export var acceleration_percentage: int = 50
+@export var friction_percentage: int = 50
+@export var rotational_acceleration_percentage: float = 5
 
 @export var muzzle: Marker2D
 @export var player_test: Node2D
@@ -20,49 +24,108 @@ signal died()
 
 const ONE_HUNDRED: int = 100
 
+var is_alive: bool = true
+
+# One or both of these may be unnecessary.
 var target: Node2D = null
+var current_target: Node2D = null
 
 var move_direction: Vector2
 var look_direction: Vector2
 
+var is_angle_to_target_in_range: bool = false
+var is_moving_forward: bool = false
+
 var aim_vector: Vector2 = Vector2.ZERO
-var previous_aim_vector: Vector2 = Vector2.ZERO
+#var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var attackable_targets: Array = []
 var location_targets: Array = []
-var current_target: Node2D = null
 
-var angle_to_target_in_range: bool = false
-var moving_forward: bool = false
+@export var context_distance: int = 100
+@export var context_number_of_rays: int = 8
+var context_ray_directions: Array = []
+var context_interests: Array = []
+var context_dangers: Array = []
+var context_chosen_direction: Vector2 = Vector2.ZERO
+
 
 var curr_speed: float:
 	get:
 		return velocity.length()
-
-var is_alive: bool = true
 
 
 func _ready() -> void:
 	ai.initialize_ai(self, team.team)
 	weapon.initialize_weapon(team.team)
 	shield.initialize_shield(team.team)
+	ready_context_movement()
+	
+	
+func ready_context_movement() -> void:
+	context_ray_directions.resize(context_number_of_rays)
+	context_interests.resize(context_number_of_rays)
+	context_dangers.resize(context_number_of_rays)
+	
+	for i: int in context_number_of_rays:
+		var angle: float = i * 2 * PI / context_number_of_rays
+		context_ray_directions[i] = Vector2.RIGHT.rotated(angle)
+		
+		
+func set_up_context_movement(target_location: Vector2) -> void:
+	set_interest_array(target_location)
+	set_danger_array()
+	choose_direction()
 
+
+func set_interest_array(target_location: Vector2) ->void:
+	for i: int in context_number_of_rays:
+		var dir: float  = context_ray_directions[i].rotated(rotation).dot(target_location)
+		context_interests[i] = dir
+		
+		
+func set_danger_array() -> void:
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	
+	for i: int in context_number_of_rays:
+		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(position, position + context_ray_directions[i].rotated(rotation) * context_distance)
+		query.exclude = [self]
+		
+		var result: Dictionary = space_state.intersect_ray(query)
+		
+		if result:
+			context_dangers[i] = 1.0
+		else:
+			context_dangers[i] = 0.0
+			
+		
+func choose_direction() -> void:
+	for i: int in context_ray_directions:
+		if context_dangers[i] > 0.0:
+			context_interests[i] = 0.0
+	
+	context_chosen_direction = Vector2.ZERO
+	
+	for i: int in context_number_of_rays:
+		context_chosen_direction += context_ray_directions[i] * context_interests[i]
+	
+	context_chosen_direction = context_chosen_direction.normalized()
+			
 
 func move_func(delta: float, target_location: Vector2) -> void:
 	
 	if target_location != Vector2.ZERO:
 		rotate_function(target_location)
 		
-		self.move_direction = (target_location - position).normalized()
+		move_direction = (target_location - position).normalized()
 
-		if moving_forward:
-			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration / ONE_HUNDRED)
-
+		if is_moving_forward:
+			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration_percentage / ONE_HUNDRED)
 		else:
-			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration * 0.75 / ONE_HUNDRED)
+			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration_percentage * 0.75 / ONE_HUNDRED)
 		
 	else:
-		velocity = lerp(velocity, Vector2.ZERO, delta * friction / ONE_HUNDRED)
+		velocity = lerp(velocity, Vector2.ZERO, delta * friction_percentage / ONE_HUNDRED)
 
 	move_and_slide()
 	
@@ -70,45 +133,36 @@ func move_func(delta: float, target_location: Vector2) -> void:
 func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
 	look_direction = (aim_position - position).normalized()
 
-	var target_rotation_angle: float = look_direction.angle()
+	var actor_rotation_angle: float = look_direction.angle()
 	var target_in_range_angle: float = 15
 	var moving_forward_angle: float = 30
 	
-	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, target_rotation_angle, rotational_accel / ONE_HUNDRED))
+	rotation_degrees = rad_to_deg(lerp_angle(global_rotation, actor_rotation_angle, rotational_acceleration_percentage / ONE_HUNDRED))
 	
-	angle_to_target_in_range = check_within_angle_range(target_rotation_angle, target_in_range_angle)
-	moving_forward = check_within_angle_range(target_rotation_angle, moving_forward_angle)
-	
+	is_angle_to_target_in_range = check_within_angle_range(actor_rotation_angle, target_in_range_angle)
+	is_moving_forward = check_within_angle_range(actor_rotation_angle, moving_forward_angle)
+
 	
 func check_within_angle_range(target_angle: float, degree_range: float) -> bool:
 	if abs(abs(rotation_degrees) - abs(rad_to_deg(target_angle))) < degree_range:
 		return true
-		
 	else:
 		return false
+		
+
+func context_movement(_delta: float) -> void:
+	pass
 	
 
-func try_to_shoot():
-	if angle_to_target_in_range:
+func try_to_shoot() -> void:
+	if is_angle_to_target_in_range:
 		shoot_laser()
-		
+
 		
 func shoot_laser() -> void:
 	weapon.fire_weapon(team.team, get_speed_in_direction(look_direction))
-
-
-func get_speed_in_direction(direction: Vector2) -> float:
-	var normalized_direction = direction.normalized()
+		
 	
-	return velocity.dot(normalized_direction)
-
-
-func get_team() -> int:
-	return team.team
-	
-func get_alive_status() -> bool:
-	return is_alive
-
 func handle_hit(damage: int) -> void: 
 	health.health -= damage
 
@@ -116,12 +170,28 @@ func handle_hit(damage: int) -> void:
 		die()
 	elif health.health < 0:
 		printerr("Health is less than 0!!!")
-			
 
+		
 func die() -> void:
-	
 	is_alive = false
-	if team.team == 1: print(self, " Actor died")
+	
+	if team.team == 1: 
+		print(self, " Actor died")
+		
 	emit_signal("died")
 	queue_free()
 	
+
+func get_speed_in_direction(direction: Vector2) -> float:
+	var normalized_direction: Vector2 = direction.normalized()
+	
+	return velocity.dot(normalized_direction)
+	
+	
+func get_team() -> int:
+	return team.team
+	
+	
+func get_alive_status() -> bool:
+	return is_alive
+
