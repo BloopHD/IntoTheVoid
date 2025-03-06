@@ -38,6 +38,10 @@ collision_layer = 32
 collision_mask = 18
 script = ExtResource("1_h22hu")
 max_speed = 1000
+acceleration_percentage = 75
+friction_percentage = 75
+rotational_acceleration_percentage = 15.0
+context_number_of_rays = 16
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.924549, 0.266025, 0.137415, 1)
@@ -103,7 +107,6 @@ starting_state = NodePath("WanderState")
 script = ExtResource("9_gwhl2")
 actor = NodePath("../../..")
 wander_timer = NodePath("WanderTimer")
-wander_range = null
 
 [node name="WanderTimer" type="Timer" parent="AI/FiniteStateMachine/WanderState"]
 wait_time = 3.0

@@ -79,6 +79,10 @@ func set_unit_ai_to_advance_to_next_base(unit: Actor) -> void:
 func spawn_unit(spaw_location: Vector2) -> void:
 	var unit_instance: Actor = unit_scene.instantiate()
 	unit_instance.global_position = spaw_location
+	
+	if base_capture_start_order == BaseCaptureStartOrder.LAST:
+		unit_instance.rotate(deg_to_rad(180))
+	
 	unit_container.add_child(unit_instance) #swap this with the line unit_instance.global_position = spaw_location. Sets location before physical spawn in.
 	unit_instance.died.connect(handle_unit_death)
 	set_unit_ai_to_advance_to_next_base(unit_instance)

@@ -25,7 +25,7 @@ func _process(_delta):
 func _physics_process(delta):
 	if not wander_location_reached:
 		actor.move_func(delta, wander_location)
-		if actor.global_position.distance_to(wander_location) < 25:
+		if actor.global_position.distance_to(wander_location) < 50:
 			wander_location_reached = true
 			wander_timer.start()
 	else:

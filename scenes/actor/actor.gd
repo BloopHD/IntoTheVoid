@@ -42,12 +42,18 @@ var aim_vector: Vector2 = Vector2.ZERO
 var attackable_targets: Array = []
 var location_targets: Array = []
 
-@export var context_distance: int = 100
+@export var context_based_movement: bool = true
+@export var context_distance: int = 500
 @export var context_number_of_rays: int = 8
 var context_ray_directions: Array = []
 var context_interests: Array = []
 var context_dangers: Array = []
 var context_chosen_direction: Vector2 = Vector2.ZERO
+var lines_to_draw: Array =[]
+
+@export var provide_data: bool = false
+var print_data: bool = false
+var current_context_target: Vector2 = Vector2.ZERO
 
 
 var curr_speed: float:
@@ -79,28 +85,71 @@ func set_up_context_movement(target_location: Vector2) -> void:
 
 
 func set_interest_array(target_location: Vector2) ->void:
+	if provide_data and current_context_target != target_location and target_location != Vector2.ZERO:
+		current_context_target = target_location
+		print_data = true
+	else:
+		print_data = false
+		
+	
 	for i: int in context_number_of_rays:
-		var dir: float  = context_ray_directions[i].rotated(rotation).dot(target_location)
-		context_interests[i] = dir
+		if print_data:
+			#print("Context Ray: ", i, " ", context_ray_directions[i])
+			#print("Context Ray Rotated: ", i, " ", context_ray_directions[i].rotated(rotation))
+			pass
+			
+		var path_direction: Vector2 = (target_location - position).normalized()
+		
+		var dir: float  = context_ray_directions[i].rotated(rotation).dot(path_direction)
+		context_interests[i] = max(0, dir)
+		if print_data:
+			#print("Target Direction: ", i, " ", context_interests[i])
+			print("CHECK: ", i)
+			print("Dir, ", context_ray_directions[i]) 
+			print("Dir Rot: ", context_ray_directions[i].rotated(rotation)) 
+			#print(" Int, ", context_interests[i])
+			print("----")
+		
+	if print_data:
+		for i: int in context_number_of_rays:
+			print("Interest: ", i, " ", context_interests[i])
+		print("-------------")
 		
 		
 func set_danger_array() -> void:
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
 	
+	lines_to_draw.clear()
+	
 	for i: int in context_number_of_rays:
-		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(position, position + context_ray_directions[i].rotated(rotation) * context_distance)
+		var ray_start: Vector2 = position
+		var ray_end: Vector2 = position + context_ray_directions[i].rotated(rotation) * context_distance
+		
+		#print("Ray Start: ", ray_start)	
+	
+		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(ray_start, ray_end)
 		query.exclude = [self]
 		
 		var result: Dictionary = space_state.intersect_ray(query)
 		
+		#lines_to_draw.append([position, position + context_ray_directions[i].rotated(rotation) * context_distance])
+		#queue_redraw()
+		
 		if result:
+			if print_data:
+				print("Result: ", i, " Danger! ", result)
 			context_dangers[i] = 1.0
 		else:
 			context_dangers[i] = 0.0
-			
+
+
+func _draw() -> void:
+	for line: Array in lines_to_draw:
+		draw_line(line[0], line[1], Color("red"), 2)
+
 		
 func choose_direction() -> void:
-	for i: int in context_ray_directions:
+	for i: int in context_number_of_rays:
 		if context_dangers[i] > 0.0:
 			context_interests[i] = 0.0
 	
@@ -109,15 +158,34 @@ func choose_direction() -> void:
 	for i: int in context_number_of_rays:
 		context_chosen_direction += context_ray_directions[i] * context_interests[i]
 	
-	context_chosen_direction = context_chosen_direction.normalized()
+	#context_chosen_direction = context_chosen_direction.normalized()
+	context_chosen_direction = context_chosen_direction.normalized().rotated(rotation)
 			
 
 func move_func(delta: float, target_location: Vector2) -> void:
+	set_up_context_movement(target_location)
+	
+	#print("Context Dir: ", context_chosen_direction.normalized())
+	#print("Target Pos: ", target_location)
+	#print("Actor Pos: ", position)
+	
+	if print_data:
+		print("Target: ", target_location)
+		print("Actor: ", position)
+		#print("Old: ",(target_location - position).normalized())
+		#print("New: ", (context_chosen_direction - position).normalized())
+		#print("New R: ", (context_chosen_direction.rotated(rotation) - position).normalized())
+		print("----")
+	
+	if context_based_movement:
+		move_direction = context_chosen_direction
+	else:
+		move_direction = (target_location - position).normalized()
 	
 	if target_location != Vector2.ZERO:
 		rotate_function(target_location)
 		
-		move_direction = (target_location - position).normalized()
+		# move_direction = (target_location - position).normalized()
 
 		if is_moving_forward:
 			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration_percentage / ONE_HUNDRED)
