@@ -5,10 +5,10 @@ class_name FiniteStateMachine
 
 var state: State = null
 
-func _ready():
+func _ready() -> void:
 	change_state(starting_state)
 
-func change_state(new_state: State):
+func change_state(new_state: State) -> void:
 	# If state is not Null, safe to call exit_state().
 	if state is State:
 		state._exit_state()

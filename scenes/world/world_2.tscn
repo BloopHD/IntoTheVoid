@@ -1,11 +1,17 @@
 [gd_scene load_steps=8 format=3 uid="uid://dqlwrqs7v3tvk"]
 
-[ext_resource type="Script" path="res://scenes/world/world_2.gd" id="1_5o700"]
-[ext_resource type="PackedScene" uid="uid://peith7845lm0" path="res://scenes/player/player_2.tscn" id="1_n4cch"]
-[ext_resource type="PackedScene" uid="uid://315rw6ghj00p" path="res://scenes/UI/hud.tscn" id="2_urw2p"]
+[ext_resource type="Script" uid="uid://0cva3es03db7" path="res://scenes/world/world_2.gd" id="1_5o700"]
 [ext_resource type="PackedScene" uid="uid://cncsy8hnxq6x8" path="res://scenes/asteroid/asteroid.tscn" id="3_8jka3"]
-[ext_resource type="PackedScene" uid="uid://ds4exgxwf6jrt" path="res://scenes/UI/game_over_screen.tscn" id="3_abnyw"]
 [ext_resource type="PackedScene" uid="uid://i0i4vr4xdfjt" path="res://scenes/player/player_spawn_area.tscn" id="6_gnsmh"]
+
+[sub_resource type="Resource" id="Resource_377hp"]
+metadata/__load_path__ = "res://scenes/UI/hud.tscn"
+
+[sub_resource type="Resource" id="Resource_cv1ys"]
+metadata/__load_path__ = "res://scenes/UI/game_over_screen.tscn"
+
+[sub_resource type="Resource" id="Resource_krt41"]
+metadata/__load_path__ = "res://scenes/player/player_2.tscn"
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l5fnx"]
 particle_flag_disable_z = true
@@ -16,12 +22,12 @@ script = ExtResource("1_5o700")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="HUD" parent="UI" instance=ExtResource("2_urw2p")]
+[node name="HUD" parent="UI"]
 
-[node name="GameOverScreen" parent="UI" instance=ExtResource("3_abnyw")]
+[node name="GameOverScreen" parent="UI"]
 visible = false
 
-[node name="Player2" parent="." instance=ExtResource("1_n4cch")]
+[node name="Player2" parent="."]
 position = Vector2(640, 360)
 max_speed = 500.0
 

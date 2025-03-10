@@ -12,8 +12,8 @@ signal shield_health_changed(new_shield_health: int)
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var sprite: Sprite2D = $Sprite2D
 
-var shield_color = Color8(0, 255, 195, 60)
-var shield_fully_transparent = Color8(0, 255, 195, 0)
+var shield_color: Color = Color8(0, 255, 195, 60)
+var shield_fully_transparent: Color = Color8(0, 255, 195, 0)
 
 var shield_team: int = -1
 

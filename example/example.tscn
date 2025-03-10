@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://drd1j4dv673ld"]
 
-[ext_resource type="Script" path="res://example/example_area.gd" id="1"]
-[ext_resource type="Script" path="res://addons/donut_collision_polygon2D/donut_collision_polygon2D.gd" id="2"]
+[ext_resource type="Script" uid="uid://b6hy8pgj3iwiq" path="res://example/example_area.gd" id="1"]
+[ext_resource type="Script" uid="uid://b4vqolr5y64qn" path="res://addons/donut_collision_polygon2D/donut_collision_polygon2D.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://xfkvttl8cxns" path="res://example/icon.png" id="3"]
 
 [node name="Example" type="Node2D"]

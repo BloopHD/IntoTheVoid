@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=3 uid="uid://ds5740b67r6eo"]
 
-[ext_resource type="Script" path="res://scenes/world/world.gd" id="1_u65k5"]
+[ext_resource type="Script" uid="uid://b84lyrajgijid" path="res://scenes/world/world.gd" id="1_u65k5"]
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_eb7vu"]
-[ext_resource type="Script" path="res://scenes/capturable/capturable_manager.gd" id="3_ninm2"]
+[ext_resource type="Script" uid="uid://drflrmgagh83c" path="res://scenes/capturable/capturable_manager.gd" id="3_ninm2"]
 [ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="4_o3o23"]
-[ext_resource type="Script" path="res://scenes/world/projectile_manager.gd" id="5_w50cl"]
+[ext_resource type="Script" uid="uid://dt1k3xdnv73tr" path="res://scenes/world/projectile_manager.gd" id="5_w50cl"]
 [ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/world/map_ai.tscn" id="6_dqi3k"]
 [ext_resource type="PackedScene" uid="uid://dcf1b1n0ijxcv" path="res://scenes/ui/gui.tscn" id="7_4wnid"]
 [ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="7_x4d7c"]
@@ -12,6 +12,7 @@
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_u65k5")
+use_free_move_camera = null
 
 [node name="SimpleParallaxBG" parent="." instance=ExtResource("2_eb7vu")]
 

@@ -43,7 +43,7 @@ func _input(event: InputEvent) -> void:
 	set_input_type(event)
 
 	
-func _process(_delta) -> void:
+func _process(_delta: float) -> void:
 	check_for_input()
 		
 
@@ -161,7 +161,7 @@ func save_aim_vector() -> void:
 # This function gets the speed of the player in a given direction,
 # which is used to determine the starting speed of a laser.
 func get_directional_speed(direction: Vector2) -> float:
-	var normalized_direction = direction.normalized()
+	var normalized_direction: Vector2 = direction.normalized()
 	return velocity.dot(normalized_direction)
 
 

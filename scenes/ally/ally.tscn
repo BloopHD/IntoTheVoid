@@ -1,21 +1,21 @@
 [gd_scene load_steps=22 format=3 uid="uid://chq22uahlmag1"]
 
-[ext_resource type="Script" path="res://scenes/actor/actor.gd" id="1_ubdep"]
+[ext_resource type="Script" uid="uid://c6dui8gb0hlkj" path="res://scenes/actor/actor.gd" id="1_ubdep"]
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_op0ba"]
 [ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="3_87ved"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="4_urgas"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="5_7cnc4"]
 [ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="6_al8nm"]
-[ext_resource type="Script" path="res://scenes/actor/ai.gd" id="7_tm8gm"]
-[ext_resource type="Script" path="res://scenes/state_machine/finite_state_machine.gd" id="8_f58ii"]
-[ext_resource type="Script" path="res://scenes/actor/wander_state.gd" id="9_sw5a0"]
-[ext_resource type="Script" path="res://scenes/actor/aware_state.gd" id="10_faui8"]
-[ext_resource type="Script" path="res://scenes/actor/chase_state.gd" id="11_70qd0"]
-[ext_resource type="Script" path="res://scenes/actor/attack_state.gd" id="12_pwqb7"]
-[ext_resource type="Script" path="res://scenes/actor/standing_attack_state.gd" id="13_d7b44"]
-[ext_resource type="Script" path="res://scenes/actor/death_state.gd" id="14_bwk0s"]
-[ext_resource type="Script" path="res://scenes/actor/travel_state.gd" id="15_4d8eg"]
-[ext_resource type="Script" path="res://scenes/actor/idle_state.gd" id="16_28t86"]
+[ext_resource type="Script" uid="uid://dfofoh6w1olyx" path="res://scenes/actor/ai.gd" id="7_tm8gm"]
+[ext_resource type="Script" uid="uid://big4sds6haodw" path="res://scenes/state_machine/finite_state_machine.gd" id="8_f58ii"]
+[ext_resource type="Script" uid="uid://oro6e6m78qkd" path="res://scenes/actor/wander_state.gd" id="9_sw5a0"]
+[ext_resource type="Script" uid="uid://bu7rk2aay557y" path="res://scenes/actor/aware_state.gd" id="10_faui8"]
+[ext_resource type="Script" uid="uid://dom0gju5ovq0d" path="res://scenes/actor/chase_state.gd" id="11_70qd0"]
+[ext_resource type="Script" uid="uid://x7rx03asfkmd" path="res://scenes/actor/attack_state.gd" id="12_pwqb7"]
+[ext_resource type="Script" uid="uid://b02gc8ir22vne" path="res://scenes/actor/standing_attack_state.gd" id="13_d7b44"]
+[ext_resource type="Script" uid="uid://du50bi0iya00v" path="res://scenes/actor/death_state.gd" id="14_bwk0s"]
+[ext_resource type="Script" uid="uid://cr5l2nkxxaajm" path="res://scenes/actor/travel_state.gd" id="15_4d8eg"]
+[ext_resource type="Script" uid="uid://bqhk157pt8gyh" path="res://scenes/actor/idle_state.gd" id="16_28t86"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10cgx"]
 radius = 20.0
@@ -40,7 +40,6 @@ max_speed = 1000
 acceleration_percentage = 75
 friction_percentage = 75
 rotational_acceleration_percentage = 15.0
-context_number_of_rays = 16
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(8.66354e-07, 0.637123, 0.383905, 1)

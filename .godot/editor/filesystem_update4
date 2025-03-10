@@ -1,5 +1,5 @@
-res://scenes/world/world.tscn
 res://scenes/world/map_ai.gd
+res://scenes/world/world.tscn
 res://scenes/actor/attack_state.gd
 res://TestScripts/testing.tscn
 res://scenes/player/player.tscn
@@ -11,8 +11,4 @@ res://scenes/laser/laser.tscn
 res://scenes/weapon/weapon.tscn
 res://TestScripts/test_script.tscn
 res://TestScripts/ai_unit_tests.tscn
-res://scenes/world/world.gd
-res://scenes/actor/wander_state.gd
-res://scenes/actor/actor.gd
-res://scenes/player/player.gd
-res://scenes/laser/laser.gd
+res://TestScripts/free_move_camera.tscn

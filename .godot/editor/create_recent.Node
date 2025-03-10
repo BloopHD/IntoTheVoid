@@ -1,5 +1,7 @@
-Sprite2D
+RemoteTransform2D
+CharacterBody2D
 Camera2D
+Sprite2D
 Node2D
 Node
 AnimationTree
@@ -11,4 +13,3 @@ ProgressBar
 HBoxContainer
 CanvasLayer
 Marker2D
-RemoteTransform2D

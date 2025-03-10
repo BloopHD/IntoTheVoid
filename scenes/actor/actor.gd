@@ -243,9 +243,6 @@ func handle_hit(damage: int) -> void:
 func die() -> void:
 	is_alive = false
 	
-	if team.team == 1: 
-		print(self, " Actor died")
-		
 	emit_signal("died")
 	queue_free()
 	

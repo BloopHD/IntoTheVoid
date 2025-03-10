@@ -11,18 +11,18 @@ var wander_location: Vector2 = Vector2.ZERO
 var wander_location_reached: bool = true
 
 
-func _ready():
+func _ready() -> void:
 	set_physics_process(false)
 	
 	if wander_timer != null and not wander_timer.is_inside_tree(): 
 		add_child(wander_timer)
 
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	pass
 		
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	if not wander_location_reached:
 		actor.move_func(delta, wander_location)
 		if actor.global_position.distance_to(wander_location) < 50:
@@ -46,7 +46,7 @@ func _exit_state() -> void:
 	wander_timer.stop()
 	
 
-func _on_wander_timer_timeout():
+func _on_wander_timer_timeout() -> void:
 	var random_x: float = randf_range(-wander_range, wander_range)
 	var random_y: float = randf_range(-wander_range, wander_range)
 

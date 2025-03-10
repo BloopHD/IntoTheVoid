@@ -5,8 +5,8 @@ extends Node2D
 @export var unit_scene: PackedScene = null
 @export var max_units_alive: int = 4
 
-@onready var team = $Team
-@onready var unit_container = $UnitContainer
+@onready var team: Team = $Team
+@onready var unit_container: Node2D = $UnitContainer
 @onready var respawn_timer: Timer = $RespawnTimer
 
 enum BaseCaptureStartOrder {
@@ -15,6 +15,7 @@ enum BaseCaptureStartOrder {
 }
 
 var target_location: CapturableLocation = null
+
 var capturable_locations: Array = []
 var spawn_points: Array = []
 
@@ -31,12 +32,12 @@ func initialize(new_capturable_locations: Array, new_spawn_points: Array) -> voi
 	capturable_locations = new_capturable_locations
 	spawn_points = new_spawn_points
 
-	for location in capturable_locations:
+	for location: CapturableLocation in capturable_locations:
 		location.location_captured.connect(handle_location_captured)
 
 	check_for_next_capturable_location()
 
-	for spawn in spawn_points:
+	for spawn: Marker2D in spawn_points:
 		if unit_container.get_child_count() < max_units_alive:
 			spawn_unit(spawn.global_position)
 
@@ -45,12 +46,12 @@ func initialize(new_capturable_locations: Array, new_spawn_points: Array) -> voi
 func handle_location_captured(_new_team: int) -> void:
 	check_for_next_capturable_location()
 
-	for unit in unit_container.get_children():
+	for unit: Actor in unit_container.get_children():
 		set_unit_ai_to_advance_to_next_base(unit)
 
 		
 # Checks and sets the next capturable location
-func check_for_next_capturable_location():
+func check_for_next_capturable_location() -> void:
 	target_location = get_next_capturable_location()
 
 	
@@ -61,7 +62,7 @@ func get_next_capturable_location() -> Node2D:
 	if base_capture_start_order == BaseCaptureStartOrder.LAST:
 		list_of_locations = range(capturable_locations.size()-1, -1, -1)
 
-	for i in list_of_locations:
+	for i: int in list_of_locations:
 		var location: CapturableLocation = capturable_locations[i]
 
 		if team.team != location.team.team:
@@ -77,6 +78,7 @@ func set_unit_ai_to_advance_to_next_base(unit: Actor) -> void:
 	
 # Spawns a unit at the given spawn location
 func spawn_unit(spaw_location: Vector2) -> void:
+	
 	var unit_instance: Actor = unit_scene.instantiate()
 	unit_instance.global_position = spaw_location
 	
@@ -87,25 +89,29 @@ func spawn_unit(spaw_location: Vector2) -> void:
 	unit_instance.died.connect(handle_unit_death)
 	set_unit_ai_to_advance_to_next_base(unit_instance)
 
+	if unit_container.get_child_count() > max_units_alive:
+		printerr("Unit container has more units than allowed!!!")
 	
 # Handles the event when a unit dies
 func handle_unit_death() -> void:
 	if respawn_timer.is_stopped():
-		if team.team == 1:
-			print("Respawn Timer Started")
-			print("Unit Count: ", unit_container.get_child_count())
 		respawn_timer.start()
 
 		
 # Handles the respawn timer timeout event
 func _on_respawn_timer_timeout() -> void:
-	var spawn = spawn_points[next_spawn_to_use]
-
+	var spawn: Marker2D = spawn_points[next_spawn_to_use]
+		
+	# TODO: This feels poorly done, I think we should be able to keep track of the units in the unit container and not have to rely on checking it every time.
+	# TODO: We also should probably try to move this, right now the timer is always called on unit death and then we decide if we can spawn a unit when it times out.
+	# TODO: This means we may be unnecessarily running the timer when we don't need to.
+	# TODO: But is that unnecessary? Can we just always assume we need to run the timer upon death? If a unit dies we know we need to spawn another, so... maybe this is fine?
+	
 	# We need to check if we can spawn a unit before we do so. This is just a safety check.
 	if unit_container.get_child_count() < max_units_alive:
 		spawn_unit(spawn.global_position)
 		# After spawning a unit, we need to check if we can spawn another unit. If so we start the respawn timer again.
-		if unit_container.get_child_count() < max_units_alive:
+		if  unit_container.get_child_count() < max_units_alive:
 			respawn_timer.start()
 
 	next_spawn_to_use += 1

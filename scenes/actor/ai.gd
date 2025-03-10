@@ -124,7 +124,7 @@ func _on_attack_detection_area_body_exited(body:Node2D) -> void:
 			chase_range_targets.append(body)
 			
 
-func _on_chase_detection_area_body_entered(body:Node2D):
+func _on_chase_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
 #		if team == 1:
@@ -142,7 +142,7 @@ func _on_chase_detection_area_body_entered(body:Node2D):
 		chase_range_targets.append(body)
 		
 
-func _on_chase_detection_area_body_exited(body:Node2D):
+func _on_chase_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
 #		if team == 1:

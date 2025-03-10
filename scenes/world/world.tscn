@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://bwlv7ix15whqd"]
 
-[ext_resource type="Script" path="res://scenes/world/world.gd" id="1_8rw03"]
+[ext_resource type="Script" uid="uid://b84lyrajgijid" path="res://scenes/world/world.gd" id="1_8rw03"]
 [ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_c3qrl"]
-[ext_resource type="Script" path="res://scenes/capturable/capturable_manager.gd" id="3_xtih7"]
-[ext_resource type="Script" path="res://scenes/world/projectile_manager.gd" id="5_lefb3"]
+[ext_resource type="Script" uid="uid://drflrmgagh83c" path="res://scenes/capturable/capturable_manager.gd" id="3_xtih7"]
+[ext_resource type="Script" uid="uid://dt1k3xdnv73tr" path="res://scenes/world/projectile_manager.gd" id="5_lefb3"]
 [ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/world/map_ai.tscn" id="7_s6psl"]
 [ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="7_xxhgs"]
 [ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="8_y18hb"]
@@ -12,11 +12,12 @@
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
+use_free_move_camera = null
 
 [node name="SimpleParallaxBG" parent="." instance=ExtResource("2_c3qrl")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.1, 0.1)
+zoom = Vector2(0.15, 0.15)
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
@@ -155,3 +156,4 @@ position = Vector2(-750, 250)
 position = Vector2(-750, 750)
 
 [node name="GUI" parent="." instance=ExtResource("9_8qhb2")]
+visible = false

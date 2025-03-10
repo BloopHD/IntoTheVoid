@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbjhfd4hcs8ff"]
+
+[ext_resource type="Script" uid="uid://cpkwurcf6dvry" path="res://TestScripts/free_move_camera.gd" id="1_3xxn1"]
+
+[node name="FreeMoveCamera" type="CharacterBody2D"]
+script = ExtResource("1_3xxn1")
+
+[node name="CameraTransform" type="RemoteTransform2D" parent="."]

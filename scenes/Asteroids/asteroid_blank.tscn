@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dh4ab5yn13ix5"]
 
-[ext_resource type="Script" path="res://scenes/Asteroids/asteroid_blank.gd" id="1_te2ng"]
+[ext_resource type="Script" uid="uid://d3e4hbqui3fuu" path="res://scenes/Asteroids/asteroid_blank.gd" id="1_te2ng"]
 
 [node name="Asteroid_Blank" type="Area2D" groups=["asteroids"]]
 script = ExtResource("1_te2ng")

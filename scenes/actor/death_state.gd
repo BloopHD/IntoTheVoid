@@ -7,10 +7,10 @@ class_name DeathState
 func _ready() -> void:
 	set_physics_process(false)
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	pass
 
-func _physics_process(_delta) -> void:
+func _physics_process(_delta: float) -> void:
 	pass
 
 func _enter_state() -> void:
