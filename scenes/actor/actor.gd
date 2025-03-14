@@ -14,7 +14,7 @@ signal died()
 @export var rotational_acceleration_percentage: float = 5
 
 @export var muzzle: Marker2D
-@export var player_test: Node2D
+@export var player: Node2D
 
 @onready var team: Team = $Team
 @onready var health: Health = $Health
@@ -84,7 +84,7 @@ func set_up_context_movement(target_location: Vector2) -> void:
 	choose_direction()
 
 
-func set_interest_array(target_location: Vector2) ->void:
+func set_interest_array(target_location: Vector2) -> void:
 	if provide_data and current_context_target != target_location and target_location != Vector2.ZERO:
 		current_context_target = target_location
 		print_data = true
@@ -98,7 +98,7 @@ func set_interest_array(target_location: Vector2) ->void:
 			#print("Context Ray Rotated: ", i, " ", context_ray_directions[i].rotated(rotation))
 			pass
 			
-		var path_direction: Vector2 = (target_location - position).normalized()
+		var path_direction: Vector2 = (target_location - position).normalized() #.rotated(PI / 4.5)
 		
 		var dir: float  = context_ray_directions[i].rotated(rotation).dot(path_direction)
 		context_interests[i] = max(0, dir)
@@ -119,21 +119,14 @@ func set_interest_array(target_location: Vector2) ->void:
 func set_danger_array() -> void:
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
 	
-	lines_to_draw.clear()
-	
 	for i: int in context_number_of_rays:
 		var ray_start: Vector2 = position
 		var ray_end: Vector2 = position + context_ray_directions[i].rotated(rotation) * context_distance
-		
-		#print("Ray Start: ", ray_start)	
 	
 		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(ray_start, ray_end)
 		query.exclude = [self]
 		
 		var result: Dictionary = space_state.intersect_ray(query)
-		
-		#lines_to_draw.append([position, position + context_ray_directions[i].rotated(rotation) * context_distance])
-		#queue_redraw()
 		
 		if result:
 			if print_data:
@@ -141,11 +134,6 @@ func set_danger_array() -> void:
 			context_dangers[i] = 1.0
 		else:
 			context_dangers[i] = 0.0
-
-
-func _draw() -> void:
-	for line: Array in lines_to_draw:
-		draw_line(line[0], line[1], Color("red"), 2)
 
 		
 func choose_direction() -> void:
@@ -157,17 +145,34 @@ func choose_direction() -> void:
 	
 	for i: int in context_number_of_rays:
 		context_chosen_direction += context_ray_directions[i] * context_interests[i]
-	
-	#context_chosen_direction = context_chosen_direction.normalized()
+		
 	context_chosen_direction = context_chosen_direction.normalized().rotated(rotation)
 			
 
 func move_func(delta: float, target_location: Vector2) -> void:
-	set_up_context_movement(target_location)
 	
-	#print("Context Dir: ", context_chosen_direction.normalized())
-	#print("Target Pos: ", target_location)
-	#print("Actor Pos: ", position)
+	var travel_location: Vector2 = Vector2.ZERO
+	
+	# If the target is attackable, get the set the travel location to be a bit away from the target.
+	# Else, set the travel location to be the target location.
+	if target != null and target.is_in_group("attackable"):
+		travel_location = get_travel_to_location(target_location)
+	else:
+		travel_location = target_location
+
+	set_up_context_movement(travel_location)
+	
+	if context_based_movement:
+		move_direction = context_chosen_direction
+	else:
+		move_direction = (travel_location - position).normalized()
+	
+	#print("Travel: ", travel_location)
+	#print("Target: ", target_location)
+	#print("---")
+	
+	
+	#set_up_context_movement(target_location)
 	
 	if print_data:
 		print("Target: ", target_location)
@@ -177,25 +182,38 @@ func move_func(delta: float, target_location: Vector2) -> void:
 		#print("New R: ", (context_chosen_direction.rotated(rotation) - position).normalized())
 		print("----")
 	
-	if context_based_movement:
-		move_direction = context_chosen_direction
-	else:
-		move_direction = (target_location - position).normalized()
 	
+	# Watch out for this. Spawns/Locations cannot be at 0,0.
 	if target_location != Vector2.ZERO:
 		rotate_function(target_location)
-		
-		# move_direction = (target_location - position).normalized()
 
-		if is_moving_forward:
-			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration_percentage / ONE_HUNDRED)
-		else:
-			velocity = lerp(velocity, move_direction * max_speed, delta * acceleration_percentage * 0.75 / ONE_HUNDRED)
+		var distance_to_target: float = position.distance_to(travel_location)
+		if distance_to_target < 50:
+			velocity = lerp(velocity, Vector2.ZERO, delta * friction_percentage / ONE_HUNDRED)
 		
-	else:
-		velocity = lerp(velocity, Vector2.ZERO, delta * friction_percentage / ONE_HUNDRED)
+		else:
+			# clamp(distance_to_target / x, 0.0, 1.0), x is the distance at which the actor will start decelerating, higher the number the sooner the actor will start decelerating.
+			# We should probably make this a x value that can be set in the editor.
+			var deceleration_factor: float = clamp(distance_to_target / 250.0, 0.0, 1.0)
+			#print("Deceleration: ", deceleration_factor)
+			
+			# If the actor is not decelerating.
+			if deceleration_factor == 1.0:
+				if is_moving_forward:
+					velocity = lerp(velocity, move_direction * max_speed * deceleration_factor, delta * acceleration_percentage / ONE_HUNDRED)
+				else:
+					velocity = lerp(velocity, move_direction * max_speed * deceleration_factor, delta * acceleration_percentage * 0.75 / ONE_HUNDRED)
+		
+			else:
+				velocity = lerp(velocity, move_direction * max_speed * deceleration_factor, delta * friction_percentage / ONE_HUNDRED)
 
 	move_and_slide()
+
+
+func get_travel_to_location(target_location: Vector2) -> Vector2:
+	var direction: Vector2 = (position - target_location).normalized()
+	var travel_location: Vector2 = target_location + direction * 250
+	return travel_location
 	
 	
 func rotate_function(aim_position: Vector2 = Vector2.ZERO) -> void:
@@ -228,7 +246,7 @@ func try_to_shoot() -> void:
 
 		
 func shoot_laser() -> void:
-	weapon.fire_weapon(team.team, get_speed_in_direction(look_direction))
+	weapon.fire_weapon(get_speed_in_direction(look_direction))
 		
 	
 func handle_hit(damage: int) -> void: 
@@ -259,4 +277,3 @@ func get_team() -> int:
 	
 func get_alive_status() -> bool:
 	return is_alive
-

@@ -1,23 +1,22 @@
 [gd_scene load_steps=10 format=3 uid="uid://ds5740b67r6eo"]
 
-[ext_resource type="Script" uid="uid://b84lyrajgijid" path="res://scenes/world/world.gd" id="1_u65k5"]
-[ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_eb7vu"]
-[ext_resource type="Script" uid="uid://drflrmgagh83c" path="res://scenes/capturable/capturable_manager.gd" id="3_ninm2"]
-[ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="4_o3o23"]
-[ext_resource type="Script" uid="uid://dt1k3xdnv73tr" path="res://scenes/world/projectile_manager.gd" id="5_w50cl"]
-[ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/world/map_ai.tscn" id="6_dqi3k"]
-[ext_resource type="PackedScene" uid="uid://dcf1b1n0ijxcv" path="res://scenes/ui/gui.tscn" id="7_4wnid"]
-[ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="7_x4d7c"]
-[ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemy/enemy.tscn" id="8_54qwk"]
+[ext_resource type="Script" uid="uid://b84lyrajgijid" path="res://scenes/world/world.gd" id="1_wxqk5"]
+[ext_resource type="PackedScene" uid="uid://d2h3vao6jebh7" path="res://scenes/background/parallax_background.tscn" id="2_wxqk5"]
+[ext_resource type="Script" uid="uid://drflrmgagh83c" path="res://scenes/capturable/capturable_manager.gd" id="3_qvpyu"]
+[ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="4_4i27o"]
+[ext_resource type="Script" uid="uid://dt1k3xdnv73tr" path="res://scenes/projectiles/projectile_manager.gd" id="5_77hxc"]
+[ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/map_ai/map_ai.tscn" id="6_50b8w"]
+[ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="7_0leb6"]
+[ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemy/enemy.tscn" id="8_801yl"]
+[ext_resource type="PackedScene" uid="uid://dcf1b1n0ijxcv" path="res://scenes/ui/gui.tscn" id="9_fnedg"]
 
 [node name="World" type="Node2D"]
-script = ExtResource("1_u65k5")
-use_free_move_camera = null
+script = ExtResource("1_wxqk5")
 
-[node name="SimpleParallaxBG" parent="." instance=ExtResource("2_eb7vu")]
+[node name="ParallaxBackground" parent="." instance=ExtResource("2_wxqk5")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.3, 0.3)
+zoom = Vector2(0.25, 0.25)
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
@@ -26,28 +25,27 @@ position_smoothing_speed = 3.0
 position = Vector2(-12, -1261)
 
 [node name="CapturableManager" type="Node2D" parent="."]
-script = ExtResource("3_ninm2")
+script = ExtResource("3_qvpyu")
 
-[node name="CapturableLocation2" parent="CapturableManager" instance=ExtResource("4_o3o23")]
+[node name="CapturableLocation2" parent="CapturableManager" instance=ExtResource("4_4i27o")]
 position = Vector2(0.5, 0)
 
 [node name="Asteroids" type="Node2D" parent="."]
 
 [node name="ProjectileManager" type="Node2D" parent="."]
-script = ExtResource("5_w50cl")
+script = ExtResource("5_77hxc")
 
-[node name="AllyMapAI" parent="." instance=ExtResource("6_dqi3k")]
+[node name="AllyMapAI" parent="." instance=ExtResource("6_50b8w")]
 team_intiger = 1
-unit_scene = ExtResource("7_x4d7c")
-max_units_alive = 8
+unit_scene = ExtResource("7_0leb6")
 
-[node name="EnemyMapAI" parent="." instance=ExtResource("6_dqi3k")]
+[node name="EnemyMapAI" parent="." instance=ExtResource("6_50b8w")]
 base_capture_start_order = 1
 team_intiger = 2
-unit_scene = ExtResource("8_54qwk")
-max_units_alive = 8
+unit_scene = ExtResource("8_801yl")
 
-[node name="GUI" parent="." instance=ExtResource("7_4wnid")]
+[node name="GUI" parent="." instance=ExtResource("9_fnedg")]
+visible = false
 
 [node name="AllyRespawnPoints" type="Node2D" parent="."]
 position = Vector2(2000, 0)

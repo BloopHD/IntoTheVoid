@@ -55,14 +55,16 @@ func provide_location(location: Node2D) -> void:
 			change_state(location, travel_state)
 
 
+func provide_player(player: Node2D) -> void:
+	if player != null:
+		actor.player = player
+		change_state(player, chase_state)
+
 
 #region Signals
 
 func _on_stand_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("S Attack Entered: ", body)
 
 		attack_range_targets.erase(body)
 		
@@ -79,9 +81,6 @@ func _on_stand_attack_detection_area_body_entered(body:Node2D) -> void:
 func _on_stand_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
 
-#		if team == 1:
-#			print("S Attack Exited: ", body)
-
 		stand_attack_targets.erase(body)
 	
 		if body.has_method("get_alive_status") and body.get_alive_status():
@@ -93,9 +92,6 @@ func _on_stand_attack_detection_area_body_exited(body:Node2D) -> void:
 
 func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("Attack Entered: ", body)
 		
 		chase_range_targets.erase(body)
 
@@ -111,9 +107,6 @@ func _on_attack_detection_area_body_entered(body:Node2D) -> void:
 
 func _on_attack_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("Attack Exited: ", body)
 			
 		attack_range_targets.erase(body)
 
@@ -126,9 +119,6 @@ func _on_attack_detection_area_body_exited(body:Node2D) -> void:
 
 func _on_chase_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("Chase Entered: ", body)
 		
 		aware_range_targets.erase(body)
 		
@@ -144,9 +134,6 @@ func _on_chase_detection_area_body_entered(body:Node2D) -> void:
 
 func _on_chase_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("Chase Exited: ", body)
 		
 		chase_range_targets.erase(body)
 
@@ -159,9 +146,6 @@ func _on_chase_detection_area_body_exited(body:Node2D) -> void:
 
 func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("Aware Entered: ", body)
 		
 		# TODO: This causes a bug, our map_ai is telling our units their target is the capturable location.
 		# This sets our actor's target to the capturable location. So the first enemy unit enters the 
@@ -176,9 +160,6 @@ func _on_aware_detection_area_body_entered(body:Node2D) -> void:
 
 func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 	if body.has_method("get_team") and body.get_team() != team:
-
-#		if team == 1:
-#			print("Aware Exited: ", body)
 	
 	# TO KNOW: 
 	# When a unit is destroyed/qued_free, it's null body is passed to this exit function first and 
@@ -202,6 +183,8 @@ func _on_aware_detection_area_body_exited(body:Node2D) -> void:
 			change_state(attack_range_targets.front(), attack_state)
 		elif not chase_range_targets.is_empty():
 			change_state(chase_range_targets.front(), chase_state)
+		elif actor.player != null:
+			change_state(actor.player, chase_state)
 		elif location_target != null:
 			change_state(location_target, travel_state)
 		else:

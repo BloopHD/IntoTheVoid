@@ -20,10 +20,10 @@ func _process(_delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if move_vector > Vector2.ZERO || move_vector < Vector2.ZERO:
-		velocity = lerp(velocity, move_vector * forward_speed, delta )
+		velocity += move_vector * 1000 * delta
 	else:
-		velocity = lerp(velocity, Vector2.ZERO, delta)
-		
+		velocity = Vector2.ZERO
+
 	move_and_slide()
 
 

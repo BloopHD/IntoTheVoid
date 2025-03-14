@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=3 uid="uid://bwlv7ix15whqd"]
 
 [ext_resource type="Script" uid="uid://b84lyrajgijid" path="res://scenes/world/world.gd" id="1_8rw03"]
-[ext_resource type="PackedScene" uid="uid://serpxan5usi1" path="res://scenes/background/simple_parallax_bg.tscn" id="2_c3qrl"]
+[ext_resource type="PackedScene" uid="uid://d2h3vao6jebh7" path="res://scenes/background/parallax_background.tscn" id="2_1yooq"]
 [ext_resource type="Script" uid="uid://drflrmgagh83c" path="res://scenes/capturable/capturable_manager.gd" id="3_xtih7"]
-[ext_resource type="Script" uid="uid://dt1k3xdnv73tr" path="res://scenes/world/projectile_manager.gd" id="5_lefb3"]
-[ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/world/map_ai.tscn" id="7_s6psl"]
+[ext_resource type="PackedScene" uid="uid://1lvycm7su7uo" path="res://scenes/projectiles/projectile_manager.tscn" id="5_1yooq"]
+[ext_resource type="PackedScene" uid="uid://dfrr5oclkajfu" path="res://scenes/map_ai/map_ai.tscn" id="7_s6psl"]
 [ext_resource type="PackedScene" uid="uid://ct2jcr4xgxwyi" path="res://scenes/capturable/capturable_location.tscn" id="7_xxhgs"]
 [ext_resource type="PackedScene" uid="uid://chq22uahlmag1" path="res://scenes/ally/ally.tscn" id="8_y18hb"]
 [ext_resource type="PackedScene" uid="uid://dcf1b1n0ijxcv" path="res://scenes/ui/gui.tscn" id="9_8qhb2"]
@@ -12,12 +12,11 @@
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_8rw03")
-use_free_move_camera = null
 
-[node name="SimpleParallaxBG" parent="." instance=ExtResource("2_c3qrl")]
+[node name="ParallaxBackground" parent="." instance=ExtResource("2_1yooq")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.15, 0.15)
+zoom = Vector2(0.1, 0.1)
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
@@ -39,8 +38,7 @@ position = Vector2(4000, 2500)
 
 [node name="Asteroids" type="Node2D" parent="."]
 
-[node name="ProjectileManager" type="Node2D" parent="."]
-script = ExtResource("5_lefb3")
+[node name="ProjectileManager" parent="." instance=ExtResource("5_1yooq")]
 
 [node name="AllyMapAI" parent="." instance=ExtResource("7_s6psl")]
 base_capture_start_order = 1

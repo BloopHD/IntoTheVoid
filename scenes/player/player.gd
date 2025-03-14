@@ -14,7 +14,7 @@ signal died()
 @onready var team: Team = $Team
 @onready var health: Health = $Health
 @onready var shield: Shield = $Shield
-@onready var weapon: Weapon = $Weapon
+@onready var weapon_manager: WeaponManager = $WeaponManager
 @onready var camera_transform: RemoteTransform2D = $CameraTransform
 
 const FULL_SPEED_MULTI: float = 1.0
@@ -25,16 +25,15 @@ var aim_vector: Vector2 = Vector2.ZERO
 var previous_aim_vector: Vector2 = Vector2.ZERO
 
 var using_m_and_k: bool = false
-
 var is_alive: bool = true
-
+var is_invincible: bool = false
 
 var current_speed: float:
 	get:
 		return velocity.length()
 
 func _ready() -> void:
-	weapon.initialize_weapon(team.team)
+	weapon_manager.initialize(team.team)
 	shield.initialize_shield(team.team)
 	is_alive = true
 	
@@ -108,22 +107,11 @@ func set_input_type(event: InputEvent) -> void:
 
 # This function checks for player game input.
 func check_for_input() -> void:
-	check_for_weapons_fired()
+	weapon_manager.check_for_weapons_fired(get_directional_speed(aim_vector))
 	move_vector = get_move_input()
 	aim_vector = get_aim_input()
 	save_aim_vector()
-
-
-# This function checks if the player has fired a weapon.
-func check_for_weapons_fired() -> void:
-
-	if Input.is_action_pressed("primary action"):
-		weapon.fire_weapon(team.team, get_directional_speed(aim_vector))
-	elif Input.is_action_pressed("secondary action"):
-		pass
-	else:
-		pass
-
+	
 
 # This function gets the move input from the player.
 func get_move_input() -> Vector2:
@@ -169,13 +157,16 @@ func set_camera_transform(camera_path: NodePath) -> void:
 	camera_transform.remote_path = camera_path
 
 
-#func get_team() -> int:
-#	return team.team
+func get_team() -> int:
+	return team.team
 
 func get_alive_status() -> bool:
 	return is_alive
 
 func handle_hit(damage: int) -> void:
+	if is_invincible:
+		return
+		
 	health.health -= damage
 	emit_signal("player_health_changed", health.health)
 	

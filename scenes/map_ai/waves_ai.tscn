@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://umcq8nc2mvhk"]
+
+[ext_resource type="Script" uid="uid://4g2i8gdqfhxp" path="res://scenes/map_ai/waves_ai.gd" id="1_si6wt"]
+[ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="2_st2v4"]
+
+[node name="WavesAI" type="Node2D"]
+script = ExtResource("1_si6wt")
+
+[node name="Team" parent="." instance=ExtResource("2_st2v4")]
+team = 2
+
+[node name="UnitContainer" type="Node2D" parent="."]
+
+[node name="RespawnTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]

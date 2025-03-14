@@ -41,6 +41,7 @@ max_speed = 1000
 acceleration_percentage = 75
 friction_percentage = 75
 rotational_acceleration_percentage = 15.0
+context_distance = 250
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.924549, 0.266025, 0.137415, 1)

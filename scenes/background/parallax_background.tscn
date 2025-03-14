@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2h3vao6jebh7"]
+
+[ext_resource type="Texture2D" uid="uid://t76ms05bgw6e" path="res://sprites/BackgroundStars.png" id="1_pn103"]
+
+[node name="ParallaxBackground" type="Node2D"]
+
+[node name="Parallax" type="Node2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="Parallax2D" type="Parallax2D" parent="Parallax"]
+repeat_size = Vector2(1280, 720)
+
+[node name="Stars" type="Sprite2D" parent="Parallax/Parallax2D"]
+modulate = Color(1, 1, 1, 0.345098)
+texture = ExtResource("1_pn103")

@@ -2,7 +2,7 @@ extends Node2D
 
 
 const NEW_PLAYER: PackedScene = preload("res://scenes/player/player.tscn")
-const NEW_FREE_MOVE_CAMERA: PackedScene = preload("res://TestScripts/free_move_camera.tscn")
+const NEW_FREE_MOVE_CAMERA: PackedScene = preload("res://scenes/testing_scenes/free_move_camera.tscn")
 
 @onready var ally_map_ai: Node2D = $AllyMapAI
 @onready var enemy_map_ai: Node2D = $EnemyMapAI

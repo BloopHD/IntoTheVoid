@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmdc1l84n1fpy"]
+
+[ext_resource type="Script" uid="uid://drr7tql2c7chc" path="res://scenes/testing_scenes/player_vs_enemy.gd" id="1_7s5pd"]
+[ext_resource type="PackedScene" uid="uid://d2h3vao6jebh7" path="res://scenes/background/parallax_background.tscn" id="2_wnhjj"]
+[ext_resource type="PackedScene" uid="uid://1lvycm7su7uo" path="res://scenes/projectiles/projectile_manager.tscn" id="3_yog08"]
+[ext_resource type="PackedScene" uid="uid://dcf1b1n0ijxcv" path="res://scenes/ui/gui.tscn" id="4_67wbe"]
+[ext_resource type="PackedScene" uid="uid://umcq8nc2mvhk" path="res://scenes/map_ai/waves_ai.tscn" id="5_yog08"]
+[ext_resource type="PackedScene" uid="uid://bdd130r3cnp88" path="res://scenes/enemy/enemy.tscn" id="6_67wbe"]
+
+[node name="PlayerVsEnemy" type="Node2D"]
+script = ExtResource("1_7s5pd")
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("2_wnhjj")]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(0, -0.25)
+
+[node name="Test" type="Marker2D" parent="."]
+position = Vector2(10, 99)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.75, 0.75)
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
+
+[node name="ProjectileManager" parent="." instance=ExtResource("3_yog08")]
+
+[node name="GUI" parent="." instance=ExtResource("4_67wbe")]
+
+[node name="WavesAI" parent="." instance=ExtResource("5_yog08")]
+team_intiger = 2
+unit_scene = ExtResource("6_67wbe")
+max_units_alive = 3

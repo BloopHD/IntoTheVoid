@@ -9,8 +9,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	actor.move_func(delta, Vector2.ZERO)
-	actor.rotate_function(actor.target.position)
+	actor.move_func(delta, actor.target.position)
+	#actor.rotate_function(actor.target.position)
 	actor.try_to_shoot()
 
 

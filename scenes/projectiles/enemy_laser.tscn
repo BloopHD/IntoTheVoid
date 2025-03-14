@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cuox25crg6kvj"]
 
-[ext_resource type="Script" uid="uid://c4qdsm34vr0aa" path="res://scenes/laser/enemy_laser.gd" id="1_hawsb"]
+[ext_resource type="Script" uid="uid://c4qdsm34vr0aa" path="res://scenes/projectiles/enemy_laser.gd" id="1_hawsb"]
 [ext_resource type="Texture2D" uid="uid://gkts3d4pbnf8" path="res://sprites/SimpleLaser.png" id="2_kef1o"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lalhh"]
