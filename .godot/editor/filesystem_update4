@@ -11,3 +11,9 @@ res://scenes/projectiles/laser.tscn
 res://scenes/weapon/weapon.gd
 res://scenes/ui/gui.tscn
 res://scenes/projectiles/laser.gd
+res://scenes/projectiles/projectile.gd
+res://scenes/projectiles/projectile.tscn
+res://globals/GlobalSignals.gd
+res://scenes/projectiles/projectile_manager.gd
+res://scenes/testing_scenes/player_vs_enemy.gd
+res://scenes/world/world.gd

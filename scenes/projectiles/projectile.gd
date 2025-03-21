@@ -1,4 +1,5 @@
 extends Area2D
+class_name Projectile
 
 @onready var destruction_area: CollisionPolygon2D = $Area2D/ExplosionArea
 @onready var kill_timer: Timer = $KillTimer

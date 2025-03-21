@@ -17,7 +17,7 @@ const NEW_FREE_MOVE_CAMERA: PackedScene = preload("res://scenes/testing_scenes/f
 
 func _ready() -> void:
 	randomize() # This properly seeds the random number generator.
-	GlobalSignals.shot_fired.connect(projectile_manager.handle_spawning_laser)
+	GlobalSignals.shot_fired.connect(projectile_manager.handle_spawning_projectile)
 	
 	var ally_respawn_points: Array = $AllyRespawnPoints.get_children()
 	var enemy_respawn_points: Array = $EnemyRespawnPoints.get_children()

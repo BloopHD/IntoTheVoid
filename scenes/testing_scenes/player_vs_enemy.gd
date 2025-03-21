@@ -12,7 +12,7 @@ var player: Player = null
 
 func _ready() -> void:
 	randomize() # This properly seeds the random number generator.
-	GlobalSignals.shot_fired.connect(projectile_manager.handle_spawning_laser)
+	GlobalSignals.shot_fired.connect(projectile_manager.handle_spawning_projectile)
 
 	spawn_player()
 	waves_ai.initialize(player)
