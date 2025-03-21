@@ -5,14 +5,10 @@ class_name Weapon
 @onready var Muzzle: Marker2D = $Muzzles/Muzzle
 @onready var laser_cooldown: Timer = $Cooldown
 
-
-#const PLAYER_PROJECTILE_LAYER: int = 3
-#const ENEMY_PROJECTILE_LAYER: int = 4
-#const PLAYER_MASK: int = 1
-#const ENEMY_MASK: int = 6
-#const PLAYER_SHIELD_MARK: int = 7
-#const ENEMY_SHIELD_MARK: int = 8
-
+@export var projectile_damage: float = 5.0
+@export var projectile_speed: float = 1250.0
+@export var projectile_force: float = 5.0
+@export var porjectile_lifetime: float = 1.0
 
 var laser_scene: PackedScene = preload("res://scenes/projectiles/laser.tscn")
 
@@ -28,9 +24,10 @@ func fire_weapon(actor_directional_speed: float) -> void:
 		
 		var laser: Area2D = laser_scene.instantiate()
 		var laser_starting_directional_speed: float = max(actor_directional_speed, 0.0) # If current speed is negative, set it to 0.
-	
+		
 		laser_cooldown.start()
-
+		
+		laser.initialize_projectile(projectile_damage, projectile_speed, porjectile_lifetime)
 		laser.team = projectile_team
 		laser.position = Muzzle.global_position
 		laser.rotation = global_rotation

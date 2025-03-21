@@ -19,7 +19,7 @@ position = Vector2(0, -0.25)
 position = Vector2(10, 99)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.75, 0.75)
+zoom = Vector2(0.5, 0.5)
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
@@ -31,4 +31,4 @@ position_smoothing_speed = 3.0
 [node name="WavesAI" parent="." instance=ExtResource("5_yog08")]
 team_intiger = 2
 unit_scene = ExtResource("6_67wbe")
-max_units_alive = 3
+max_units_alive = 0

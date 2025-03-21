@@ -4,7 +4,6 @@ extends Area2D
 @onready var kill_timer: Timer = $KillTimer
 
 @export var damage: float = 5.0
-
 @export var speed: float = 1250.0
 @export var force: float = 5.0
 
@@ -13,6 +12,7 @@ var movement_vector: Vector2 = Vector2.RIGHT
 var force_direction: Vector2 = Vector2()
 
 var team: int = -1
+var lifetime: float = 1.0
 
 var starting_speed: float:
 	set(value):
@@ -20,12 +20,20 @@ var starting_speed: float:
 
 
 func _ready() -> void:
+	kill_timer.wait_time = lifetime
 	kill_timer.start()
 
 
 func _physics_process(delta: float) -> void:
 	force_direction = movement_vector.rotated(rotation)
 	global_position += force_direction * (speed + starting_speed) * delta
+	
+	
+func initialize_projectile(set_damage: float, set_speed: float, set_lifetime: float) -> void:
+	damage = set_damage
+	speed = set_speed
+	lifetime = set_lifetime
+
 
 
 func _on_body_entered(body: Node2D) -> void:

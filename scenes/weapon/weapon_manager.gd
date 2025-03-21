@@ -15,7 +15,8 @@ func _ready() -> void:
 func initialize(team: int) -> void:
 	for weapon: Weapon in weapons:
 		weapon.initialize_weapon(team)
-
+	
+	current_weapon = weapons[0]
 
 # This function checks if the player has fired a weapon.
 func check_for_weapons_fired(directional_aim_speed: float) -> void:

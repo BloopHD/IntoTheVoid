@@ -40,10 +40,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
 
 [node name="Rows" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -67,7 +67,7 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 10
 
 [node name="HealthBar" type="ProgressBar" parent="MarginContainer/Rows/TopRow/TopLeft/HealthBarMargin"]
-custom_minimum_size = Vector2(50, 25)
+custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -83,7 +83,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 5
 
 [node name="ShieldBar" type="ProgressBar" parent="MarginContainer/Rows/TopRow/TopLeft/ShieldBarMargin"]
-custom_minimum_size = Vector2(50, 10)
+custom_minimum_size = Vector2(50, 5)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2

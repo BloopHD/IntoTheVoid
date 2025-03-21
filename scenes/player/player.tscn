@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dgy3rqxws2l4w"]
+[gd_scene load_steps=10 format=3 uid="uid://dgy3rqxws2l4w"]
 
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="1_gvkbj"]
 [ext_resource type="Script" uid="uid://di1hq2t1msqy7" path="res://scenes/player/player.gd" id="1_pf1yp"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="4_xtpps"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="5_pdjii"]
 [ext_resource type="Script" uid="uid://bagegd823otwj" path="res://scenes/weapon/weapon_manager.gd" id="6_0owmy"]
+[ext_resource type="PackedScene" uid="uid://hv7rx3jj5d76" path="res://scenes/weapon/fast_laser.tscn" id="7_5gtgg"]
 [ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="7_cbco3"]
 [ext_resource type="PackedScene" uid="uid://bsr8sidh0r20m" path="res://scenes/weapon/simple_laser.tscn" id="7_qek5x"]
 
@@ -17,6 +18,10 @@ z_index = 10
 collision_mask = 18
 motion_mode = 1
 script = ExtResource("1_pf1yp")
+forward_speed = 650
+reverse_and_strafe_speed = 600
+reverse_and_strafe_accel = 50.0
+friction = 75.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -44,4 +49,8 @@ collision_mask = 16
 [node name="WeaponManager" type="Node2D" parent="."]
 script = ExtResource("6_0owmy")
 
+[node name="FastLaser" parent="WeaponManager" instance=ExtResource("7_5gtgg")]
+projectile_speed = 750.0
+
 [node name="SimpleLaser" parent="WeaponManager" instance=ExtResource("7_qek5x")]
+projectile_speed = 750.0
