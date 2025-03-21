@@ -107,7 +107,7 @@ func set_input_type(event: InputEvent) -> void:
 
 # This function checks for player game input.
 func check_for_input() -> void:
-	weapon_manager.check_for_weapons_fired(get_directional_speed(aim_vector))
+	check_for_weapons_fired(get_directional_speed(aim_vector))
 	move_vector = get_move_input()
 	aim_vector = get_aim_input()
 	save_aim_vector()
@@ -144,6 +144,15 @@ func save_aim_vector() -> void:
 		# If the player is not aiming but moving, save the move vector.
 	elif move_vector != Vector2.ZERO:
 		previous_aim_vector = move_vector
+
+
+func check_for_weapons_fired(directional_aim_speed: float) -> void:
+	if Input.is_action_pressed("primary action"):
+		weapon_manager.fire_weapon(directional_aim_speed)
+	elif Input.is_action_pressed("secondary action"):
+		pass
+	else:
+		pass
 
 
 # This function gets the speed of the player in a given direction,

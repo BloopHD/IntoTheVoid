@@ -19,7 +19,7 @@ signal died()
 @onready var team: Team = $Team
 @onready var health: Health = $Health
 @onready var shield: Shield = $Shield
-@onready var weapon: Weapon = $Weapon
+@onready var weapon_manager: WeaponManager = $WeaponManager
 @onready var ai: AI = $AI
 
 const ONE_HUNDRED: int = 100
@@ -63,7 +63,7 @@ var curr_speed: float:
 
 func _ready() -> void:
 	ai.initialize_ai(self, team.team)
-	weapon.initialize_weapon(team.team)
+	weapon_manager.initialize(team.team)
 	shield.initialize_shield(team.team)
 	ready_context_movement()
 	
@@ -246,7 +246,7 @@ func try_to_shoot() -> void:
 
 		
 func shoot_laser() -> void:
-	weapon.fire_weapon(get_speed_in_direction(look_direction))
+	weapon_manager.fire_weapon(get_speed_in_direction(look_direction))
 		
 	
 func handle_hit(damage: int) -> void: 

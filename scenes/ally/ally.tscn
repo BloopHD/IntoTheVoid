@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="3_87ved"]
 [ext_resource type="PackedScene" uid="uid://cpy1r1k376npg" path="res://scenes/health/health.tscn" id="4_urgas"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="5_7cnc4"]
-[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="6_al8nm"]
+[ext_resource type="PackedScene" uid="uid://nnbvvrjj1eix" path="res://scenes/weapons/weapon_manager.tscn" id="6_0ei6g"]
 [ext_resource type="Script" uid="uid://dfofoh6w1olyx" path="res://scenes/actor/ai.gd" id="7_tm8gm"]
 [ext_resource type="Script" uid="uid://big4sds6haodw" path="res://scenes/state_machine/finite_state_machine.gd" id="8_f58ii"]
 [ext_resource type="Script" uid="uid://oro6e6m78qkd" path="res://scenes/actor/wander_state.gd" id="9_sw5a0"]
@@ -61,7 +61,7 @@ scale = Vector2(6, 6)
 collision_layer = 64
 collision_mask = 16
 
-[node name="Weapon" parent="." instance=ExtResource("6_al8nm")]
+[node name="WeaponManager" parent="." instance=ExtResource("6_0ei6g")]
 
 [node name="AI" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
 script = ExtResource("7_tm8gm")

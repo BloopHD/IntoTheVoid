@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsr8sidh0r20m"]
-
-[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="1_l22ig"]
-
-[node name="SimpleLaser" instance=ExtResource("1_l22ig")]
-
-[node name="Cooldown" parent="." index="0"]
-wait_time = 0.25

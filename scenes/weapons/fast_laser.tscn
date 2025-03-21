@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://hv7rx3jj5d76"]
 
-[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="1_5jr76"]
+[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapons/weapon.tscn" id="1_5jr76"]
 
 [node name="FastLaser" instance=ExtResource("1_5jr76")]
 

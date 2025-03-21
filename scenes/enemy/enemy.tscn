@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b2ewnmaaqi1gy" path="res://sprites/SimpleShip.png" id="2_6f36q"]
 [ext_resource type="PackedScene" uid="uid://buqadppkk8v8r" path="res://scenes/team/team.tscn" id="3_88t8a"]
 [ext_resource type="PackedScene" uid="uid://4tpapswc0bbh" path="res://scenes/shield/shield.tscn" id="3_qwefe"]
-[ext_resource type="PackedScene" uid="uid://crasmqmrosgc" path="res://scenes/weapon/weapon.tscn" id="5_hblv0"]
+[ext_resource type="PackedScene" uid="uid://nnbvvrjj1eix" path="res://scenes/weapons/weapon_manager.tscn" id="6_pb0yv"]
 [ext_resource type="Script" uid="uid://dfofoh6w1olyx" path="res://scenes/actor/ai.gd" id="7_f052b"]
 [ext_resource type="Script" uid="uid://big4sds6haodw" path="res://scenes/state_machine/finite_state_machine.gd" id="8_dxm85"]
 [ext_resource type="Script" uid="uid://oro6e6m78qkd" path="res://scenes/actor/wander_state.gd" id="9_gwhl2"]
@@ -63,7 +63,7 @@ scale = Vector2(6, 6)
 collision_layer = 128
 collision_mask = 16
 
-[node name="Weapon" parent="." instance=ExtResource("5_hblv0")]
+[node name="WeaponManager" parent="." instance=ExtResource("6_pb0yv")]
 
 [node name="AI" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
 script = ExtResource("7_f052b")

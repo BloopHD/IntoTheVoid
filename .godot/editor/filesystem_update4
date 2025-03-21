@@ -17,3 +17,13 @@ res://globals/GlobalSignals.gd
 res://scenes/projectiles/projectile_manager.gd
 res://scenes/testing_scenes/player_vs_enemy.gd
 res://scenes/world/world.gd
+res://scenes/weapon/weapon_manager.gd
+res://scenes/weapon/weapon_manager.tscn
+res://scenes/weapons/weapon_manager.gd
+res://scenes/weapons/weapon.tscn
+res://scenes/weapons/simple_laser.tscn
+res://scenes/weapons/fast_laser.tscn
+res://scenes/weapons/weapon_manager.tscn
+res://scenes/actor/actor.gd
+res://scenes/player/player.gd
+res://scenes/ally/ally.tscn

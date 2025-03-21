@@ -31,4 +31,3 @@ position_smoothing_speed = 3.0
 [node name="WavesAI" parent="." instance=ExtResource("5_yog08")]
 team_intiger = 2
 unit_scene = ExtResource("6_67wbe")
-max_units_alive = 0
